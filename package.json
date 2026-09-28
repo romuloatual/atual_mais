@@ -1,0 +1,21 @@
+{
+  "name": "atual-mais-qa-automation",
+  "version": "1.0.0",
+  "description": "Testes automatizados (Playwright) do setor de QA - Projeto Atual Mais",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "test:codegen": "playwright codegen"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3"
+  }
+}
