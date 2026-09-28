@@ -8,7 +8,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'https://playwright.dev',
+    // Por padrao os testes rodam contra HMG. Nunca apontar para producao.
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'https://backoffice.hmg.atualmais.com.br',
     trace: 'on-first-retry',
   },
   projects: [

@@ -18,11 +18,30 @@ npx playwright install
 | `npm run test:ui` | Abre a interface interativa do Playwright |
 | `npm run test:report` | Abre o último relatório de execução |
 | `npm run test:codegen` | Grava ações no navegador e gera código de teste automaticamente |
+| `npm run test:regression` | Roda só a suíte de regressão (tag `@regression`) |
+| `npm run test:card -- @INTG-2645` | Roda só os testes de um card específico |
 
 ## Estrutura
 
 - `playwright.config.ts` - configuração global (baseURL, navegadores, timeouts, relatórios)
-- `tests/` - arquivos de teste (`*.spec.ts`)
+- `tests/regression/` - testes das telas/fluxos mais usados, sempre com a tag `@regression`.
+  Roda automaticamente em todo push/PR e também à noite (agendado), pra pegar quando um
+  card quebra outra funcionalidade do mesmo processo/tela.
+- `tests/cards/` - um arquivo por card do Jira, com a tag do card (ex.: `@INTG-2645`).
+  Roda sob demanda enquanto o card está em andamento; cenários críticos/recorrentes são
+  promovidos para `regression/` depois de validados.
+
+Veja a convenção completa em [`tests/README.md`](./tests/README.md).
+
+## CI
+
+O workflow [`.github/workflows/playwright.yml`](./.github/workflows/playwright.yml) roda:
+
+- **Push/PR para `main`:** só a suíte de regressão (feedback rápido).
+- **Todo dia às 03:00 (horário de Brasília):** a suíte completa (regressão + cards).
+- **Manual (`workflow_dispatch`):** você escolhe rodar regressão ou tudo.
+
+O relatório HTML de cada execução fica disponível como artefato do workflow por 14 dias.
 
 ## Documentação
 

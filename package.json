@@ -8,7 +8,9 @@
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:report": "playwright show-report",
-    "test:codegen": "playwright codegen"
+    "test:codegen": "playwright codegen",
+    "test:regression": "playwright test --grep @regression",
+    "test:card": "playwright test --grep"
   },
   "keywords": [],
   "author": "",
