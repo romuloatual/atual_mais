@@ -58,10 +58,36 @@ jobs:
         env:
           CI: true
 
-      - name: Publicar relatorio HTML
+      - name: Publicar relatorio HTML como artefato
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 14
+
+      # Guarda o relatorio para o job de deploy no GitHub Pages (so nos gatilhos
+      # que nao sao pull_request - PR de fork nao tem permissao de publicar Pages).
+      - name: Preparar artefato para o GitHub Pages
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: playwright-report/
+
+  deploy-report:
+    needs: test
+    if: always() && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    steps:
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

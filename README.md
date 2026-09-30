@@ -41,7 +41,13 @@ O workflow [`.github/workflows/playwright.yml`](./.github/workflows/playwright.y
 - **Todo dia às 03:00 (horário de Brasília):** a suíte completa (regressão + cards).
 - **Manual (`workflow_dispatch`):** você escolhe rodar regressão ou tudo.
 
-O relatório HTML de cada execução fica disponível como artefato do workflow por 14 dias.
+O relatório HTML de cada execução fica disponível como artefato do workflow por 14 dias, e
+também publicado (sempre a versão mais recente) em:
+
+**https://romuloatual.github.io/atual_mais/**
+
+> Setup único necessário: em **Settings → Pages** do repositório, defina "Source" como
+> **GitHub Actions**. Sem isso o passo de deploy do workflow falha.
 
 ## Documentação
 
