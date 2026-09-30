@@ -53,6 +53,8 @@ também publicado (sempre a versão mais recente) em:
 
 Consulte [`Guia_Onboarding_QA_Automacao_Atual_Mais.pdf`](./Guia_Onboarding_QA_Automacao_Atual_Mais.pdf) para o guia completo de onboarding do setor de QA: ambientes, ferramentas, fluxo de trabalho, boas práticas de seletores e checklist de entrada.
 
+Consulte [`ROADMAP.md`](./ROADMAP.md) para o cronograma de implantação do setor de QA, fase a fase.
+
 ## Regras rápidas
 
 - Todo teste deve estar vinculado a um card no Jira.
