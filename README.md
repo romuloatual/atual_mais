@@ -29,12 +29,15 @@ Os valores exatos de token, série e demais campos estão documentados na seçã
 | `npm run test:ui` | Abre a interface interativa do Playwright |
 | `npm run test:report` | Abre o último relatório de execução |
 | `npm run test:codegen` | Grava ações no navegador e gera código de teste automaticamente |
+| `npm run test:smoke` | Roda só a suíte de fumaça (tag `@smoke`) |
 | `npm run test:regression` | Roda só a suíte de regressão (tag `@regression`) |
 | `npm run test:card -- @INTG-2645` | Roda só os testes de um card específico |
 
 ## Estrutura
 
 - `playwright.config.ts` - configuração global (baseURL, navegadores, timeouts, relatórios)
+- `tests/smoke/` - checagem rápida e rasa de que as telas principais abrem, tag `@smoke`.
+  Roda primeiro em toda execução de CI, como gate rápido antes do resto da suíte.
 - `tests/regression/` - testes das telas/fluxos mais usados, sempre com a tag `@regression`.
   Roda automaticamente em todo push/PR e também à noite (agendado), pra pegar quando um
   card quebra outra funcionalidade do mesmo processo/tela.
@@ -48,7 +51,8 @@ Veja a convenção completa em [`tests/README.md`](./tests/README.md).
 
 O workflow [`.github/workflows/playwright.yml`](./.github/workflows/playwright.yml) roda:
 
-- **Push/PR para `main`:** só a suíte de regressão (feedback rápido).
+- **Sempre primeiro:** a suíte de fumaça (`@smoke`) como gate rápido — se falhar, o resto nem roda.
+- **Push/PR para `main`:** suíte de regressão (feedback rápido).
 - **Todo dia às 03:00 (horário de Brasília):** a suíte completa (regressão + cards).
 - **Manual (`workflow_dispatch`):** você escolhe rodar regressão ou tudo.
 

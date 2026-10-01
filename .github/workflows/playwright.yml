@@ -36,6 +36,11 @@ jobs:
       - name: Instalar navegadores do Playwright
         run: npx playwright install --with-deps
 
+      - name: Rodar suite de fumaca (gate rapido, roda sempre primeiro)
+        run: npm run test:smoke
+        env:
+          CI: true
+
       - name: Rodar suite de regressao (push / pull_request)
         if: github.event_name == 'push' || github.event_name == 'pull_request'
         run: npm run test:regression

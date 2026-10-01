@@ -1,6 +1,29 @@
 # Organização dos testes
 
-Os testes ficam divididos em duas pastas, com convenções de tag diferentes.
+Os testes ficam divididos em três pastas, com convenções de tag diferentes.
+
+| | `smoke/` | `regression/` | `cards/` |
+| --- | --- | --- | --- |
+| Profundidade | Rasa (tela abre, ação básica funciona) | Funda (regra de negócio específica) | Funda (o que o card pede) |
+| Abrangência | Todos os módulos principais | Telas mais usadas/críticas | Só o escopo do card |
+| Quando roda | Primeiro, sempre, bem rápido | Todo push/PR | Sob demanda |
+| Objetivo | "O sistema não está pegando fogo" | "Essa regra específica continua certa" | "Esse card específico funciona" |
+
+## `smoke/` — testes de fumaça
+
+Checagem rápida e rasa de que as telas principais abrem e as ações mais básicas
+funcionam. Roda **primeiro** em toda execução de CI — se falhar, o resto da suíte nem
+chega a rodar (gate rápido, barato de manter).
+
+- Toda spec dessa pasta deve ter a tag `@smoke`.
+
+```ts
+import { test, expect } from '@playwright/test';
+
+test('Venda Rápida V2 abre sem erro', { tag: '@smoke' }, async ({ page }) => {
+  // ...
+});
+```
 
 ## `regression/` — suíte de regressão
 
@@ -41,6 +64,9 @@ test('impressão em bobina não concatena telefone e celular', { tag: '@INTG-264
 ## Rodando por tag
 
 ```bash
+# Só a suíte de fumaça
+npm run test:smoke
+
 # Só a suíte de regressão
 npm run test:regression
 
