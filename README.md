@@ -9,6 +9,17 @@ npm install
 npx playwright install
 ```
 
+## Configurar o ambiente de homologação (HMG)
+
+Antes de testar fluxos fiscais (NFC-e/NF-e), a empresa de teste em HMG precisa estar configurada:
+
+1. Solicitar o link do ambiente HMG, se ainda não tiver.
+2. Em **Configurações → Editar → Dados Gerais**, preencher CNPJ e Inscrição Estadual da empresa de teste.
+3. Em **Configurações → Editar → Faturamento**, configurar NFC-e e NF-e (tipo de emissão, ambiente = Homologação, token/série de teste).
+
+Os valores exatos de token, série e demais campos estão documentados na seção 5 do
+[`Guia_Onboarding_QA_Automacao_Atual_Mais.pdf`](./Guia_Onboarding_QA_Automacao_Atual_Mais.pdf) — use sempre série/numeração alta (ex.: 511) para não conflitar com dados de outras pessoas testando no mesmo ambiente.
+
 ## Scripts disponíveis
 
 | Script | Descrição |
