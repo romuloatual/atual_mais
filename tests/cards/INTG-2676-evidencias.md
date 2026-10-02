@@ -12,6 +12,32 @@ impresso, em Bobina e A4. No Pedido de Venda, validar só que a impressão conti
 **Onde está hoje no HMG:** o modal já tem os dois campos, mas só o telefone é enviado, o pedido não tem
 campo de celular e a impressão lê o cadastro do cliente (vazio no cliente à vista).
 
+## Cenários
+
+Venda Rápida V2, editando o **cliente à vista** (código 1) pelo lápis:
+
+| # | Telefone | Celular | Impressão | Status |
+| --- | --- | --- | --- | --- |
+| 1 | informado | informado | Bobina | **Reprovado** |
+| 2 | informado | informado | A4 | Pendente |
+| 3 | informado | vazio | Bobina | Pendente |
+| 4 | vazio | informado | Bobina | Pendente |
+| 5 | vazio | vazio | Bobina | Pendente |
+| 9 | informado | vazio | A4 | Pendente |
+| 10 | vazio | informado | A4 | Pendente |
+| 11 | vazio | vazio | A4 | Pendente |
+| 6 | informado | informado | Bobina, reabrindo o modal depois de salvar (persistência) | Pendente |
+
+Pedido de Venda, com **cliente cadastrado** (102) que já tem telefone e celular no cadastro (regressão):
+
+| # | Impressão | Status |
+| --- | --- | --- |
+| 7 | Bobina | **Aprovado** |
+| 8 | A4 | **Aprovado** |
+
+Os cenários 1 a 5 e 9 a 11 cobrem as 8 combinações do critério de aceite (Bobina e A4 × com/sem
+telefone × com/sem celular).
+
 ## Resumo
 
 - **Cliente cadastrado:** a impressão busca telefone e celular do cadastro (INTG-2645). Funciona.
@@ -88,7 +114,7 @@ Transporte > Continuar; Faturas > Dinheiro > Gerar; Salvar; Mais Opções > Mode
 - [ ] Perguntar ao desenvolvedor: o card prevê criar um campo de celular no `billingAddress` (backend),
   enviá-lo (front) e fazer a impressão ler do pedido? Hoje o pedido não tem onde guardar o celular.
 - [ ] Obter o checklist do INTG-2645.
-- [ ] Matriz do critério de aceite: A4, só telefone, só celular, nenhum, persistência e Pedido de Venda.
+- [ ] Executar os cenários pendentes (2 a 6 e 9 a 11) depois da resposta do desenvolvedor.
 
 ## Bug (rascunho para o card)
 
