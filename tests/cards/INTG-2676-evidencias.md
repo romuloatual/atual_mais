@@ -71,6 +71,9 @@ do cadastro do cliente no momento da impressão.
 - **Cliente cadastrado:** a impressão busca telefone e celular do cadastro (INTG-2645). Funciona.
 - **Cliente à vista (id 1):** o cadastro não tem contatos e o modal só envia `billingAddress.phone`.
   O campo Contato do pedido sai vazio.
+- **Por que o cliente à vista é diferente:** ele é um cliente genérico (código 1) e não é editável. O
+  Confirmar do modal não chama a API e não grava no cadastro. O que se digita fica só na venda e só
+  pode chegar à impressão pelo pedido.
 - **Causa:** o `billingAddress` do pedido só tem o campo `phone`; não existe campo de celular. O
   telefone é gravado no pedido, mas a impressão lê o contato do **cadastro do cliente** (vazio no
   cliente à vista), e não do pedido.
