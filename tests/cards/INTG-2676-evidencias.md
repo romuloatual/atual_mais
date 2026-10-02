@@ -38,6 +38,62 @@ Pedido de Venda, com **cliente cadastrado** (102) que já tem telefone e celular
 Os cenários 1 a 5 e 9 a 11 cobrem as 8 combinações do critério de aceite (Bobina e A4 × com/sem
 telefone × com/sem celular).
 
+## Passo a passo
+
+**Pré-condição:** Configurações padrões > aba Venda > "Venda Rápida — Tipo de faturamento" = `0-Outro`.
+Vazio, o popup de faturamento mostra a palavra `undefined` (bug separado).
+
+### Venda Rápida V2, cliente à vista (cenários 1 a 6 e 9 a 11)
+
+| Step | Ação | O que se vê / observação |
+| --- | --- | --- |
+| 1 | Abrir a Venda Rápida V2 (`/pdv-v2`) | Tela CAIXA LIVRE, cliente CLIENTE A VISTA |
+| 2 | Digitar `012` no campo de produto e dar Enter **duas vezes** | O 1º Enter carrega o produto e o 2º adiciona. Item: Água Mineral sem Gás 500ml, R$ 1,98 |
+| 3 | Manter o CLIENTE A VISTA (não selecionar cliente) | |
+| 4 | Clicar no lápis ao lado do nome do cliente | Abre "Dados do cliente" com Telefone e Celular vazios |
+| 5 | Preencher Telefone e Celular conforme o cenário e clicar em **Confirmar** | O modal fecha sem popup e sem chamada à API |
+| 6 | `END` (Pagamento) > Adicionar Pagamento > Dinheiro > Confirmar (R$ 1,98) | O vendedor fica memorizado (a seleção é pulada) |
+| 7 | `F1 Opções` e escolher o modelo conforme o cenário | O padrão volta para "Folha A4" a cada venda; conferir que o escolhido ficou como "atual" |
+| 8 | `END` (Finalizar Venda) > **Faturar (Outros)** | Leva de 5 segundos a 2 minutos |
+| 9 | **Visualizar** e salvar o PDF | Conferir o campo **Contato** do pedido |
+
+O que muda em cada cenário (Steps 5 e 7):
+
+| Cenário | Step 5: preencher | Step 7: modelo |
+| --- | --- | --- |
+| 1 | Telefone e Celular | Bobina |
+| 2 | Telefone e Celular | A4 |
+| 3 | só Telefone | Bobina |
+| 4 | só Celular | Bobina |
+| 5 | nenhum | Bobina |
+| 9 | só Telefone | A4 |
+| 10 | só Celular | A4 |
+| 11 | nenhum | A4 |
+| 6 | Telefone e Celular; depois do Confirmar, **clicar no lápis de novo** e conferir se os dois campos continuam preenchidos | Bobina |
+
+**Resultado esperado (todos):** o Contato exibe o que foi preenchido, `telefone / celular`, sem " / "
+sobrando e `-` quando nenhum foi informado.
+
+**Resultado obtido, cenário 1: reprovado.** `Contato: -` nos pedidos 00000017 (A4, pela tela de
+Pedidos) e 00000018 (bobina, pelo PDV). O resultado se repetiu em 2 execuções (manual e automatizada).
+
+### Pedido de Venda, cliente cadastrado (cenários 7 e 8, regressão)
+
+| Step | Ação | O que se vê / observação |
+| --- | --- | --- |
+| 1 | Vendas > Pedidos > **Novo** | Tela "Criar novo pedido" |
+| 2 | Dados Gerais: Cliente `102` (clicar na lupa), Operação `1000 Vendas`, Vendedor `VENDEDOR-CAIXA` > Continuar | O nome do cliente só aparece depois da lupa |
+| 3 | Produtos > Adicionar Produto > `012` > Salvar Produto > Continuar | Item de R$ 1,98 |
+| 4 | Transporte > Continuar | O campo "Telefone de contato" do endereço vem **vazio**, embora o cliente tenha os dois números |
+| 5 | Faturas: Forma de Pagamento `Dinheiro` > Gerar > Salvar | Pedido criado com status CONCLUÍDO |
+| 6 | Na linha do pedido: Mais Opções > Modelo de Impressão > escolher Folha A4 ou bobina > OK | Cenário 8 = A4, cenário 7 = bobina |
+| 7 | Salvar o PDF no diálogo de impressão do navegador | Conferir o campo **Contato** |
+
+**Resultado esperado:** Contato com telefone e celular do cadastro, em Bobina e A4.
+
+**Resultado obtido (pedido 00000021): aprovado** nos dois formatos:
+`Contato: (27) 3322-1100 / (27) 97766-5544`.
+
 ## Checklist do INTG-2645 (a repetir, segundo o critério de aceite)
 
 | # | Item | Resultado | Evidência |
@@ -108,41 +164,6 @@ dos dois. O 102 tem `contacts: []` e mesmo assim imprime, então a impressão us
 Confirmado no DevTools (resposta do `POST /sales-order`, pedido 00000019): o servidor devolve
 `billingAddress` (id 16) com `phone` preenchido e **sem nenhum campo de celular**. O telefone fica no
 pedido, mas o campo Contato impresso continua vazio.
-
-## Cenário 1: Telefone + Celular, impressão Bobina (cliente à vista)
-
-Step1: Digitar `012`, Enter, Enter
-Step2: Manter CLIENTE A VISTA (não selecionar cliente)
-Step3: Clicar no lápis de edição do cliente
-Step4: Preencher Telefone e Celular e Confirmar
-Step5: `END` > Dinheiro > Confirmar
-Step6: `F1 Opções` > Comum bobina (80mm)
-Step7: `END` Finalizar Venda > Faturar (Outros)
-Step8: Visualizar
-
-**Resultado Esperado:** a impressão exibe telefone e celular informados.
-
-**Resultado Obtido:** `Contato: -` (vazio), nos pedidos 00000017 (A4, pela tela de Pedidos) e
-00000018 (bobina, pelo PDV).
-
-**Observações:**
-- Pré-condição: Configurações padrões > Venda > "Venda Rápida — Tipo de faturamento" = `0-Outro`.
-  Vazio, o popup de faturamento mostra a palavra `undefined` (bug separado).
-- O Confirmar do cliente à vista não chama a API e não mostra popup.
-- Resultado repetido em 2 execuções com cliente à vista (manual e automatizada).
-
-## Cenários 7 e 8: Pedido de Venda, cliente cadastrado (regressão)
-
-Steps: Vendas > Pedidos > Novo; Cliente 102 (Maria das Dores), operação 1000; Produto 012 (1 un);
-Transporte > Continuar; Faturas > Dinheiro > Gerar; Salvar; Mais Opções > Modelo de Impressão.
-
-**Resultado Esperado:** Contato com telefone e celular do cadastro, em Bobina e A4.
-
-**Resultado Obtido (pedido 00000021):** **Aprovado** nos dois formatos:
-`Contato: (27) 3322-1100 / (27) 97766-5544`.
-
-**Observação:** no passo Transporte, o bloco de endereço do pedido tem um único campo
-`phone` ("Telefone de contato") e veio vazio, embora o cliente tenha telefone e celular no cadastro.
 
 ## Comparação
 
