@@ -69,7 +69,8 @@ do cadastro do cliente no momento da impressão.
 - **Regra do INTG-2645:** o Contato vem do **cadastro do cliente** (telefone e celular). Antes dele, a
   Venda Rápida imprimia só o telefone.
 - **Cliente cadastrado:** a impressão busca telefone e celular do cadastro (INTG-2645). Funciona.
-- **Cliente à vista (id 1):** o cadastro não tem contatos e o modal só envia `billingAddress.phone`.
+- **Cliente à vista (id 1):** o cadastro não tem `phoneNumber` nem `cellphoneNumber` (a impressão lê
+  esses dois campos do cliente) e o modal só envia `billingAddress.phone`.
   O campo Contato do pedido sai vazio.
 - **Por que o cliente à vista é diferente:** ele é um cliente genérico (código 1) e não é editável. O
   Confirmar do modal não chama a API e não grava no cadastro. O que se digita fica só na venda e só
@@ -92,6 +93,10 @@ do cadastro do cliente no momento da impressão.
 ```
 
 O telefone vai em `phone`; **o celular não é enviado**.
+
+De onde a impressão lê (DevTools, lista de clientes): o cliente 102 tem os campos `phoneNumber`
+(`2733221100`) e `cellphoneNumber` (`27977665544`); o cliente 1 (à vista) não tem nenhum dos dois.
+O 102 tem `contacts: []` e mesmo assim imprime, então a impressão usa esses campos e não `contacts`.
 
 Confirmado no DevTools (resposta do `POST /sales-order`, pedido 00000019): o servidor devolve
 `billingAddress` (id 16) com `phone` preenchido e **sem nenhum campo de celular**. O telefone fica no
