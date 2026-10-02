@@ -161,9 +161,18 @@ Transporte > Continuar; Faturas > Dinheiro > Gerar; Salvar; Mais Opções > Mode
 
 ## Bug (rascunho para o card)
 
-**Celular informado na edição do cliente à vista (Venda Rápida V2) não é enviado nem impresso.**
+**`[BUG] (FrontEnd) {Vendas/Venda Rápida V2 e Pedido de Venda} Inserir dados da edição do cliente à vista na Impressão do Pedido`**
+
+Resumo: o celular informado na edição do cliente à vista não é enviado nem impresso.
 
 Passos: Venda Rápida V2, item 012, manter CLIENTE A VISTA, lápis, preencher Telefone e Celular,
 Confirmar, finalizar e imprimir o pedido. Esperado: telefone e celular no Contato. Obtido: Contato
 vazio; a requisição `POST /sales-order` envia só `billingAddress.phone`, o `billingAddress` do pedido
 não tem campo de celular e a impressão lê o contato do cadastro do cliente (vazio no cliente à vista).
+
+## Bugs fora do escopo do card (abrir à parte)
+
+- `[BUG] (FrontEnd) {Vendas/Venda Rápida V2} Popup de faturamento exibe "undefined" quando o tipo de faturamento da Venda Rápida não está configurado`
+  Reproduzir: deixar "Venda Rápida — Tipo de faturamento" vazio em Configurações padrões e finalizar uma venda.
+- `[BUG] (FrontEnd) {Vendas/Venda Rápida V2} Edição do cliente ignora campos apagados (só grava valores preenchidos)`
+  Reproduzir: editar o cliente 102 no modal, apagar o celular e confirmar; o cadastro mantém o número.
