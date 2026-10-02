@@ -2,7 +2,7 @@
 
 HMG, empresa `romulo`, PDV LOJA001, 02/10/2026.
 
-**Status: Cenário 1 reprovado** (cliente à vista, Bobina).
+**Status:** Cenário 1 reprovado (cliente à vista, Bobina). Cenários 7 e 8 (Pedido de Venda) aprovados.
 
 ## O que o card pede
 
@@ -61,6 +61,26 @@ Step8: Visualizar
   Vazio, o popup de faturamento mostra a palavra `undefined` (bug separado).
 - O Confirmar do cliente à vista não chama a API e não mostra popup.
 - Resultado repetido em 2 execuções com cliente à vista (manual e automatizada).
+
+## Cenários 7 e 8: Pedido de Venda, cliente cadastrado (regressão)
+
+Steps: Vendas > Pedidos > Novo; Cliente 102 (Maria das Dores), operação 1000; Produto 012 (1 un);
+Transporte > Continuar; Faturas > Dinheiro > Gerar; Salvar; Mais Opções > Modelo de Impressão.
+
+**Resultado Esperado:** Contato com telefone e celular do cadastro, em Bobina e A4.
+
+**Resultado Obtido (pedido 00000021):** **Aprovado** nos dois formatos:
+`Contato: (27) 3322-1100 / (27) 97766-5544`.
+
+**Observação:** no passo Transporte, o bloco de endereço do pedido tem um único campo
+`phone` ("Telefone de contato") e veio vazio, embora o cliente tenha telefone e celular no cadastro.
+
+## Comparação
+
+| Fluxo | Cliente | Contato impresso |
+| --- | --- | --- |
+| Pedido de Venda | 102 (cadastrado) | Telefone e celular |
+| Venda Rápida V2 | CLIENTE A VISTA | Vazio |
 
 ## Pendências
 
