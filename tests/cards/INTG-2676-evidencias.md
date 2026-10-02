@@ -4,6 +4,14 @@ HMG, empresa `romulo`, PDV LOJA001, 02/10/2026.
 
 **Status: Cenário 1 reprovado** (cliente à vista, Bobina).
 
+## O que o card pede
+
+Telefone e celular digitados na edição do cliente à vista (Venda Rápida V2) devem sair no pedido
+impresso, em Bobina e A4. No Pedido de Venda, validar só que a impressão continua certa (regressão).
+
+**Onde está hoje no HMG:** o modal já tem os dois campos, mas só o telefone é enviado, o pedido não tem
+campo de celular e a impressão lê o cadastro do cliente (vazio no cliente à vista).
+
 ## Resumo
 
 - **Cliente cadastrado:** a impressão busca telefone e celular do cadastro (INTG-2645). Funciona.
