@@ -43,15 +43,26 @@ telefone × com/sem celular).
 | # | Item | Resultado | Evidência |
 | --- | --- | --- | --- |
 | 1 | Venda Rápida, cliente com tel e cel, Bobina: Contato mostra tel / cel | Passou com cliente cadastrado; **reprovado com cliente à vista** | pedido 16 (102); cenário 1 |
-| 2 | Venda Rápida, cliente com tel e cel, A4 | Pendente | |
+| 2 | Venda Rápida, cliente com tel e cel, A4 | Passou | pedido 22 |
 | 3 | Pedido de Venda, Bobina: 2 números, sem duplicar o celular | Passou | pedido 21 |
 | 4 | Pedido de Venda, A4: 2 números, sem duplicar | Passou | pedido 21 |
-| 5 | Cliente só com telefone: mostra só o telefone | Pendente | |
-| 6 | Cliente só com celular: mostra só o celular | Pendente | |
+| 5 | Cliente só com telefone: mostra só o telefone | Passou (Bobina) | pedido 23: `Contato: (27) 3322-1100` |
+| 6 | Cliente só com celular: mostra só o celular | Passou (A4) | pedido 24: `Contato: (27) 97766-5544` |
 | 7 | Cliente sem contato: exibe `-` | Passou | pedidos 17 e 18 (cliente à vista) |
 | 8 | Máscara: fixo `(XX) XXXX-XXXX`, celular `(XX) XXXXX-XXXX` | Passou | pedidos 16 e 21 |
 | 9 | Bobina e A4 com os mesmos números e ordem (telefone, celular) | Passou no Pedido de Venda; pendente na Venda Rápida | pedido 21 |
 | 10 | Sem regressão nos demais campos (nome, CPF/CNPJ, endereço, itens, pagamentos, total) | Passou | pedidos 16, 17, 18 e 21 |
+
+Os itens 2, 5 e 6 foram executados com o cliente cadastrado 102. Para os itens 5 e 6, o telefone e o
+celular foram alterados no cadastro completo (Pessoas > Clientes) e depois restaurados.
+
+**Confirmado:** alterando o cadastro, a impressão muda junto, ou seja, o `Contato` do pedido é lido
+do cadastro do cliente no momento da impressão.
+
+**Observações:**
+- O modal de edição da Venda Rápida só grava valores preenchidos. Apagar o celular ali e confirmar não
+  altera o cadastro; para esvaziar um número é preciso usar o cadastro completo.
+- O rótulo "Pedido NNNNNNNN" na tela de venda mostra o número do pedido anterior, e não o da venda em curso.
 
 ## Resumo
 
