@@ -38,8 +38,25 @@ Pedido de Venda, com **cliente cadastrado** (102) que já tem telefone e celular
 Os cenários 1 a 5 e 9 a 11 cobrem as 8 combinações do critério de aceite (Bobina e A4 × com/sem
 telefone × com/sem celular).
 
+## Checklist do INTG-2645 (a repetir, segundo o critério de aceite)
+
+| # | Item | Resultado | Evidência |
+| --- | --- | --- | --- |
+| 1 | Venda Rápida, cliente com tel e cel, Bobina: Contato mostra tel / cel | Passou com cliente cadastrado; **reprovado com cliente à vista** | pedido 16 (102); cenário 1 |
+| 2 | Venda Rápida, cliente com tel e cel, A4 | Pendente | |
+| 3 | Pedido de Venda, Bobina: 2 números, sem duplicar o celular | Passou | pedido 21 |
+| 4 | Pedido de Venda, A4: 2 números, sem duplicar | Passou | pedido 21 |
+| 5 | Cliente só com telefone: mostra só o telefone | Pendente | |
+| 6 | Cliente só com celular: mostra só o celular | Pendente | |
+| 7 | Cliente sem contato: exibe `-` | Passou | pedidos 17 e 18 (cliente à vista) |
+| 8 | Máscara: fixo `(XX) XXXX-XXXX`, celular `(XX) XXXXX-XXXX` | Passou | pedidos 16 e 21 |
+| 9 | Bobina e A4 com os mesmos números e ordem (telefone, celular) | Passou no Pedido de Venda; pendente na Venda Rápida | pedido 21 |
+| 10 | Sem regressão nos demais campos (nome, CPF/CNPJ, endereço, itens, pagamentos, total) | Passou | pedidos 16, 17, 18 e 21 |
+
 ## Resumo
 
+- **Regra do INTG-2645:** o Contato vem do **cadastro do cliente** (telefone e celular). Antes dele, a
+  Venda Rápida imprimia só o telefone.
 - **Cliente cadastrado:** a impressão busca telefone e celular do cadastro (INTG-2645). Funciona.
 - **Cliente à vista (id 1):** o cadastro não tem contatos e o modal só envia `billingAddress.phone`.
   O campo Contato do pedido sai vazio.
@@ -113,7 +130,7 @@ Transporte > Continuar; Faturas > Dinheiro > Gerar; Salvar; Mais Opções > Mode
 - [ ] Confirmar com o desenvolvedor se o código do INTG-2676 está no HMG.
 - [ ] Perguntar ao desenvolvedor: o card prevê criar um campo de celular no `billingAddress` (backend),
   enviá-lo (front) e fazer a impressão ler do pedido? Hoje o pedido não tem onde guardar o celular.
-- [ ] Obter o checklist do INTG-2645.
+- [x] Obter o checklist do INTG-2645 (incluído acima).
 - [ ] Executar os cenários pendentes (2 a 6 e 9 a 11) depois da resposta do desenvolvedor.
 
 ## Bug (rascunho para o card)
