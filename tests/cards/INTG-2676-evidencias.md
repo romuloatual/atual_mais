@@ -184,12 +184,35 @@ pedido, mas o campo Contato impresso continua vazio.
 
 **`[BUG] (FrontEnd) {Vendas/Venda Rápida V2 e Pedido de Venda} Inserir dados da edição do cliente à vista na Impressão do Pedido`**
 
-Resumo: o celular informado na edição do cliente à vista não é enviado nem impresso.
+**Resumo:** o celular informado na edição do cliente à vista não é enviado nem impresso.
 
-Passos: Venda Rápida V2, item 012, manter CLIENTE A VISTA, lápis, preencher Telefone e Celular,
-Confirmar, finalizar e imprimir o pedido. Esperado: telefone e celular no Contato. Obtido: Contato
-vazio; a requisição `POST /sales-order` envia só `billingAddress.phone`, o `billingAddress` do pedido
-não tem campo de celular e a impressão lê o contato do cadastro do cliente (vazio no cliente à vista).
+**Ambiente:** HMG, empresa `romulo`, PDV LOJA001.
+
+**Pré-condição:** Configurações padrões > aba Venda > "Venda Rápida — Tipo de faturamento" = `0-Outro`.
+
+**Passos:**
+1. Abrir a Venda Rápida V2 e adicionar o item `012`.
+2. Manter o cliente padrão **CLIENTE A VISTA** (não selecionar outro).
+3. Clicar no lápis ao lado do nome do cliente.
+4. Preencher **Telefone** e **Celular** e clicar em Confirmar.
+5. `END`, pagar em Dinheiro, escolher a impressão (Bobina ou A4) e finalizar com **Faturar (Outros)**.
+6. Clicar em **Visualizar** e conferir o campo **Contato** do pedido.
+
+**Resultado esperado:** `Contato: (telefone) / (celular)` com os números informados no passo 4.
+
+**Resultado obtido:** `Contato: -` (vazio).
+
+**Causa provável:**
+- O front envia só `billingAddress.phone` no `POST /api/v1/sales-order`; o celular não é enviado.
+- O `billingAddress` do pedido não tem campo de celular.
+- A impressão lê `phoneNumber` e `cellphoneNumber` do **cadastro do cliente**, e o cliente à vista não
+  os tem e não é editável.
+
+**Evidências a anexar:** PDF do pedido 00000018 (bobina, `Contato: -`), PDF do pedido 00000022 (cliente 102,
+com os dois números, para comparação), trecho do `POST /sales-order` e print do DevTools da lista de clientes.
+
+**Pergunta ao desenvolvimento:** a impressão do cliente à vista deve ler o contato do pedido
+(`billingAddress`) ou o pedido deve gravar telefone e celular nos campos do cliente?
 
 ## Bugs fora do escopo do card (abrir à parte)
 
