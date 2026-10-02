@@ -94,9 +94,16 @@ do cadastro do cliente no momento da impressão.
 
 O telefone vai em `phone`; **o celular não é enviado**.
 
-De onde a impressão lê (DevTools, lista de clientes): o cliente 102 tem os campos `phoneNumber`
-(`2733221100`) e `cellphoneNumber` (`27977665544`); o cliente 1 (à vista) não tem nenhum dos dois.
-O 102 tem `contacts: []` e mesmo assim imprime, então a impressão usa esses campos e não `contacts`.
+De onde a impressão lê (DevTools, `GET /api/v1/customer`, lista de clientes), trecho:
+
+```json
+{ "id": 102, "name": "Maria das Dores",
+  "phoneNumber": "2733221100", "cellphoneNumber": "27977665544", "contacts": [] }
+{ "id": 1, "name": "CLIENTE A VISTA", "cnpj": "99999999999", "contacts": [] }
+```
+
+O cliente 102 tem os campos `phoneNumber` e `cellphoneNumber`; o cliente 1 (à vista) não tem nenhum
+dos dois. O 102 tem `contacts: []` e mesmo assim imprime, então a impressão usa esses campos.
 
 Confirmado no DevTools (resposta do `POST /sales-order`, pedido 00000019): o servidor devolve
 `billingAddress` (id 16) com `phone` preenchido e **sem nenhum campo de celular**. O telefone fica no
