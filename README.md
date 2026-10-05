@@ -72,6 +72,8 @@ Consulte [`ROADMAP.md`](./ROADMAP.md) para o cronograma de implantação do seto
 
 Consulte [`docs/fluxos-principais.md`](./docs/fluxos-principais.md) para os 8 fluxos mais importantes do Atual Mais (como usar e o que observar como QA).
 
+Consulte [`docs/mapa-mental/`](./docs/mapa-mental/) para o mapa mental do guia de onboarding guardado no Git: [visão geral (diagrama)](./docs/mapa-mental/visao-geral.md) e [texto completo](./docs/mapa-mental/guia-onboarding-qa.md).
+
 ## Regras rápidas
 
 - Todo teste deve estar vinculado a um card no Jira.
