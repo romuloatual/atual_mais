@@ -29,12 +29,14 @@ Confirmar > `END` > Dinheiro > `F1` modelo > `END` Finalizar > **Faturar (Outros
 | # | Tipo | Dado | Quando | Então | Obtido |
 | --- | --- | --- | --- | --- | --- |
 | 1 | Feliz | à vista, Tel + Cel | Bobina | Contato com os dois | ❌ `Contato: -` (pedidos 17 A4 e 18 bobina; 2 execuções) |
-| 2 | Feliz | à vista, Tel + Cel | A4 | idem | Pendente |
+| 2 | Feliz | à vista, Tel + Cel | A4 | idem | ❌ `Contato: -` (pedido 29) |
 | 3 | Feliz | à vista, só Tel | Bobina | só o telefone | Pendente |
 | 4 | Feliz | à vista, só Cel | Bobina | só o celular | Pendente |
 | 5 | Feliz | à vista, nenhum | Bobina | `-` | Pendente |
-| 9 a 11 | Feliz | à vista, só Tel / só Cel / nenhum | A4 | idem 3 a 5 | Pendente |
-| 6 | Feliz | à vista, Tel + Cel; reabrir o lápis | Bobina | campos continuam preenchidos | Pendente |
+| 9 | Feliz | à vista, só Tel | A4 | só o telefone | ❌ `Contato: -` (pedido 30) |
+| 10 | Feliz | à vista, só Cel | A4 | só o celular | ❌ `Contato: -` (pedido 31) |
+| 11 | Feliz | à vista, nenhum | A4 | `-` | ✅ `Contato: -` (pedido 32) |
+| 6 | Feliz | à vista, Tel + Cel; reabrir o lápis | Bobina | campos continuam preenchidos e Contato com os dois | Modal ✅ mantém os dois; impresso ❌ `Contato: -` (pedido 33) |
 | 7 | Regressão | Pedido de Venda, cliente 102 | Bobina | `(27) 3322-1100 / (27) 97766-5544` | ✅ pedido 21 |
 | 8 | Regressão | Pedido de Venda, cliente 102 | A4 | idem | ✅ pedido 21 |
 | 12 | Feliz | Venda Rápida, cliente 102 editado pelo modal | Bobina / A4 | grava no cadastro e imprime os dois | ✅ pedidos 16 e 22 |
@@ -47,6 +49,8 @@ Confirmar > `END` > Dinheiro > `F1` modelo > `END` Finalizar > **Faturar (Outros
 | B2 | Borda | 17 dígitos no Cel | digitar | respeita o limite | ✅ corta em 11 |
 
 Notas:
+- 05/10: o produto `012` ficou **sem estoque** ("não pode ser vendido sem estoque"); os cenários 2 a 11 desta rodada usaram o `010` (Biscoito Recheado Chocolate 140g, R$ 3,04). O item não afeta o cenário.
+- Bobina: o cabeçalho traz o `Contato` da **empresa** e o bloco do cliente tem o seu `Contato`; o `Endereço` do cliente sai com o da empresa. O 3 (só Tel, Bobina; pedido 34) foi faturado mas o impresso não pôde ser lido (diálogo de impressão travou o navegador): refazer o 3, o 4 e o 5.
 - Os campos são `type=text`, sem `maxlength`/`pattern`/`inputmode`. A máscara só age com dígitos puros; com letras é desligada.
 - Tel e Cel aceitam 11 dígitos nos dois (sem distinção fixo/celular). A validação esperada depende do dev.
 - N1 a N4 não foram finalizados em venda (evita pedidos de lixo no HMG).
