@@ -221,8 +221,8 @@ caminho feliz, negativo e borda. O caminho feliz já está nos cenários 1 a 6.
   cadastro dele ou só para o pedido? Haverá campo de celular no `billingAddress`, e a impressão lerá do
   pedido? O card cita `customer.cellphoneNumber`, que o à vista não tem.
 - [ ] Perguntar ao desenvolvedor sobre N1 a N4: o modal deve validar letras e número incompleto?
-- [ ] Validar com cliente cadastrado, manualmente: editar o 102 no modal, conferir se grava no cadastro e se
-  imprime (a digitação automatizada não persistiu nesse caso).
+- [x] Cliente cadastrado (102) pelo modal da Venda Rápida: já validado manualmente. A edição grava no
+  cadastro e a impressão sai com telefone e celular (Bobina: pedido 16; A4: pedido 22).
 - [x] Obter o checklist do INTG-2645 (incluído acima).
 - [ ] Executar os cenários pendentes (2 a 6 e 9 a 11) depois da resposta do desenvolvedor.
 
