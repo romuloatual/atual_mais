@@ -182,6 +182,28 @@ ou persistir um cliente, e o contato sairia no pedido.
 **Conclusão:** a hipótese não se confirma. Preencher Nome e CPF reais não cria cliente, não persiste nada e
 o impresso sai igual (cliente 1, Contato vazio). PDF do pedido: `05-10-2026.pdf`.
 
+### Cenários negativos e de borda: campos Telefone e Celular do modal (05/10/2026)
+
+Modal "Dados do cliente" do CLIENTE A VISTA (Venda Rápida V2). Orientação do consultor de QA: cobrir
+caminho feliz, negativo e borda. O caminho feliz já está nos cenários 1 a 6.
+
+| # | Tipo | Dado / Quando | Então (esperado) | Obtido |
+| --- | --- | --- | --- | --- |
+| N1 | Negativo | Digitar `abcXYZ!@#` no Telefone | Campo não aceita letras e símbolos | ❌ Aceita e mostra `abcXYZ!@#` |
+| N2 | Negativo | Digitar `abcXYZ!@#` no Celular | Idem | ❌ Aceita |
+| N3 | Negativo | Digitar `27abc33` (dígitos + letras) no Telefone e no Celular | Letras barradas | ❌ Aceita `27abc33` nos dois |
+| N4 | Negativo | Confirmar com Telefone `12` (incompleto) e Celular `abc` | Mensagem de erro e modal aberto | ❌ Modal fecha sem erro nem aviso |
+| B1 | Borda | Digitar 16 dígitos no Telefone | Respeita o limite do campo | ✅ Corta em 11 dígitos (`27334455667`) |
+| B2 | Borda | Digitar 17 dígitos no Celular | Respeita o limite do campo | ✅ Corta em 11 dígitos (`27933445566`) |
+
+**Observações:**
+- Os campos são `type=text`, sem `maxlength`, `pattern` nem `inputmode`. Quando só há dígitos, a máscara aplica
+  e limita em 11; com letras no meio, a máscara é desligada e o campo guarda o texto como veio.
+- O Telefone aceita 11 dígitos (formato de celular) e o Celular também: não há distinção entre os dois.
+- A validação esperada depende do desenvolvedor: confirmar se letras e números incompletos devem ser barrados.
+- Não finalizei venda com esses valores (evita pedidos de lixo no HMG); o `POST /sales-order` envia `phone`
+  como veio do modal.
+
 ## Comparação
 
 | Fluxo | Cliente | Contato impresso |
@@ -198,6 +220,7 @@ o impresso sai igual (cliente 1, Contato vazio). PDF do pedido: `05-10-2026.pdf`
 - [ ] Perguntar ao desenvolvedor, com o cliente à vista genérico e não editável: os dados devem ir para o
   cadastro dele ou só para o pedido? Haverá campo de celular no `billingAddress`, e a impressão lerá do
   pedido? O card cita `customer.cellphoneNumber`, que o à vista não tem.
+- [ ] Perguntar ao desenvolvedor sobre N1 a N4: o modal deve validar letras e número incompleto?
 - [ ] Validar com cliente cadastrado, manualmente: editar o 102 no modal, conferir se grava no cadastro e se
   imprime (a digitação automatizada não persistiu nesse caso).
 - [x] Obter o checklist do INTG-2645 (incluído acima).
