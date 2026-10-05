@@ -165,6 +165,23 @@ Confirmado no DevTools (resposta do `POST /sales-order`, pedido 00000019): o ser
 `billingAddress` (id 16) com `phone` preenchido e **sem nenhum campo de celular**. O telefone fica no
 pedido, mas o campo Contato impresso continua vazio.
 
+### Teste da hipótese dos comentários do Jira (05/10/2026): Nome e CPF reais no modal
+
+Hipótese (comentário de 20/08): preencher Nome e CPF reais no modal do cliente à vista faria o sistema criar
+ou persistir um cliente, e o contato sairia no pedido.
+
+| Passo | Resultado |
+| --- | --- |
+| Modal do cliente à vista: Nome `Cliente Teste QA`, CPF `529.982.247-25`, Telefone `(27) 3344-5566`, Celular `(27) 9 3344-5566` | Campos aceitos |
+| Confirmar | Modal fecha, a venda exibe "Cliente Teste QA". Sem popup de sucesso e sem chamada de API de cliente |
+| Finalizar (Dinheiro, Faturar Outros) e Visualizar | Pedido **00000025** emitido (HMG levou ~1 min para faturar) |
+| Campo do cliente no impresso | `Cliente: 1 – CLIENTE A VISTA (99999999999)`: nome e CPF digitados **foram ignorados** |
+| Campo Contato no impresso | `Contato: -` |
+| Pessoas > Clientes | Só existem 102 e CLIENTE A VISTA: **nenhum cliente foi criado** |
+
+**Conclusão:** a hipótese não se confirma. Preencher Nome e CPF reais não cria cliente, não persiste nada e
+o impresso sai igual (cliente 1, Contato vazio). PDF do pedido: `05-10-2026.pdf`.
+
 ## Comparação
 
 | Fluxo | Cliente | Contato impresso |
@@ -174,13 +191,22 @@ pedido, mas o campo Contato impresso continua vazio.
 
 ## Pendências
 
-- [ ] Confirmar com o desenvolvedor se o código do INTG-2676 está no HMG.
-- [ ] Perguntar ao desenvolvedor: o card prevê criar um campo de celular no `billingAddress` (backend),
-  enviá-lo (front) e fazer a impressão ler do pedido? Hoje o pedido não tem onde guardar o celular.
+- [x] Confirmar com o desenvolvedor se o código do INTG-2676 está no HMG (João Victor, 20/08: sim; grava
+  telefone/celular no cadastro do cliente pelo Venda Rápida V2).
+- [x] Testar a hipótese Nome + CPF reais no modal do à vista: não cria cliente e não imprime contato
+  (ver "Teste da hipótese" acima).
+- [ ] Perguntar ao desenvolvedor, com o cliente à vista genérico e não editável: os dados devem ir para o
+  cadastro dele ou só para o pedido? Haverá campo de celular no `billingAddress`, e a impressão lerá do
+  pedido? O card cita `customer.cellphoneNumber`, que o à vista não tem.
+- [ ] Validar com cliente cadastrado, manualmente: editar o 102 no modal, conferir se grava no cadastro e se
+  imprime (a digitação automatizada não persistiu nesse caso).
 - [x] Obter o checklist do INTG-2645 (incluído acima).
 - [ ] Executar os cenários pendentes (2 a 6 e 9 a 11) depois da resposta do desenvolvedor.
 
 ## Bug (rascunho para o card)
+
+> Status: **rascunho, não abrir ainda.** Falta o desenvolvedor confirmar se o cliente à vista está no escopo
+> da correção entregue (ver Pendências). Até lá, tratar como dúvida de escopo.
 
 **`[BUG] (FrontEnd) {Vendas/Venda Rápida V2 e Pedido de Venda} Inserir dados da edição do cliente à vista na Impressão do Pedido`**
 
