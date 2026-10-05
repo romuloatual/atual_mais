@@ -113,8 +113,13 @@ impresso. Falta o dev confirmar qual chamada alimenta a impressão (não muda a 
 
 **Confirmar no modal (DevTools, 05/10):** com o cliente **102**, o front faz `PUT /api/v1/customer/102` (200 OK) na hora, ou
 seja, grava no cadastro. Com o **CLIENTE A VISTA** não há nenhuma chamada. É por isso que o 102 imprime e o à vista não:
-a correção entregue persiste no cadastro, e o à vista é genérico e não editável. Falta conferir o `billingAddress.phone`
-do `POST sales-order` de uma venda com o 102.
+a correção entregue persiste no cadastro, e o à vista é genérico e não editável. 
+
+`POST /api/v1/sales-order` de uma venda com o **102** editado pelo modal (DevTools, 05/10): o `billingAddress` leva só
+`phone: "2733221100"` (fixo), `name`/`recipientName` "Maria das Dores", `cnpj` "00125111100", `city` e `zipCode` nulos, **sem
+celular**; `customer: {"id": 102}`. Mesmo assim o impresso saiu com telefone **e** celular: o celular só pode vir do
+cadastro (`customer`), logo a impressão lê o cadastro e não o `billingAddress`. O front monta o `billingAddress` igual para
+o 102 e para o à vista; a diferença é o `PUT /customer/102` (só existe para o editável).
 
 Origem de cada bloco do impresso: `Telefone:` do topo e o bloco `End/Bairro/CEP/Cidade/UF` são da **empresa** (iguais a
 Configuração > Empresas > Dados Gerais: (21) 9706-8530, Rua teste, 29780000, São Gabriel da Palha/ES). O cliente 102 não tem
@@ -131,8 +136,7 @@ PDFs: pedido 18 (bobina, `Contato: -`), pedido 22 (102, com os dois números), p
 - [ ] Perguntar ao dev: para o à vista (genérico, não editável), os dados vão para o cadastro dele ou só para o
   pedido? Haverá campo de celular no `billingAddress` e a impressão lerá do pedido? O card cita
   `customer.cellphoneNumber`, que o à vista não tem.
-- [ ] Conferir no DevTools o `billingAddress` do `POST sales-order` de uma venda com o 102 editado pelo modal
-  (se o telefone também vai no pedido).
+- [x] `billingAddress` do `sales-order` com o 102: só telefone fixo, sem celular; a impressão mostra os dois, logo lê do cadastro.
 - [ ] Perguntar ao dev: o bloco `End/Bairro/CEP/Cidade/UF` do impresso, dentro da área do Cliente, é o endereço da
   empresa por desenho ou deveria mostrar o do cliente? (dúvida, não bug)
 - [ ] Perguntar ao dev: o modal deve validar letras e número incompleto (N1 a N4)?
