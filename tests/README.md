@@ -5,7 +5,7 @@ Os testes ficam divididos em três pastas, com convenções de tag diferentes.
 | | `smoke/` | `regression/` | `cards/` |
 | --- | --- | --- | --- |
 | Profundidade | Rasa (tela abre, ação básica funciona) | Funda (regra de negócio específica) | Funda (o que o card pede) |
-| Abrangência | Todos os módulos principais | Telas mais usadas/críticas | Só o escopo do card |
+| Abrangência | Todos os módulos principais | Um módulo inteiro (macro), ex.: Vendas | Só o escopo do card |
 | Quando roda | Primeiro, sempre, bem rápido | Todo push/PR | Sob demanda |
 | Objetivo | "O sistema não está pegando fogo" | "Essa regra específica continua certa" | "Esse card específico funciona" |
 
@@ -27,8 +27,9 @@ test('Venda Rápida V2 abre sem erro', { tag: '@smoke' }, async ({ page }) => {
 
 ## `regression/` — suíte de regressão
 
-Cobre as telas e fluxos mais usados do sistema (ex.: Venda Rápida V2, Pedido de Venda,
-Dados do Cliente). É a rede de segurança que roda **automaticamente em todo push/PR** e
+É uma suíte **macro**, organizada por **módulo** (ex.: Vendas, Financeiro, Compras), e não por
+tela solta. Cada módulo reúne os fluxos que, se quebrarem, geram o maior estrago (ex.: em
+Vendas: Venda Rápida, Pedido, Orçamento). Testar tela por tela gasta energia demais. É a rede de segurança que roda **automaticamente em todo push/PR** e
 também à noite (agendado), pra pegar quando uma alteração em um card quebra outra
 funcionalidade do mesmo processo/tela.
 

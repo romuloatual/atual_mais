@@ -38,7 +38,7 @@ Os valores exatos de token, série e demais campos estão documentados na seçã
 - `playwright.config.ts` - configuração global (baseURL, navegadores, timeouts, relatórios)
 - `tests/smoke/` - checagem rápida e rasa de que as telas principais abrem, tag `@smoke`.
   Roda primeiro em toda execução de CI, como gate rápido antes do resto da suíte.
-- `tests/regression/` - testes das telas/fluxos mais usados, sempre com a tag `@regression`.
+- `tests/regression/` - suíte macro por módulo (ex.: Vendas), sempre com a tag `@regression`.
   Roda automaticamente em todo push/PR e também à noite (agendado), pra pegar quando um
   card quebra outra funcionalidade do mesmo processo/tela.
 - `tests/cards/` - um arquivo por card do Jira, com a tag do card (ex.: `@INTG-2645`).
