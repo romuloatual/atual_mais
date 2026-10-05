@@ -34,7 +34,7 @@ você não está no dia 1, está entrando na Fase 2.
 
 - [x] Listar os módulos/telas do Atual Mais por **frequência de uso** e **impacto de um bug** (fiscal e pagamento primeiro) — feito a partir do manual oficial, documentado em [`docs/fluxos-principais.md`](./docs/fluxos-principais.md) e no mapa mental "Fluxos Principais do Atual Mais e como usar" (Venda Rápida, Pedidos, Orçamento, Ordem de Serviço, Caixa, Entrada de NF, Clientes, Produtos)
 - [ ] Para cada módulo crítico, listar os fluxos "caminho feliz" que, se quebrarem, geram o maior estrago
-- [ ] Dessa lista, escolher as 3-5 telas que viram a base da suíte `tests/regression/`
+- [ ] Dessa lista, escolher os 2-3 **módulos** (ex.: Vendas) que viram a base da suíte `tests/regression/`. Regressão é macro (um conjunto de testes por módulo), não tela por tela
 - [ ] Definir a "Definição de Pronto" de QA: o que precisa estar verdade pra um card ser considerado testado (validado em HMG? evidência anexada? automatizado se crítico?)
 
 ## Fase 3 — Primeiros testes reais (semana 2-4)

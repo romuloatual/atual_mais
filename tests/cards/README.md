@@ -7,6 +7,6 @@ Veja a convenção completa em [`../README.md`](../README.md).
 
 ## Documentando a validação manual
 
-Antes (ou em vez) de automatizar, registre cada cenário testado no formato
-Cenário / Steps / Resultado Esperado / Resultado Obtido / Observações, e anexe no card do Jira.
+Antes (ou em vez) de automatizar, registre cada cenário em formato BDD (Dado / Quando / Então),
+cobrindo caminho feliz, negativo e borda, e anexe no card do Jira. Texto enxuto, evidência à vontade.
 Use o modelo em [`TEMPLATE-caso-de-teste.md`](./TEMPLATE-caso-de-teste.md).
