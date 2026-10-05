@@ -95,6 +95,18 @@ o à vista não tem nenhum dos dois.
 { "id": 1, "name": "CLIENTE A VISTA", "cnpj": "99999999999", "contacts": [] }
 ```
 
+`POST /api/v1/invoice` (pedido 25, fatura 26, `status: COMPLETED`, "Faturado com sucesso"): o `customer` devolvido é
+o cadastro genérico, **sem** `phoneNumber` nem `cellphoneNumber`:
+
+```json
+"customer": { "id": 1, "name": "CLIENTE A VISTA", "cnpj": "99999999999", "stateRegistration": "ISENTO",
+              "customer": true, "carrier": false, "employee": false, "finance": false, "supplier": false }
+```
+
+Três provas de que o Contato não vem do `billingAddress`: (1) o à vista não tem os campos no cadastro; (2) o telefone
+digitado foi no `billingAddress.phone` e o impresso saiu `Contato: -`; (3) no cliente 102, alterar o cadastro altera o
+impresso. Falta o dev confirmar qual chamada alimenta a impressão (não muda a conclusão).
+
 PDFs: pedido 18 (bobina, `Contato: -`), pedido 22 (102, com os dois números), pedido 25 (`05-10-2026.pdf`, N0).
 
 ## Pendências
