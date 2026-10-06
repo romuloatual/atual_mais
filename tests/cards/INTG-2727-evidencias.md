@@ -11,9 +11,10 @@ descrição técnica do próprio card ainda liste "gaps a resolver"/"proposta de
 > **Nota de correção (06/10/2026):** este arquivo e a branch estavam nomeados `INTG-2726` por engano — esse é o
 > número do card de Backend (a dependência acima), não deste card. Corrigido para `INTG-2727`.
 
-**Status do card no Jira: "Pronto Para Teste".** **Resultado do teste: 🔴 BLOQUEADO em HMG.** Modal com a tela
-nova, mas o campo "Forma de pagamento" não abre a lista de opções em nenhuma linha — impossível selecionar uma
-forma, impossível executar qualquer cenário do card.
+**Status do card no Jira: "Pronto Para Teste".** **Resultado do teste: 🟡 BLOQUEADO/CONDICIONADO em HMG.** Modal
+com a tela nova; o campo "Forma de pagamento" **filtra as opções de acordo com a forma de pagamento escolhida na
+abertura do documento a receber** (achado pelo Rômulo, testando na prática — ver "Achado técnico" para a matriz
+e a causa no código). Para "Dinheiro", o filtro zera todas as opções, impossibilitando testar o card nesse caso.
 
 HMG, empresa `romulo`, PDV LOJA001, 06/10/2026. Lançamento de teste: Rômulo Alves, doc. 5001, R$150,00. Evidência
 em vídeo (JAM): _pendente — gravar ao reexecutar após a correção do dev._
@@ -94,28 +95,80 @@ document.querySelectorAll('.ant-select-dropdown').length === 1             // s�
                                                                              // e pertence a outro campo (filtro de
                                                                              // Cliente da tela de fundo), oculto
 ```
-Conclusão provada: a lista de opções do campo "Forma de pagamento" não está sendo renderizada nesse modal, em
-nenhuma das linhas — não é lentidão, não é erro de digitação/filtro, e não é específico da 2ª linha.
+Conclusão (parcial, corrigida abaixo): no título de teste usado (criado com forma "Dinheiro"), a lista de opções
+nunca populou em nenhuma linha. **O Rômulo descobriu, testando com títulos criados com formas diferentes, que
+isso não é geral — depende da forma de pagamento escolhida na abertura do documento a receber.**
 
-**Causa provável (investigação no código servido em HMG, 06/10/2026):**
+## Achado principal — filtro de formas de pagamento depende da forma de pagamento de abertura do documento
 
-> **Correção:** a hipótese inicial (componente com `name="paymentId"` fixo, item 1 das notas técnicas do card)
-> **foi descartada** após inspecionar o JS servido em HMG. O componente (achado no bundle
-> `3777.4262186b.async.js`) já aceita `name`/`label`/`required` como propriedades — a refatoração citada nas
-> notas técnicas do card aparenta **já estar feita**.
+**Descoberta (Rômulo, 06/10/2026):** ao criar o documento a receber, a forma de pagamento escolhida na abertura
+influencia quais formas ficam disponíveis no campo "Forma de pagamento" do modal de quitação:
 
-O que o código mostra: o campo busca as opções de forma assíncrona via `useRequest` (biblioteca `ahooks`), com
-busca "debounced" (500ms após parar de digitar) e também uma tentativa de carregamento automático ao abrir,
-dependente de duas informações externas (`store` e `type`). Em nenhum teste (clique simples, com texto digitado,
-ou esperando mais de 2s) uma chamada de rede nova foi observada, e nenhuma lista chega a popular. Quando essa busca
-não retorna nenhuma opção, o componente está configurado para **não exibir nem o painel vazio** (em vez de um
-"nenhum resultado") — o que bate exatamente com o sintoma: campo em foco, mas nenhum painel aparece, nem vazio.
+| Forma de pagamento na abertura do documento | Formas disponíveis na quitação |
+| --- | --- |
+| Dinheiro | nenhuma outra forma selecionável (lista vazia — o bug que reproduzi antes) |
+| A Prazo | várias formas disponíveis |
+| Pix | Dinheiro ou PicPay |
 
-**Não confirmado com certeza absoluta:** o motivo exato pelo qual a busca nunca retorna nenhuma opção — pode ser
-que o campo não receba corretamente os dados (`store`/`type`) que precisa do componente pai para montar a busca,
-mas eu não tenho acesso ao código desse componente pai nem a uma ferramenta que capture chamadas de rede internas
-da aplicação (só vejo carregamento de arquivos JS/CSS, não as chamadas de API/autenticação internas). Essa parte
-fica como pista técnica para o dev investigar, não como causa confirmada.
+**Causa provável (bate com o código visto no bundle `3777.4262186b.async.js`):** o campo recebe um `document`/`type`
+(derivado da forma de pagamento de abertura) e usa isso para **filtrar** a lista de opções antes de buscá-la:
+```js
+S && v.test(S) && Y.filter(e => "05"!==e.paymentType.code && "14"!==e.paymentType.code && "15"!==e.paymentType.code)
+S && !v.test(S) && Y.map(...)   // sem filtro
+!S && Y.map(...)                // sem filtro
+```
+Ou seja, dependendo do tipo do documento (`S`), certos códigos de forma de pagamento (`paymentType.code` 05/14/15)
+são excluídos da lista. **Hipótese, não confirmada por completo:** para documentos abertos como "Dinheiro", o
+filtro parece excluir tudo (zero opções); para "A Prazo", quase nada é excluído; para "Pix", só um subconjunto
+passa. Não verifiquei o código exato que decide `S`/`v` nem a tabela completa de `paymentType.code`, então não
+afirmo a regra exata — só que ela existe e está ligada à forma de abertura, com evidência direta da tela.
+
+**Isso muda o veredito:** não é "o campo nunca funciona" — é "o campo funciona, mas filtrado por uma regra não
+documentada no card". Essa regra **não aparece na seção "Regra de Negócio" do INTG-2727** — é um comportamento que
+já existia no sistema (ou foi introduzido junto) e merece confirmação com o time: é intencional, ou é o bug?
+
+## Achado técnico — bloqueador (caso "Dinheiro")
+
+**Cenário técnico — negativo: campo "Forma de pagamento" não abre a lista de opções (documento aberto como "Dinheiro")**
+
+- **Dado** o modal "Quitar contas a receber" aberto, para um documento criado com forma de pagamento "Dinheiro" na
+  abertura, com uma linha de forma de pagamento (1ª, pré-preenchida com "Dinheiro") e uma 2ª linha adicionada (vazia)
+- **Quando** clico no campo "Forma de pagamento" de qualquer uma das linhas
+- **Então** deveria abrir a lista de formas cadastradas (Dinheiro, PicPay, Cartão, etc.) — mesmo que filtrada,
+  deveria sobrar ao menos uma opção compatível
+
+**Obtido:** ❌ falhou — o campo entra em foco, mas nenhuma lista de opções aparece em nenhuma linha. Reportado
+originalmente pelo Rômulo: "teve uma [opção] que apareceu mas depois sumiu".
+
+**Passo a passo (reproduzível):**
+1. Financeiro > Contas a Receber > Novo > forma de pagamento "Dinheiro" na abertura > salvar o documento.
+2. Localizar o título em aberto > menu da linha (ícone "⋮" em Situação) > Quitar.
+3. Clicar no campo "Forma de pagamento" da 1ª linha: nenhuma lista aparece.
+4. Clicar em "+ Adicionar forma de pagamento" (cria uma 2ª linha, vazia); clicar no campo dela: mesmo resultado.
+5. Digitar um texto de busca (ex.: "din"): o valor é registrado no campo, mas a lista de opções continua sem
+   aparecer; ao clicar em outro campo, o texto digitado some (comportamento esperado do componente quando nada
+   foi de fato selecionado — ver nota técnica abaixo).
+
+**Evidência técnica (DevTools, console + Network + inspeção de DOM, no caso "Dinheiro"):**
+```
+// Console: sem erro no momento do clique
+// Network: nenhuma chamada relacionada a forma de pagamento/gateway disparada ao clicar no campo
+// DOM, após clicar e digitar "din" na 2ª linha:
+document.getElementById('paymentMethods_1_paymentGateway').value === 'din'  // true — valor digitado registrado
+document.querySelectorAll('.ant-select-dropdown').length === 1             // só existe 1 dropdown na página inteira,
+                                                                             // e pertence a outro campo (filtro de
+                                                                             // Cliente da tela de fundo), oculto
+```
+
+**Nota técnica — por que o texto digitado some ao trocar de campo:** esse campo só guarda o texto digitado como
+busca temporária; vira valor real apenas se o usuário clica numa opção da lista. O código limpa a busca no
+`onBlur` de propósito (`onBlur:function(){return L("")}`). Como a lista nunca aparece (no caso "Dinheiro"), nunca
+há o que clicar, e o campo sempre volta vazio. Não é um bug à parte — é consequência do achado principal.
+
+**Causa técnica da refatoração (corrigida, 06/10/2026):** a hipótese inicial (componente com `name="paymentId"`
+fixo, item 1 das notas técnicas do card) **foi descartada** após inspecionar o JS servido em HMG — o componente já
+aceita `name`/`label`/`required`. A causa real está no filtro por `paymentType.code` descrito acima, não na
+refatoração do autocomplete (essa parte do plano do dev parece já estar feita).
 
 **Impacto:** bloqueia 100% dos cenários do card (não dá pra adicionar uma 2ª forma sem selecionar qual é ela, nem
 confirmar o caminho de uma forma só sem depender do padrão pré-configurado).
@@ -143,8 +196,10 @@ Corrigido antes de postar qualquer comentário no Jira.
 
 ## Pendências
 
-- [ ] Reportar o bug (campo "Forma de pagamento" sem lista de opções) no INTG-2727 — comentário pronto no padrão JAM,
-  apontando a causa provável (item 1 das notas técnicas do próprio card, autocomplete não refatorado).
+- [ ] Reportar no INTG-2727: o filtro de formas de pagamento por forma de abertura do documento (Dinheiro = zero
+  opções) não está na "Regra de Negócio" do card — perguntar ao time se é intencional ou é o bug.
+- [ ] Mapear a regra completa (qual forma de abertura libera quais formas na quitação) — hoje só temos 3 pontos
+  (Dinheiro→nenhuma, A Prazo→várias, Pix→Dinheiro/PicPay), não a tabela inteira de `paymentType.code`.
 - [ ] Confirmar com o time a discrepância do INTG-2726 (Backend): status no Jira é "Pronto Para Teste", mas a
   descrição técnica do card ainda fala em "gaps a resolver" — qual das duas está desatualizada?
 - [ ] Depois que o dev corrigir: reexecutar os critérios 1–8 e os complementares (B1-B3, N1-N3), com vídeo JAM.
