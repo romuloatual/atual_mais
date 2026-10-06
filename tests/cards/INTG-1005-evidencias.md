@@ -9,6 +9,7 @@ Relacionados: INTG-3546 (UI do % Acréscimo), INTG-3547 (Unidade de Medida, sem 
 desconto acima do limite, em staging).
 
 HMG, empresa `romulo`, PDV LOJA001, 06/10/2026. Cliente 102 (Maria das Dores).
+Evidência em vídeo (JAM): https://jam.dev/c/eb375c21-c661-48d7-8e9c-a4e77b868c2c
 
 ## O que o card pede
 
