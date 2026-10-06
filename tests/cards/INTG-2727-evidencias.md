@@ -31,14 +31,14 @@ nominal da conta, ex. "A Prazo", porque lê a lista de contas em vez da lista de
 | # | Dado | Quando | Então (card) | Obtido |
 | --- | --- | --- | --- | --- |
 | 0 | Modal "Quitar contas a receber" em HMG | abrir a quitação de um título qualquer | mostra opção de adicionar mais de uma linha de forma de pagamento | ✅ mostra — feature de tela chegou em HMG |
-| 1 | total R$19,00 | adicionar Dinheiro 10,00 + PicPay 9,00 | valor restante 0,00; confirma em 1 requisição; recibo lista as duas formas | ⛔ bloqueado — ver "Achado técnico" |
+| 1 | total R$19,00 (doc. 5002, aberto como "A Prazo") | adicionar Dinheiro 10,00 + PicPay 9,00 | valor restante 0,00; confirma em 1 requisição; recibo lista as duas formas | ✅ passou — recibo #5002 lista Dinheiro R$10,00 e PicPay R$9,00, Total Pago R$19,00, Restante R$0,00. Requisição única não conferida (pendente). |
 | 2 | total R$19,00 | soma das formas R$25,00 | bloqueia a confirmação, aviso de valores divergentes | ⛔ bloqueado |
 | 3 | total R$19,00 | soma das formas R$15,00 | valor restante 4,00; confirmação permitida (parcial) | ⛔ bloqueado |
 | 4 | 2 linhas adicionadas | remover uma | valor restante recalcula; última linha não pode ser removida (botão desabilitado) | ⛔ bloqueado |
 | 5 | 1 forma só (não-regressão) | quitar normalmente | funciona como a versão oficial; recibo mostra essa forma | ⛔ bloqueado — ver nota abaixo |
 | 6 | — | campo "Data de pagamento" | continua só com a data; hora é anexada no envio (conferir payload) | ⛔ bloqueado |
 | 7 | pedido com 2+ formas | conferir payload da confirmação (DevTools) | uma única requisição com `payments[]`, não uma por forma | ⛔ bloqueado |
-| 8 | recibo do pedido com 2+ formas | conferir se lista as formas reais | não deve aparecer a forma nominal da conta (ex. "A Prazo") | ⛔ bloqueado |
+| 8 | recibo do pedido com 2+ formas | conferir se lista as formas reais | não deve aparecer a forma nominal da conta (ex. "A Prazo") | ✅ passou — recibo #5002 mostra "Dinheiro" e "PicPay" na coluna Forma Pagamento, não "A Prazo" (forma de abertura do documento) |
 
 **Nota sobre o item 5:** mesmo o fluxo de **uma única forma** não pôde ser validado de ponta a ponta — a 1ª linha só
 tem um valor porque veio pré-preenchida pelo padrão configurado em Configurações > Contas a Receber (ver "Achado
