@@ -35,7 +35,7 @@ nominal da conta, ex. "A Prazo", porque lê a lista de contas em vez da lista de
 | 2 | total R$25,00 | Dinheiro R$15,00 + PicPay R$15,00 (soma R$30,00) | bloqueia a confirmação, aviso de valores divergentes | ✅ passou — aviso "A soma dos valores das formas de pagamento não pode ultrapassar o valor total a pagar", valor restante exibido em vermelho (-R$5,00) |
 | 3 | total R$59,00 | Dinheiro R$20,00 + Pix R$20,00 (soma R$40,00) | valor restante recalcula; confirmação permitida (parcial) | ✅ passou — recibo #5007 gerado normalmente, situação "parcialmente paga", Total Pago R$40,00, Total Restante R$19,00 (bate com 59-40) |
 | 4 | 2 linhas adicionadas | remover uma | valor restante recalcula; última linha não pode ser removida (botão desabilitado) | ✅ passou — relatado pelo Rômulo, ambos os comportamentos conferidos |
-| 5 | 1 forma só (não-regressão) | quitar normalmente | funciona como a versão oficial; recibo mostra essa forma | ⛔ bloqueado — ver nota abaixo |
+| 5 | 1 forma só (não-regressão) | quitar normalmente | funciona como a versão oficial; recibo mostra essa forma | ✅ passou — recibo #5005, Dinheiro R$49,00, Total Pago = Total, Restante R$0,00 |
 | 6 | — | campo "Data de pagamento" | continua só com a data; hora é anexada no envio (conferir payload) | ⛔ bloqueado |
 | 7 | pedido com 2+ formas | conferir payload da confirmação (DevTools) | uma única requisição com `payments[]`, não uma por forma | ⛔ bloqueado |
 | 8 | recibo do pedido com 2+ formas | conferir se lista as formas reais | não deve aparecer a forma nominal da conta (ex. "A Prazo") | ✅ passou — recibo #5002 mostra "Dinheiro" e "PicPay" na coluna Forma Pagamento, não "A Prazo" (forma de abertura do documento) |
