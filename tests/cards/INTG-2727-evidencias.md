@@ -93,13 +93,25 @@ document.querySelectorAll('.ant-select-dropdown').length === 1             // s�
 Conclusão provada: a lista de opções do campo "Forma de pagamento" não está sendo renderizada nesse modal, em
 nenhuma das linhas — não é lentidão, não é erro de digitação/filtro, e não é específico da 2ª linha.
 
-**Causa provável (bate com as próprias notas técnicas do card):** a seção "Notas técnicas" do INTG-2727 lista como
-item 1 do escopo a construir: refatorar `AutoCompletePaymentGatewayReceipt.tsx` para aceitar `name`/`label`/
-`required`, porque hoje usa `name="paymentId"` **fixo** — "impede uso indexado em `Form.List`" (nas palavras do
-próprio card). Isso é exatamente o sintoma reproduzido: um componente de autocomplete com nome de campo fixo,
-usado dentro de uma lista indexada (uma instância por linha de forma de pagamento), não consegue vincular a opção
-certa a cada linha. **Esse item do plano do dev aparenta não ter sido feito ainda**, apesar do card estar marcado
-"Pronto Para Teste" no Jira.
+**Causa provável (investigação no código servido em HMG, 06/10/2026):**
+
+> **Correção:** a hipótese inicial (componente com `name="paymentId"` fixo, item 1 das notas técnicas do card)
+> **foi descartada** após inspecionar o JS servido em HMG. O componente (achado no bundle
+> `3777.4262186b.async.js`) já aceita `name`/`label`/`required` como propriedades — a refatoração citada nas
+> notas técnicas do card aparenta **já estar feita**.
+
+O que o código mostra: o campo busca as opções de forma assíncrona via `useRequest` (biblioteca `ahooks`), com
+busca "debounced" (500ms após parar de digitar) e também uma tentativa de carregamento automático ao abrir,
+dependente de duas informações externas (`store` e `type`). Em nenhum teste (clique simples, com texto digitado,
+ou esperando mais de 2s) uma chamada de rede nova foi observada, e nenhuma lista chega a popular. Quando essa busca
+não retorna nenhuma opção, o componente está configurado para **não exibir nem o painel vazio** (em vez de um
+"nenhum resultado") — o que bate exatamente com o sintoma: campo em foco, mas nenhum painel aparece, nem vazio.
+
+**Não confirmado com certeza absoluta:** o motivo exato pelo qual a busca nunca retorna nenhuma opção — pode ser
+que o campo não receba corretamente os dados (`store`/`type`) que precisa do componente pai para montar a busca,
+mas eu não tenho acesso ao código desse componente pai nem a uma ferramenta que capture chamadas de rede internas
+da aplicação (só vejo carregamento de arquivos JS/CSS, não as chamadas de API/autenticação internas). Essa parte
+fica como pista técnica para o dev investigar, não como causa confirmada.
 
 **Impacto:** bloqueia 100% dos cenários do card (não dá pra adicionar uma 2ª forma sem selecionar qual é ela, nem
 confirmar o caminho de uma forma só sem depender do padrão pré-configurado).
