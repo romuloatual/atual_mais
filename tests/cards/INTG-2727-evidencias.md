@@ -7,8 +7,9 @@ Depende do Backend [INTG-2726](https://integramais.atlassian.net/browse/INTG-272
 numa única quitação) — status "Pronto Para Teste" no Jira, embora a descrição técnica ainda fale em "gaps a
 resolver" (discrepância não resolvida, ver Pendências).
 
-**Status: 🟢 APROVADO em HMG (06/10/2026).** Correção de numeração: este arquivo/branch estavam como `INTG-2726`
-(número do Backend, dependência) por engano — corrigido para `INTG-2727`.
+**Status: 🟡 PARCIAL em HMG (06/10/2026).** Bug confirmado: Desconto/Acréscimo global quebra a quitação com
+múltiplas formas (ver "Achado — Desconto/Acréscimo"). Correção de numeração: este arquivo/branch estavam como
+`INTG-2726` (número do Backend, dependência) por engano — corrigido para `INTG-2727`.
 
 HMG, empresa `romulo`, PDV LOJA001. Cliente de teste: Rômulo Alves. Evidência em vídeo (JAM): pendente.
 
@@ -32,6 +33,8 @@ nominal da conta (ex. "A Prazo").
 | 6 | — | campo "Data de pagamento" | só data; hora anexada no envio | 🟡 campo só com data (confirmado); hora no payload não verificada (ver Pendências) |
 | 7 | 2+ formas | payload da confirmação | 1 requisição com `payments[]` | 🟡 não verificado via rede; evidência indireta forte (1 botão de confirmação, recibo sempre correto) |
 | 8 | recibo com 2+ formas | lista as formas reais | não aparece a forma nominal da conta | ✅ recibos #5002/#5007 mostram "Dinheiro"/"PicPay"/"Pix", nunca "A Prazo" |
+| 9 | conta corrente diferente por linha | 2 formas, contas correntes distintas | cada forma usa sua própria conta | ✅ confirmado |
+| 10 | Desconto/Acréscimo global (regra: "como hoje") | título R$19,00, Desconto R$5,00 **ou** Acréscimo R$2,00, formas somando o total ajustado (restante R$0,00 na tela) | deve confirmar normalmente | ❌ **falha** — erro 400 "A soma das formas de pagamento excede o valor total das contas selecionadas", mesmo com a tela mostrando restante R$0,00. Falha isolada com só Desconto e isolada com só Acréscimo (não é só quando os dois são usados juntos) |
 
 ## Achado — filtro de formas por forma de abertura do documento
 
@@ -43,8 +46,24 @@ Regra de Negócio do card** — registrado como pergunta ao time, não como bug 
 **Workaround:** abrir o documento como "A Prazo" libera a quitação com múltiplas formas — foi assim que os
 critérios acima foram executados.
 
-## Pendências (fora do escopo, não bloqueiam a aprovação)
+## Achado — Desconto/Acréscimo global quebra a quitação (bloqueador, item 10)
 
+A regra do card diz que Desconto/Acréscimo "permanecem no nível da quitação... como hoje" (ou seja, deveria
+continuar funcionando). Na prática: com a tela 100% correta (Total recalculado certo, "valor restante" em R$0,00),
+o backend recusa a confirmação com **400: "A soma das formas de pagamento excede o valor total das contas
+selecionadas"**. Testado isoladamente:
+- Só Desconto (R$5,00, sem acréscimo): formas somando o total ajustado (R$14,00) → ❌ erro 400.
+- Só Acréscimo (R$2,00, sem desconto): formas somando o total ajustado (R$21,00) → ❌ erro 400.
+
+Ou seja, o backend parece validar a soma das formas contra o total **sem considerar** desconto/acréscimo (ou
+calculando errado) — hipótese a confirmar com DevTools (payload da requisição e cálculo exato do backend).
+**Pendente para amanhã.**
+
+## Pendências
+
+- [ ] **Investigar via DevTools (amanhã):** payload exato da requisição de quitação com Desconto/Acréscimo, pra
+  achar contra qual valor o backend está comparando a soma das formas.
+- [ ] Reportar o bug do item 10 no INTG-2727 — bloqueia uma regra explícita do card, não é "fora do escopo".
 - [ ] Perguntar ao time: o filtro de formas por forma de abertura (Dinheiro = zero opções) é intencional?
 - [ ] Confirmar discrepância do INTG-2726: Jira diz "Pronto Para Teste", descrição técnica fala em "gaps a resolver".
 - [ ] Desconto/acréscimo no recibo com várias formas depende de definição do Backend (INTG-2726) — testar depois.
