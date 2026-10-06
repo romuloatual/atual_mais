@@ -1,7 +1,11 @@
-# INTG-2726 — Validação manual
+# INTG-2727 — Validação manual
 
 **Card:** `[MELHORIA] (Frontend) {Contas a Receber} Permitir múltiplas formas de pagamento na quitação e exibi-las no recibo`
-https://integramais.atlassian.net/browse/INTG-2726
+https://integramais.atlassian.net/browse/INTG-2727
+
+> **Nota de correção (06/10/2026):** este arquivo e a branch eram `INTG-2726` por engano — esse é o número do card
+> de **Backend** relacionado (aceitar múltiplas formas numa única quitação), que é dependência deste card, não o
+> próprio. Renomeado para `INTG-2727`, que é o Frontend (este card).
 
 **Status: 🔴 BLOQUEADO em HMG (06/10/2026).** A tela mudou (modal já tem "Adicionar forma de pagamento"), mas o
 campo "Forma de pagamento" não abre a lista de opções em nenhuma linha — impossível selecionar uma forma, impossível
@@ -12,7 +16,10 @@ executar qualquer cenário do card. Ver "Achado técnico" abaixo.
 No modal "Quitar contas a receber": permitir várias linhas de forma de pagamento (forma + conta corrente + valor),
 com "valor restante" em tempo real, bloqueando a confirmação só quando a soma **exceder** o total (parcial é
 permitido). Enviar tudo numa única requisição. O recibo deve listar as formas realmente usadas (hoje mostra a forma
-nominal da conta, ex. "A Prazo", porque lê a lista de contas em vez da lista de pagamentos).
+nominal da conta, ex. "A Prazo", porque lê a lista de contas em vez da lista de pagamentos). Depende do card de
+Backend [INTG-2726](https://integramais.atlassian.net/browse/INTG-2726) (aceitar múltiplas formas numa única
+quitação, `payments[]` + `paymentGrouping`), ainda não implementado — ver "Comparação" abaixo sobre o que isso
+afeta e o que não afeta no teste deste card.
 
 ## Checklist — antes de testar
 
@@ -45,14 +52,15 @@ Configurações > Contas a Receber — não porque o dropdown funcionou.
 Único teste possível hoje é o de não-regressão (quitar com 1 forma só, usando o valor pré-preenchido), ainda não
 executado.
 
-**Comparação (isola a causa, 06/10/2026):** o card de Backend relacionado (aceitar múltiplas formas numa única
-quitação) ainda não foi implementado — a própria descrição técnica dele lista "gaps a resolver" e "proposta de
-alterações" em aberto. Isso poderia sugerir que o campo trava "porque o backend não está pronto". **Descartado**:
-testei o mesmo tipo de campo "forma de pagamento" no PDV (Venda Rápida, tela de Pagamento → "Adicionar Pagamento")
-e a lista abre e funciona normalmente (Dinheiro, Cartão de Crédito, Cartão de Débito, PicPay, Pix, Cartão/Cheque
-compensado). Ou seja, o catálogo de formas de pagamento existe e funciona no sistema — o problema é isolado ao
-componente novo do modal de quitação de Contas a Receber, não depende do card de Backend. **Pode e deve ser
-reportado como bug agora.**
+**Comparação (isola a causa, 06/10/2026):** o card de Backend relacionado
+([INTG-2726](https://integramais.atlassian.net/browse/INTG-2726), aceitar múltiplas formas numa única quitação)
+ainda não foi implementado — a própria descrição técnica dele lista "gaps a resolver" e "proposta de alterações" em
+aberto. Isso poderia sugerir que o campo trava "porque o Backend não está pronto". **Descartado**: testei o mesmo
+tipo de campo "forma de pagamento" no PDV (Venda Rápida, tela de Pagamento → "Adicionar Pagamento") e a lista abre
+e funciona normalmente (Dinheiro, Cartão de Crédito, Cartão de Débito, PicPay, Pix, Cartão/Cheque compensado). Ou
+seja, o catálogo de formas de pagamento existe e funciona no sistema — o problema é isolado ao componente novo do
+modal de quitação de Contas a Receber, não depende do card de Backend (INTG-2726). **Pode e deve ser reportado
+como bug agora, no INTG-2727.**
 
 ## Cenários (BDD) — do card + complementares
 
@@ -78,7 +86,8 @@ Quitar > modal "Quitar contas a receber".
 
 ## Pendências
 
-- [ ] Confirmar com o time se o Backend (card relacionado) e este Frontend já estão em HMG.
+- [x] Confirmar com o time se o Backend (card relacionado, INTG-2726) e este Frontend (INTG-2727) já estão em
+  HMG. **Frontend: sim, com o bug acima. Backend: não, ainda em "gaps a resolver".**
 - [ ] Perguntar ao dev: N1 (valor 0,00) e N3 (forma duplicada) — comportamento esperado?
 - [ ] Ponto já sinalizado pelo próprio card: exibição de desconto/acréscimo no recibo com várias formas depende da
   definição do Backend — só testar depois que isso for definido.
