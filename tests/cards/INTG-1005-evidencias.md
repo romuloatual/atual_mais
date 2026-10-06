@@ -16,7 +16,7 @@ No Pedido de Venda, Valor Total do item **maior** que o subtotal deve virar **ac
 total enviado ao backend deve somar os acréscimos (antes só somava descontos); o pedido deve fechar (CONCLUÍDO) e a NF
 emitir sem erro.
 
-## Critérios do card (BDD) — executados por mim e pelo Rômulo, mesmo resultado
+## Critérios do card (BDD) executados
 
 | # | Dado | Quando | Então (card) | Obtido |
 | --- | --- | --- | --- | --- |
