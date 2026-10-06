@@ -25,6 +25,36 @@ emitir sem erro.
 | 3 | Pedido com 2 itens: 045 (acréscimo) + 010 (desconto) | fechar | total do pedido bate com o rodapé | ✅ pedido 43: total 152 = 150 + 2; CONCLUÍDO |
 | 4 | Pedido 43 (misto) | Gerar NFC-e | emite sem erro | ✅ NF 678, NFC-e, chave `3226101226649600012965469000006781000006798`, status **FATURADO** |
 
+## Passo a passo (reproduzível)
+
+**Fluxo base:** Vendas > Pedidos > Novo > Cliente `102` (lupa) > Continuar > Produtos.
+
+**Cenário 1 — Acréscimo (pedido 40):**
+1. Adicionar Produto > marcar "Pesquisar por SKU" > `045` > selecionar Calça Jeans Feminina (Valor unitário R$123,50).
+2. No campo **Valor total**, apagar e digitar `150,00` > Tab. Conferir: Acréscimo 21,46%, Desconto desabilitado.
+3. Salvar Produto > Continuar (Transporte, já preenchido) > Continuar (Faturas).
+4. Forma de Pagamento = Dinheiro. O "Valor a pagar" já vem com R$150 (o total do rodapé). Gerar > Salvar.
+5. Conferir na lista de Pedidos: status **CONCLUÍDO**, valor R$150,00.
+
+**Cenário 2 — Desconto, não regressão (pedido 42):**
+1. Repetir os passos 1 a 5 do cenário 1, mas no passo 2 digitar `100,00` (menor que o subtotal).
+2. Conferir: Desconto 19,03%, Acréscimo desabilitado. Valor a pagar = R$100. Status final: CONCLUÍDO.
+
+**Cenário 3 — Combinado, um item de cada tipo (pedido 43):**
+1. Novo pedido, cliente `102` > Continuar.
+2. Adicionar Produto `045`, Valor total `150,00` (acréscimo) > Salvar Produto.
+3. Adicionar Produto (2º item) > `010` Biscoito Recheado Chocolate (R$3,04) > Valor total `2,00` (desconto) > Salvar Produto.
+4. Conferir a tabela de Produtos: colunas Desc. Item e Acréscimo, uma por item, e o total geral.
+5. Continuar > Transporte > Continuar > Faturas > Dinheiro. Conferir que o "Valor a pagar" veio `152` (soma dos dois
+   itens, já com acréscimo e desconto). Gerar > Salvar.
+6. Conferir: status **CONCLUÍDO**, valor R$152,00.
+
+**Cenário 4 — Emissão de NF (a partir do pedido 43):**
+1. Na lista de Pedidos, na linha do pedido 43: **Mais Opções** > **Gerar NFC-e**.
+2. Confirmar o aviso "Deseja Emitir a NFCE?" (ação irreversível, feita em HMG).
+3. Confirmar "Deseja visualizar a nota fiscal?" (abre em nova aba, pode ser dispensado).
+4. Conferir na lista: status muda para **FATURADO**, com número da NF, modelo NFC-e e chave de acesso preenchidos.
+
 ## Evidência técnica (payload do `POST /api/v1/sales-order`, pedido 43, capturado via interceptação de XHR)
 
 ```json
