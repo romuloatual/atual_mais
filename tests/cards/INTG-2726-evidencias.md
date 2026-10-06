@@ -45,6 +45,15 @@ Configurações > Contas a Receber — não porque o dropdown funcionou.
 Único teste possível hoje é o de não-regressão (quitar com 1 forma só, usando o valor pré-preenchido), ainda não
 executado.
 
+**Comparação (isola a causa, 06/10/2026):** o card de Backend relacionado (aceitar múltiplas formas numa única
+quitação) ainda não foi implementado — a própria descrição técnica dele lista "gaps a resolver" e "proposta de
+alterações" em aberto. Isso poderia sugerir que o campo trava "porque o backend não está pronto". **Descartado**:
+testei o mesmo tipo de campo "forma de pagamento" no PDV (Venda Rápida, tela de Pagamento → "Adicionar Pagamento")
+e a lista abre e funciona normalmente (Dinheiro, Cartão de Crédito, Cartão de Débito, PicPay, Pix, Cartão/Cheque
+compensado). Ou seja, o catálogo de formas de pagamento existe e funciona no sistema — o problema é isolado ao
+componente novo do modal de quitação de Contas a Receber, não depende do card de Backend. **Pode e deve ser
+reportado como bug agora.**
+
 ## Cenários (BDD) — do card + complementares
 
 Total a pagar de exemplo do card: R$19,00. Fluxo base: Financeiro > Contas a Receber > localizar um título >
