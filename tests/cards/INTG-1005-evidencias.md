@@ -3,57 +3,66 @@
 **Card:** `Acréscimo por item no fechamento do Pedido de Venda grava como desconto negativo (erro na emissão da NF)`
 https://integramais.atlassian.net/browse/INTG-1005
 
-**Criticidade alta** (card de 2023, uma tentativa de correção anterior falhou). Correção atual já entregue pelo dev
-(João Victor), branch `fix/order-item-increase-total-INTG-1005`, revisão de código **OK** (Winicios).
-Relacionados: INTG-3546 (UI do % Acréscimo), INTG-3547 (bug de Unidade de Medida, sem relação), INTG-3197 (modal de
-liberação de desconto acima do limite, em staging).
+**Criticidade alta** (card de 2023, uma tentativa de correção anterior falhou). **Status: APROVADO em HMG.**
+Correção do dev (João Victor), branch `fix/order-item-increase-total-INTG-1005`, revisão de código OK (Winicios).
+Relacionados: INTG-3546 (UI do % Acréscimo), INTG-3547 (Unidade de Medida, sem relação), INTG-3197 (liberação de
+desconto acima do limite, em staging).
 
-HMG, empresa `romulo`, PDV LOJA001. **Status:** em execução — validação independente da correção do dev.
+HMG, empresa `romulo`, PDV LOJA001, 06/10/2026. Cliente 102 (Maria das Dores).
 
 ## O que o card pede
 
-No **Pedido de Venda**, ao editar o **Valor Total** de um item para um valor **maior** que o subtotal (qtd × valor
-unitário): tratar a diferença como **acréscimo** (nunca desconto negativo); o total enviado ao backend no fechamento
-deve somar os acréscimos (hoje só somava descontos); o pedido deve fechar (CONCLUÍDO) e a NF emitir sem erro.
+No Pedido de Venda, Valor Total do item **maior** que o subtotal deve virar **acréscimo** (nunca desconto negativo); o
+total enviado ao backend deve somar os acréscimos (antes só somava descontos); o pedido deve fechar (CONCLUÍDO) e a NF
+emitir sem erro.
 
-**Causa (confirmada pelo dev):** o total enviado ao backend no fechamento não somava os acréscimos dos itens, só os
-descontos — o rodapé da tela já mostrava o valor certo, mas o total enviado ficava menor, e o backend rejeitava por a
-soma dos pagamentos não bater com o total do pedido. Correção só no front: o total enviado passou a somar os acréscimos
-igual ao rodapé, arredondado em 2 casas. Sem mudança de banco/DTO.
+## Critérios do card (BDD) — executados por mim e pelo Rômulo, mesmo resultado
 
-**Testes do próprio dev no HMG (não substituem a nossa validação):**
-
-| Cenário | Pedido | Item (increase/discount) | Total do pedido | Resultado |
+| # | Dado | Quando | Então (card) | Obtido |
 | --- | --- | --- | --- | --- |
-| Acréscimo (13,96 → 20,00) | 64 | increase 6,04 | 20,00 | Concluído e faturado ✅ |
-| Desconto, sem regressão (13,96 → 13,00) | 65 | discount 0,96 | 13,00 | Concluído ✅ |
+| 1 | Item 045, subtotal R$123,50 | Valor Total `150,00` | acréscimo R$26,50, total enviado = rodapé, fecha sem erro | ✅ pedido 40: `increase: 26.5, discount: 0`, total 150; CONCLUÍDO |
+| 2 | Item 045, subtotal R$123,50 | Valor Total `100,00` (desconto) | calcula desconto, como já ocorria | ✅ pedido 42: `discount: 23.5`, total 100; CONCLUÍDO |
+| 3 | Pedido com 2 itens: 045 (acréscimo) + 010 (desconto) | fechar | total do pedido bate com o rodapé | ✅ pedido 43: total 152 = 150 + 2; CONCLUÍDO |
+| 4 | Pedido 43 (misto) | Gerar NFC-e | emite sem erro | ✅ NF 678, NFC-e, chave `3226101226649600012965469000006781000006798`, status **FATURADO** |
 
-## Cenários (BDD) — nosso teste independente
+## Evidência técnica (payload do `POST /api/v1/sales-order`, pedido 43, capturado via interceptação de XHR)
 
-Fluxo (do próprio dev): Vendas > Pedidos > Novo > Cliente e Vendedor > Produtos (item) > editar **Valor Total** no item
-> Transporte > Faturas (forma de pagamento = **valor do rodapé**) > Salvar/Fechar.
+```json
+// enviado
+{ "total": 152,
+  "items": [
+    { "sku": 10, "discount": 1.04, "increase": 0, "total": 2 },
+    { "sku": 45, "discount": 0, "increase": 26.5, "total": 150 }
+  ]
+}
+// resposta
+{ "id": 43, "total": 152, "status": "COMPLETED",
+  "items": [
+    { "sku": 10, "discount": 1.04, "increase": 0 },
+    { "sku": 45, "discount": 0, "increase": 26.5 }
+  ]
+}
+```
 
-| # | Tipo | Dado | Quando | Então | Obtido |
-| --- | --- | --- | --- | --- | --- |
-| 1 | Feliz (o card) | item com subtotal conhecido | Valor Total maior (acréscimo) | item grava em `increase` (não desconto negativo); total enviado = rodapé; pedido CONCLUÍDO; NF emite sem erro | Pendente |
-| 2 | Regressão | mesmo item | Valor Total menor (desconto) | grava em `discount`; pedido CONCLUÍDO, como antes | Pendente |
-| 3 | Combinado | pedido com 2+ itens | um item com acréscimo e outro com desconto | total do pedido bate com o rodapé | Pendente |
+- O `total` enviado (152) bate com o rodapé (150 + 2), confirmando a correção: antes só somava descontos.
+- O item com Valor Total maior grava em `increase` (não em `discount` negativo).
+- Não há campo de percentual de acréscimo no payload — consistente com o aviso do dev (o % não é persistido, é
+  calculado em tela como `increase ÷ subtotal`; isso é escopo do INTG-3546, não deste card).
+- `discountAverage`/`increaseAverage` vieram `0` na resposta — são o rateio por item calculado pelo backend em outro
+  momento (fatura), não neste payload; não é algo a cobrar aqui.
 
-**Atenção ao montar os cenários:**
-- Usar **desconto abaixo do limite da empresa** (10% no HMG) nos cenários de desconto — acima disso o backend retorna
-  422 e pede liberação (modal do INTG-3197, fora do escopo aqui).
-- **Não** editar o Total no rodapé diretamente — isso manda a diferença para "Outras despesas"/"Desconto" do pedido,
-  é outro fluxo e não foi tocado por esta correção.
-- O **% Acréscimo não aparece na tela** (fica vazio) — está correto, é escopo do INTG-3546, não deste card.
+## Print/preview
 
-## Evidência técnica a coletar
+- Formulário do item: Acréscimo 21,46% (pedido 40) e Desconto 19,03% (pedido 42), com o campo oposto desabilitado.
+- Tabela de produtos do pedido 43: colunas Desc. Item e Acréscimo separadas, uma por item.
+- Lista de Pedidos: 00000040 R$150,00 CONCLUÍDO; 00000042 R$100,00 CONCLUÍDO; 00000043 R$152,00 FATURADO (NF 678, NFC-e).
 
-- Payload do fechamento (DevTools): campo de desconto/acréscimo do item e o total do pedido, comparado ao rodapé.
-- Status final do pedido (CONCLUÍDO/EM ANDAMENTO) e se a NF emite sem erro.
-- Se falhar: a mensagem de erro exata.
+## Observação de processo
+
+Durante o teste, um clique errado abriu a confirmação de exclusão do pedido 00000041 (de outro teste, não relacionado
+a este card); foi cancelado a tempo e o pedido não foi afetado.
 
 ## Pendências
 
-- [ ] Executar os cenários 1, 2 e 3.
-- [ ] Se falhar, capturar o payload mostrando o total divergente e comparar com a causa descrita pelo dev.
+- [ ] Nenhuma — critérios do card atendidos. Encaminhar ao time/Jira.
 - [ ] Antes do PR: mesclar a `main` na branch do card.
