@@ -10,3 +10,7 @@ Veja a convenção completa em [`../README.md`](../README.md).
 Antes (ou em vez) de automatizar, registre cada cenário em formato BDD (Dado / Quando / Então),
 cobrindo caminho feliz, negativo e borda, e anexe no card do Jira. Texto enxuto, evidência à vontade.
 Use o modelo em [`TEMPLATE-caso-de-teste.md`](./TEMPLATE-caso-de-teste.md).
+
+Depois de preencher o arquivo de validação (`INTG-XXXX-evidencias.md`), resuma no comentário do Jira usando o
+modelo em [`TEMPLATE-comentario-jira.md`](./TEMPLATE-comentario-jira.md) (status, cenários validados, observações
+fora do escopo e conclusão).
