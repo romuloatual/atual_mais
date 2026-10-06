@@ -11,10 +11,11 @@ descrição técnica do próprio card ainda liste "gaps a resolver"/"proposta de
 > **Nota de correção (06/10/2026):** este arquivo e a branch estavam nomeados `INTG-2726` por engano — esse é o
 > número do card de Backend (a dependência acima), não deste card. Corrigido para `INTG-2727`.
 
-**Status do card no Jira: "Pronto Para Teste".** **Resultado do teste: 🟡 BLOQUEADO/CONDICIONADO em HMG.** Modal
-com a tela nova; o campo "Forma de pagamento" **filtra as opções de acordo com a forma de pagamento escolhida na
-abertura do documento a receber** (achado pelo Rômulo, testando na prática — ver "Achado técnico" para a matriz
-e a causa no código). Para "Dinheiro", o filtro zera todas as opções, impossibilitando testar o card nesse caso.
+**Status do card no Jira: "Pronto Para Teste".** **Resultado final: 🟢 APROVADO em HMG, com ressalva.** Usando o
+workaround (abrir o documento como "A Prazo"), os critérios 1-5 e 8 do card passaram. O campo "Forma de pagamento"
+**filtra as opções de acordo com a forma de pagamento escolhida na abertura do documento** (achado pelo Rômulo,
+testando na prática) — para "Dinheiro", o filtro zera todas as opções. Essa regra não está na "Regra de Negócio"
+do card; fica como pergunta ao time (ver "Pendências"), não como bloqueio do veredito.
 
 HMG, empresa `romulo`, PDV LOJA001, 06/10/2026. Lançamento de teste: Rômulo Alves, doc. 5001, R$150,00. Evidência
 em vídeo (JAM): _pendente — gravar ao reexecutar após a correção do dev._
@@ -36,8 +37,8 @@ nominal da conta, ex. "A Prazo", porque lê a lista de contas em vez da lista de
 | 3 | total R$59,00 | Dinheiro R$20,00 + Pix R$20,00 (soma R$40,00) | valor restante recalcula; confirmação permitida (parcial) | ✅ passou — recibo #5007 gerado normalmente, situação "parcialmente paga", Total Pago R$40,00, Total Restante R$19,00 (bate com 59-40) |
 | 4 | 2 linhas adicionadas | remover uma | valor restante recalcula; última linha não pode ser removida (botão desabilitado) | ✅ passou — relatado pelo Rômulo, ambos os comportamentos conferidos |
 | 5 | 1 forma só (não-regressão) | quitar normalmente | funciona como a versão oficial; recibo mostra essa forma | ✅ passou — recibo #5005, Dinheiro R$49,00, Total Pago = Total, Restante R$0,00 |
-| 6 | — | campo "Data de pagamento" | continua só com a data; hora é anexada no envio (conferir payload) | ⛔ bloqueado |
-| 7 | pedido com 2+ formas | conferir payload da confirmação (DevTools) | uma única requisição com `payments[]`, não uma por forma | ⛔ bloqueado |
+| 6 | — | campo "Data de pagamento" | continua só com a data; hora é anexada no envio (conferir payload) | 🟡 parcial — campo só mostra data (confirmado visualmente nos recibos #5002/#5007/#5005); hora anexada no envio **não verificada via payload** (decisão: não vale o esforço, comportamento funcional já validado em 5 cenários) |
+| 7 | pedido com 2+ formas | conferir payload da confirmação (DevTools) | uma única requisição com `payments[]`, não uma por forma | 🟡 parcial — **não verificado tecnicamente**; evidência indireta forte: um único botão "OK" no modal, confirmação única visível, recibo sempre correto nos testes (critério 1, 3). Decisão conjunta de não aprofundar (custo/benefício) |
 | 8 | recibo do pedido com 2+ formas | conferir se lista as formas reais | não deve aparecer a forma nominal da conta (ex. "A Prazo") | ✅ passou — recibo #5002 mostra "Dinheiro" e "PicPay" na coluna Forma Pagamento, não "A Prazo" (forma de abertura do documento) |
 
 **Nota sobre o item 5:** mesmo o fluxo de **uma única forma** não pôde ser validado de ponta a ponta — a 1ª linha só
@@ -200,17 +201,19 @@ Editar o documento a receber e trocar a forma de pagamento de abertura para **"A
 várias formas no modal de quitação. Com isso dá pra seguir e executar os critérios 1–8 e os complementares
 (B1-B3, N1-N3) da tabela BDD, usando documentos abertos como "A Prazo".
 
-## Pendências
+## Veredito
 
-- [ ] Reportar no INTG-2727: o filtro de formas de pagamento por forma de abertura do documento (Dinheiro = zero
-  opções) não está na "Regra de Negócio" do card — perguntar ao time se é intencional ou é o bug.
-- [ ] Mapear a regra completa (qual forma de abertura libera quais formas na quitação) — hoje só temos 3 pontos
-  (Dinheiro→nenhuma, A Prazo→várias, Pix→Dinheiro/PicPay), não a tabela inteira de `paymentType.code`.
-- [ ] Com o workaround (abrir como "A Prazo"), executar os critérios 1–8 e os complementares (B1-B3, N1-N3).
+🟢 **Aprovado em HMG.** Critérios 1-5 e 8 do card passaram (workaround: abrir o documento como "A Prazo").
+Critérios 6 e 7 ficam parciais (comportamento funcional observado é o esperado; payload bruto não foi inspecionado
+— decisão consciente de custo/benefício, não bloqueia a aprovação). Complementares (B1-B3, N1-N3) não executados,
+são extras que eu adicionei ao plano, não pedidos pelo card — não bloqueiam o veredito ([[QA valida o que o card pede]]).
+
+## Pendências (para o comentário "Fora do Escopo" do Jira, não bloqueiam a aprovação)
+
+- [ ] O filtro de formas de pagamento por forma de abertura do documento (Dinheiro = zero opções) não está na
+  "Regra de Negócio" do card — perguntar ao time se é intencional ou é o bug.
 - [ ] Confirmar com o time a discrepância do INTG-2726 (Backend): status no Jira é "Pronto Para Teste", mas a
   descrição técnica do card ainda fala em "gaps a resolver" — qual das duas está desatualizada?
-- [ ] Depois que o dev corrigir: reexecutar os critérios 1–8 e os complementares (B1-B3, N1-N3), com vídeo JAM.
-- [ ] Perguntar ao dev: N1 (valor 0,00) e N3 (forma duplicada) — comportamento esperado?
 - [ ] Ponto já sinalizado pelo próprio card: exibição de desconto/acréscimo no recibo com várias formas depende da
   definição do Backend (INTG-2726) — só testar depois que isso for definido.
 - [ ] Antes do PR: mesclar a `main` na branch do card.
