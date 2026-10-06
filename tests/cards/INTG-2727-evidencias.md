@@ -3,92 +3,123 @@
 **Card:** `[MELHORIA] (Frontend) {Contas a Receber} Permitir múltiplas formas de pagamento na quitação e exibi-las no recibo`
 https://integramais.atlassian.net/browse/INTG-2727
 
-> **Nota de correção (06/10/2026):** este arquivo e a branch eram `INTG-2726` por engano — esse é o número do card
-> de **Backend** relacionado (aceitar múltiplas formas numa única quitação), que é dependência deste card, não o
-> próprio. Renomeado para `INTG-2727`, que é o Frontend (este card).
+Depende do Backend [INTG-2726](https://integramais.atlassian.net/browse/INTG-2726) (aceitar múltiplas formas numa
+única quitação, `payments[]` + `paymentGrouping`) — **ainda não implementado**, conforme a própria descrição
+técnica do card ("gaps a resolver", "proposta de alterações" em aberto).
 
-**Status: 🔴 BLOQUEADO em HMG (06/10/2026).** A tela mudou (modal já tem "Adicionar forma de pagamento"), mas o
-campo "Forma de pagamento" não abre a lista de opções em nenhuma linha — impossível selecionar uma forma, impossível
-executar qualquer cenário do card. Ver "Achado técnico" abaixo.
+> **Nota de correção (06/10/2026):** este arquivo e a branch estavam nomeados `INTG-2726` por engano — esse é o
+> número do card de Backend (a dependência acima), não deste card. Corrigido para `INTG-2727`.
+
+**Status: 🔴 BLOQUEADO em HMG.** Modal com a tela nova, mas o campo "Forma de pagamento" não abre a lista de
+opções em nenhuma linha — impossível selecionar uma forma, impossível executar qualquer cenário do card.
+
+HMG, empresa `romulo`, PDV LOJA001, 06/10/2026. Lançamento de teste: Rômulo Alves, doc. 5001, R$150,00. Evidência
+em vídeo (JAM): _pendente — gravar ao reexecutar após a correção do dev._
 
 ## O que o card pede
 
 No modal "Quitar contas a receber": permitir várias linhas de forma de pagamento (forma + conta corrente + valor),
 com "valor restante" em tempo real, bloqueando a confirmação só quando a soma **exceder** o total (parcial é
 permitido). Enviar tudo numa única requisição. O recibo deve listar as formas realmente usadas (hoje mostra a forma
-nominal da conta, ex. "A Prazo", porque lê a lista de contas em vez da lista de pagamentos). Depende do card de
-Backend [INTG-2726](https://integramais.atlassian.net/browse/INTG-2726) (aceitar múltiplas formas numa única
-quitação, `payments[]` + `paymentGrouping`), ainda não implementado — ver "Comparação" abaixo sobre o que isso
-afeta e o que não afeta no teste deste card.
+nominal da conta, ex. "A Prazo", porque lê a lista de contas em vez da lista de pagamentos).
 
-## Checklist — antes de testar
+## Critérios do card (BDD) executados
 
-- [x] Abrir Financeiro > Contas a Receber > Quitar uma conta qualquer em HMG.
-- [x] O modal mostra um botão de **adicionar forma de pagamento** (mais de uma linha)? Se não, a feature não está em
-  HMG ainda — parar aqui, registrar "aguardando deploy" e avisar. **Mostra.**
-- [ ] Se mostrar, conferir a pré-condição do card: ainda é possível quitar com uma forma só (não-regressão)? **Não
-  testado ainda — bloqueado pelo achado abaixo antes de chegar nesse ponto.**
+| # | Dado | Quando | Então (card) | Obtido |
+| --- | --- | --- | --- | --- |
+| 0 | Modal "Quitar contas a receber" em HMG | abrir a quitação de um título qualquer | mostra opção de adicionar mais de uma linha de forma de pagamento | ✅ mostra — feature de tela chegou em HMG |
+| 1 | total R$19,00 | adicionar Dinheiro 10,00 + PicPay 9,00 | valor restante 0,00; confirma em 1 requisição; recibo lista as duas formas | ⛔ bloqueado — ver "Achado técnico" |
+| 2 | total R$19,00 | soma das formas R$25,00 | bloqueia a confirmação, aviso de valores divergentes | ⛔ bloqueado |
+| 3 | total R$19,00 | soma das formas R$15,00 | valor restante 4,00; confirmação permitida (parcial) | ⛔ bloqueado |
+| 4 | 2 linhas adicionadas | remover uma | valor restante recalcula; última linha não pode ser removida (botão desabilitado) | ⛔ bloqueado |
+| 5 | 1 forma só (não-regressão) | quitar normalmente | funciona como a versão oficial; recibo mostra essa forma | ⛔ bloqueado — ver nota abaixo |
+| 6 | — | campo "Data de pagamento" | continua só com a data; hora é anexada no envio (conferir payload) | ⛔ bloqueado |
+| 7 | pedido com 2+ formas | conferir payload da confirmação (DevTools) | uma única requisição com `payments[]`, não uma por forma | ⛔ bloqueado |
+| 8 | recibo do pedido com 2+ formas | conferir se lista as formas reais | não deve aparecer a forma nominal da conta (ex. "A Prazo") | ⛔ bloqueado |
 
-## Achado técnico — bloqueador (06/10/2026)
+**Nota sobre o item 5:** mesmo o fluxo de **uma única forma** não pôde ser validado de ponta a ponta — a 1ª linha só
+tem um valor porque veio pré-preenchida pelo padrão configurado em Configurações > Contas a Receber (ver "Achado
+técnico"), não porque o campo funciona. Sem esse padrão configurado, nem o caminho antigo (forma única) seria
+possível na tela nova.
 
-**Sintoma:** ao clicar no campo "Forma de pagamento" (1ª linha ou qualquer linha adicionada), o campo entra em foco
-mas nenhuma lista de opções aparece. Reportado pelo Rômulo: "teve uma [opção] que apareceu mas depois sumiu". A 1ª
-linha só mostra um valor (ex.: "Dinheiro") porque veio pré-preenchida pelo padrão configurado em
-Configurações > Contas a Receber — não porque o dropdown funcionou.
+## Complementares — borda e negativo do card (ainda não especificados)
 
-**Reproduzido e investigado via DevTools (eu, Claude, com o navegador autenticado pelo Rômulo):**
-- Lançamento de teste criado (Rômulo Alves, doc. 5001, R$150,00) e modal "Quitar contas a receber" aberto.
-- Campo `paymentMethods_0_paymentGateway` (1ª linha, já com "Dinheiro"): clique não abre lista.
-- Adicionada 2ª linha (`paymentMethods_1_paymentGateway`, vazia): clique não abre lista; digitar "din" no campo
-  registra o valor digitado (`input.value === "din"`), mas **nenhum painel de opções é criado no DOM** — só existe
-  1 `.ant-select-dropdown` na página inteira, pertencente a outro campo (filtro de Cliente da tela de fundo),
-  oculto.
-- Nenhuma chamada de rede relacionada a forma de pagamento/gateway é disparada ao abrir o campo (Network, sem
-  filtro de termo "payment"/"gateway"/"method" com resultado).
-- Conclusão provada: a lista de opções do campo "Forma de pagamento" não está sendo renderizada nesse modal, em
-  nenhuma das linhas — não é um problema só da 2ª linha nem de digitação/filtro.
+Pendentes de execução, bloqueados pelo mesmo achado técnico:
 
-**Impacto:** bloqueia 100% dos cenários do card (não dá pra adicionar uma 2ª forma sem selecionar qual é ela).
-Único teste possível hoje é o de não-regressão (quitar com 1 forma só, usando o valor pré-preenchido), ainda não
-executado.
+| # | Tipo | Quando | Então (esperado) |
+| --- | --- | --- | --- |
+| B1 | Borda | soma exatamente igual ao total, com centavos (ex.: 6,33 + 6,33 + 6,34 = 19,00) | valor restante 0,00, sem erro de arredondamento |
+| B2 | Borda | soma 0,01 a mais que o total | bloqueia (limite exato do aviso) |
+| B3 | Borda | soma 0,01 a menos que o total | permite (parcial, limite exato) |
+| N1 | Negativo | linha com valor 0,00 | aceita, barra, ou ignora? (não especificado pelo card — perguntar) |
+| N2 | Negativo | linha sem forma de pagamento selecionada, só valor | deve bloquear (campo obrigatório) |
+| N3 | Negativo | duas linhas com a mesma forma (ex.: Dinheiro + Dinheiro, contas diferentes) | permitido ou bloqueado? (não especificado — perguntar) |
 
-**Comparação (isola a causa, 06/10/2026):** o card de Backend relacionado
-([INTG-2726](https://integramais.atlassian.net/browse/INTG-2726), aceitar múltiplas formas numa única quitação)
-ainda não foi implementado — a própria descrição técnica dele lista "gaps a resolver" e "proposta de alterações" em
-aberto. Isso poderia sugerir que o campo trava "porque o Backend não está pronto". **Descartado**: testei o mesmo
-tipo de campo "forma de pagamento" no PDV (Venda Rápida, tela de Pagamento → "Adicionar Pagamento") e a lista abre
-e funciona normalmente (Dinheiro, Cartão de Crédito, Cartão de Débito, PicPay, Pix, Cartão/Cheque compensado). Ou
-seja, o catálogo de formas de pagamento existe e funciona no sistema — o problema é isolado ao componente novo do
-modal de quitação de Contas a Receber, não depende do card de Backend (INTG-2726). **Pode e deve ser reportado
-como bug agora, no INTG-2727.**
+## Achado técnico — bloqueador
 
-## Cenários (BDD) — do card + complementares
+**Cenário técnico — negativo: campo "Forma de pagamento" não abre a lista de opções**
 
-Total a pagar de exemplo do card: R$19,00. Fluxo base: Financeiro > Contas a Receber > localizar um título >
-Quitar > modal "Quitar contas a receber".
+- **Dado** o modal "Quitar contas a receber" aberto, com uma linha de forma de pagamento (1ª, pré-preenchida com
+  "Dinheiro" pelo padrão configurado) e uma 2ª linha adicionada (vazia)
+- **Quando** clico no campo "Forma de pagamento" de qualquer uma das linhas
+- **Então** deveria abrir a lista de formas cadastradas (Dinheiro, PicPay, Cartão, etc.)
 
-| # | Tipo | Dado | Quando | Então (esperado) | Obtido |
-| --- | --- | --- | --- | --- | --- |
-| 1 | Feliz | total R$19,00 | adicionar Dinheiro 10,00 + PicPay 9,00 | valor restante 0,00; confirma em 1 requisição; recibo lista as duas formas | Pendente |
-| 2 | Negativo | total R$19,00 | soma das formas R$25,00 | bloqueia a confirmação, aviso de valores divergentes | Pendente |
-| 3 | Borda | total R$19,00 | soma das formas R$15,00 | valor restante 4,00; confirmação permitida (parcial) | Pendente |
-| 4 | Feliz | 2 linhas adicionadas | remover uma | valor restante recalcula; última linha não pode ser removida (botão desabilitado) | Pendente |
-| 5 | Regressão | 1 forma só | quitar normalmente | funciona como a versão oficial; recibo mostra essa forma | Pendente |
-| B1 | Borda | total R$19,00 | soma exatamente igual ao total, com centavos (ex.: 6,33 + 6,33 + 6,34) | valor restante 0,00, sem erro de arredondamento | Pendente |
-| B2 | Borda | — | soma 0,01 a mais que o total | bloqueia (limite exato do aviso) | Pendente |
-| B3 | Borda | — | soma 0,01 a menos que o total | permite (parcial, limite exato) | Pendente |
-| N1 | Negativo | — | linha com valor 0,00 | aceita, barra, ou ignora? (não especificado pelo card — perguntar) | Pendente |
-| N2 | Negativo | — | linha sem forma de pagamento selecionada, só valor | deve bloquear (campo obrigatório) | Pendente |
-| N3 | Negativo | — | duas linhas com a mesma forma (ex.: Dinheiro + Dinheiro, contas diferentes) | permitido ou bloqueado? (não especificado — perguntar) | Pendente |
-| 6 | Regressão | — | campo "Data de pagamento" | continua só com a data; hora é anexada no envio (conferir payload) | Pendente |
-| 7 | Técnico | pedido com 2+ formas | conferir payload da confirmação (DevTools) | uma única requisição com `payments[]`, não uma por forma | Pendente |
-| 8 | Técnico | recibo do pedido com 2+ formas | conferir se lista as formas reais, não a forma da conta (ex. não deve aparecer "A Prazo" fixo) | Pendente |
+**Obtido:** ❌ falhou — o campo entra em foco, mas nenhuma lista de opções aparece em nenhuma linha. Reportado
+originalmente pelo Rômulo: "teve uma [opção] que apareceu mas depois sumiu".
+
+**Passo a passo (reproduzível):**
+1. Financeiro > Contas a Receber > localizar um título em aberto > menu da linha (ícone "⋮" em Situação) > Quitar.
+2. No modal, observar a 1ª linha de "Formas de pagamento" — já vem com um valor (ex.: "Dinheiro"), herdado do
+   padrão configurado em Configurações > Contas a Receber.
+3. Clicar no campo "Forma de pagamento" da 1ª linha: nenhuma lista aparece.
+4. Clicar em "+ Adicionar forma de pagamento" (cria uma 2ª linha, vazia).
+5. Clicar no campo "Forma de pagamento" da 2ª linha: campo fica em foco (cursor piscando), nenhuma lista aparece.
+6. Digitar um texto de busca (ex.: "din"): o valor é registrado no campo, mas a lista de opções continua sem
+   aparecer.
+
+**Evidência técnica (DevTools, console + Network + inspeção de DOM):**
+```
+// Console: sem erro no momento do clique
+// Network: nenhuma chamada relacionada a forma de pagamento/gateway disparada ao clicar no campo
+//          (sem resultado para filtro "payment" / "gateway" / "method")
+// DOM, após clicar e digitar "din" na 2ª linha:
+document.getElementById('paymentMethods_1_paymentGateway').value === 'din'  // true — valor digitado registrado
+document.querySelectorAll('.ant-select-dropdown').length === 1             // só existe 1 dropdown na página inteira,
+                                                                             // e pertence a outro campo (filtro de
+                                                                             // Cliente da tela de fundo), oculto
+```
+Conclusão provada: a lista de opções do campo "Forma de pagamento" não está sendo renderizada nesse modal, em
+nenhuma das linhas — não é lentidão, não é erro de digitação/filtro, e não é específico da 2ª linha.
+
+**Impacto:** bloqueia 100% dos cenários do card (não dá pra adicionar uma 2ª forma sem selecionar qual é ela, nem
+confirmar o caminho de uma forma só sem depender do padrão pré-configurado).
+
+## Investigação complementar — isolamento da causa (Backend x Frontend)
+
+**Cenário técnico — comparação: o catálogo de forma de pagamento funciona em outro lugar do sistema?**
+
+- **Dado** o card de Backend relacionado (INTG-2726) ainda não implementado, o que poderia sugerir que o campo
+  trava "porque o Backend não está pronto"
+- **Quando** testo o mesmo tipo de campo "forma de pagamento" em outro fluxo que não depende do INTG-2726: PDV
+  (Venda Rápida) > tela de Pagamento > "Adicionar Pagamento"
+- **Então** se a lista abrir normalmente ali, a dependência do Backend não é a causa do bloqueio no INTG-2727
+
+**Obtido:** ✅ confirma a hipótese de descarte — no PDV, a lista abre e funciona normalmente (Dinheiro, Cartão de
+Crédito, Cartão de Débito, PicPay, Pix, Cartão/Cheque compensado), sem nenhum problema. O catálogo de formas de
+pagamento existe e funciona no sistema; o bug é isolado ao componente novo do modal de quitação de Contas a
+Receber, **não depende do INTG-2726**. Pode e deve ser reportado como bug agora, no INTG-2727.
+
+## Observação de processo
+
+Numeração do card/branch corrigida em 06/10/2026: o arquivo e a branch estavam como `INTG-2726` (número do card de
+Backend, citado como dependência no texto original do card de Frontend) em vez de `INTG-2727` (o próprio card).
+Corrigido antes de postar qualquer comentário no Jira.
 
 ## Pendências
 
-- [x] Confirmar com o time se o Backend (card relacionado, INTG-2726) e este Frontend (INTG-2727) já estão em
-  HMG. **Frontend: sim, com o bug acima. Backend: não, ainda em "gaps a resolver".**
+- [ ] Reportar o bug (campo "Forma de pagamento" sem lista de opções) no INTG-2727 — comentário pronto no padrão JAM.
+- [ ] Depois que o dev corrigir: reexecutar os critérios 1–8 e os complementares (B1-B3, N1-N3), com vídeo JAM.
 - [ ] Perguntar ao dev: N1 (valor 0,00) e N3 (forma duplicada) — comportamento esperado?
 - [ ] Ponto já sinalizado pelo próprio card: exibição de desconto/acréscimo no recibo com várias formas depende da
-  definição do Backend — só testar depois que isso for definido.
+  definição do Backend (INTG-2726) — só testar depois que isso for definido.
 - [ ] Antes do PR: mesclar a `main` na branch do card.
