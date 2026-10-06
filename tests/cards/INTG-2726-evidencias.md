@@ -3,9 +3,9 @@
 **Card:** `[MELHORIA] (Frontend) {Contas a Receber} Permitir múltiplas formas de pagamento na quitação e exibi-las no recibo`
 https://integramais.atlassian.net/browse/INTG-2726
 
-**Status: AGUARDANDO.** Depende de um card de Backend (aceitar múltiplas formas numa única quitação) e, segundo o
-próprio card, "nada do comportamento multi-forma está implementado" na versão oficial. **Não testar antes de
-confirmar que a tela em HMG já mudou.**
+**Status: 🔴 BLOQUEADO em HMG (06/10/2026).** A tela mudou (modal já tem "Adicionar forma de pagamento"), mas o
+campo "Forma de pagamento" não abre a lista de opções em nenhuma linha — impossível selecionar uma forma, impossível
+executar qualquer cenário do card. Ver "Achado técnico" abaixo.
 
 ## O que o card pede
 
@@ -16,10 +16,34 @@ nominal da conta, ex. "A Prazo", porque lê a lista de contas em vez da lista de
 
 ## Checklist — antes de testar
 
-- [ ] Abrir Financeiro > Contas a Receber > Quitar uma conta qualquer em HMG.
-- [ ] O modal mostra um botão de **adicionar forma de pagamento** (mais de uma linha)? Se não, a feature não está em
-  HMG ainda — parar aqui, registrar "aguardando deploy" e avisar.
-- [ ] Se mostrar, conferir a pré-condição do card: ainda é possível quitar com uma forma só (não-regressão)?
+- [x] Abrir Financeiro > Contas a Receber > Quitar uma conta qualquer em HMG.
+- [x] O modal mostra um botão de **adicionar forma de pagamento** (mais de uma linha)? Se não, a feature não está em
+  HMG ainda — parar aqui, registrar "aguardando deploy" e avisar. **Mostra.**
+- [ ] Se mostrar, conferir a pré-condição do card: ainda é possível quitar com uma forma só (não-regressão)? **Não
+  testado ainda — bloqueado pelo achado abaixo antes de chegar nesse ponto.**
+
+## Achado técnico — bloqueador (06/10/2026)
+
+**Sintoma:** ao clicar no campo "Forma de pagamento" (1ª linha ou qualquer linha adicionada), o campo entra em foco
+mas nenhuma lista de opções aparece. Reportado pelo Rômulo: "teve uma [opção] que apareceu mas depois sumiu". A 1ª
+linha só mostra um valor (ex.: "Dinheiro") porque veio pré-preenchida pelo padrão configurado em
+Configurações > Contas a Receber — não porque o dropdown funcionou.
+
+**Reproduzido e investigado via DevTools (eu, Claude, com o navegador autenticado pelo Rômulo):**
+- Lançamento de teste criado (Rômulo Alves, doc. 5001, R$150,00) e modal "Quitar contas a receber" aberto.
+- Campo `paymentMethods_0_paymentGateway` (1ª linha, já com "Dinheiro"): clique não abre lista.
+- Adicionada 2ª linha (`paymentMethods_1_paymentGateway`, vazia): clique não abre lista; digitar "din" no campo
+  registra o valor digitado (`input.value === "din"`), mas **nenhum painel de opções é criado no DOM** — só existe
+  1 `.ant-select-dropdown` na página inteira, pertencente a outro campo (filtro de Cliente da tela de fundo),
+  oculto.
+- Nenhuma chamada de rede relacionada a forma de pagamento/gateway é disparada ao abrir o campo (Network, sem
+  filtro de termo "payment"/"gateway"/"method" com resultado).
+- Conclusão provada: a lista de opções do campo "Forma de pagamento" não está sendo renderizada nesse modal, em
+  nenhuma das linhas — não é um problema só da 2ª linha nem de digitação/filtro.
+
+**Impacto:** bloqueia 100% dos cenários do card (não dá pra adicionar uma 2ª forma sem selecionar qual é ela).
+Único teste possível hoje é o de não-regressão (quitar com 1 forma só, usando o valor pré-preenchido), ainda não
+executado.
 
 ## Cenários (BDD) — do card + complementares
 
