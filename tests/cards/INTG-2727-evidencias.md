@@ -4,14 +4,16 @@
 https://integramais.atlassian.net/browse/INTG-2727
 
 Depende do Backend [INTG-2726](https://integramais.atlassian.net/browse/INTG-2726) (aceitar múltiplas formas numa
-única quitação, `payments[]` + `paymentGrouping`) — **ainda não implementado**, conforme a própria descrição
-técnica do card ("gaps a resolver", "proposta de alterações" em aberto).
+única quitação, `payments[]` + `paymentGrouping`) — marcado como **"Pronto Para Teste"** no Jira, embora a
+descrição técnica do próprio card ainda liste "gaps a resolver"/"proposta de alterações" em tempo futuro.
+**Discrepância registrada, não resolvida** — ver "Pendências".
 
 > **Nota de correção (06/10/2026):** este arquivo e a branch estavam nomeados `INTG-2726` por engano — esse é o
 > número do card de Backend (a dependência acima), não deste card. Corrigido para `INTG-2727`.
 
-**Status: 🔴 BLOQUEADO em HMG.** Modal com a tela nova, mas o campo "Forma de pagamento" não abre a lista de
-opções em nenhuma linha — impossível selecionar uma forma, impossível executar qualquer cenário do card.
+**Status do card no Jira: "Pronto Para Teste".** **Resultado do teste: 🔴 BLOQUEADO em HMG.** Modal com a tela
+nova, mas o campo "Forma de pagamento" não abre a lista de opções em nenhuma linha — impossível selecionar uma
+forma, impossível executar qualquer cenário do card.
 
 HMG, empresa `romulo`, PDV LOJA001, 06/10/2026. Lançamento de teste: Rômulo Alves, doc. 5001, R$150,00. Evidência
 em vídeo (JAM): _pendente — gravar ao reexecutar após a correção do dev._
@@ -91,6 +93,14 @@ document.querySelectorAll('.ant-select-dropdown').length === 1             // s�
 Conclusão provada: a lista de opções do campo "Forma de pagamento" não está sendo renderizada nesse modal, em
 nenhuma das linhas — não é lentidão, não é erro de digitação/filtro, e não é específico da 2ª linha.
 
+**Causa provável (bate com as próprias notas técnicas do card):** a seção "Notas técnicas" do INTG-2727 lista como
+item 1 do escopo a construir: refatorar `AutoCompletePaymentGatewayReceipt.tsx` para aceitar `name`/`label`/
+`required`, porque hoje usa `name="paymentId"` **fixo** — "impede uso indexado em `Form.List`" (nas palavras do
+próprio card). Isso é exatamente o sintoma reproduzido: um componente de autocomplete com nome de campo fixo,
+usado dentro de uma lista indexada (uma instância por linha de forma de pagamento), não consegue vincular a opção
+certa a cada linha. **Esse item do plano do dev aparenta não ter sido feito ainda**, apesar do card estar marcado
+"Pronto Para Teste" no Jira.
+
 **Impacto:** bloqueia 100% dos cenários do card (não dá pra adicionar uma 2ª forma sem selecionar qual é ela, nem
 confirmar o caminho de uma forma só sem depender do padrão pré-configurado).
 
@@ -117,7 +127,10 @@ Corrigido antes de postar qualquer comentário no Jira.
 
 ## Pendências
 
-- [ ] Reportar o bug (campo "Forma de pagamento" sem lista de opções) no INTG-2727 — comentário pronto no padrão JAM.
+- [ ] Reportar o bug (campo "Forma de pagamento" sem lista de opções) no INTG-2727 — comentário pronto no padrão JAM,
+  apontando a causa provável (item 1 das notas técnicas do próprio card, autocomplete não refatorado).
+- [ ] Confirmar com o time a discrepância do INTG-2726 (Backend): status no Jira é "Pronto Para Teste", mas a
+  descrição técnica do card ainda fala em "gaps a resolver" — qual das duas está desatualizada?
 - [ ] Depois que o dev corrigir: reexecutar os critérios 1–8 e os complementares (B1-B3, N1-N3), com vídeo JAM.
 - [ ] Perguntar ao dev: N1 (valor 0,00) e N3 (forma duplicada) — comportamento esperado?
 - [ ] Ponto já sinalizado pelo próprio card: exibição de desconto/acréscimo no recibo com várias formas depende da
