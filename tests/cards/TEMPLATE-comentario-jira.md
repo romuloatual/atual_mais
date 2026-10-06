@@ -33,5 +33,8 @@ Conclusão: [uma linha — aprovado/reprovado em HMG] e liberado para o próximo
 - QA aprova **em HMG**; a conclusão diz "liberado para o próximo ambiente" (PREPROD/Produção), nunca "pronto para
   produção" — essa decisão não é do QA.
 - Link para o arquivo completo (`tests/cards/INTG-XXXX-evidencias.md`) quando o comentário não couber tudo.
+- **Nunca citar o nome do produto usado no teste** (ex.: "iPhone 11", "Calça Jeans"). O produto é só dado de teste do
+  HMG, sem significado para quem lê o card; descrever pelo valor ou pela característica relevante (ex.: "item de
+  R$123,50", "item de 6 dígitos", "segundo item, de menor valor").
 
 Exemplo real: INTG-3545 e INTG-1005 (ver os respectivos `tests/cards/INTG-XXXX-evidencias.md`).
