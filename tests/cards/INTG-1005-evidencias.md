@@ -26,6 +26,27 @@ emitir sem erro.
 | 3 | Pedido com 2 itens: 045 (acréscimo) + 010 (desconto) | fechar | total do pedido bate com o rodapé | ✅ pedido 43: total 152 = 150 + 2; CONCLUÍDO |
 | 4 | Pedido 43 (misto) | Gerar NFC-e | emite sem erro | ✅ NF 678, NFC-e, chave `3226101226649600012965469000006781000006798`, status **FATURADO** |
 
+## Complementares — negativo e borda (campo Valor Total do item)
+
+Item 045, subtotal R$123,50, salvo isolado (sem finalizar venda, exceto onde indicado).
+
+| # | Tipo | Quando | Então (esperado) | Obtido |
+| --- | --- | --- | --- | --- |
+| N1 | Negativo | Valor Total `abc` (letras) | barra ou trata sem quebrar | ⚠️ não aceita a letra, mas vira `0`: Desconto 100% (campo não quebra, mas sem aviso) |
+| N2 | Negativo | Valor Total vazio | idem | ⚠️ mesmo efeito do N1: Desconto 100% |
+| N3 | Negativo | Valor Total `-50,00` | idem | ⚠️ perde o sinal, vira `50`: Desconto 59,51% (mesmo padrão já visto no INTG-3545) |
+| B1 | Borda | Valor Total igual ao subtotal (`123,50`) | sem desconto nem acréscimo | ✅ Desconto 0%, Acréscimo 0% |
+| B2 | Borda | Desconto a 9,99% (`111,16`, abaixo do limite de 10%) | calcula e fecha sem pedir liberação | ✅ pedido 44: Desconto 9,99%, CONCLUÍDO |
+| B3 | Borda | Desconto a 10,10% (`111,03`, acima do limite de 10%) | backend pede liberação (422) **ou** fecha, conforme a config da loja | ⚠️ fechou direto, sem pedir nada — ver nota abaixo (pedido 45) |
+| B4 | Borda | Acréscimo muito grande (`10.000,00`, 7997,17%) | calcula e fecha sem erro | ✅ pedido 46: Acréscimo 7997,17%, total R$10.000,00, CONCLUÍDO |
+
+**Nota sobre B3:** o dev avisou que desconto acima do limite da empresa retorna 422 pedindo liberação (modal do
+INTG-3197). Capturei a configuração real via `GET /settings/discount-limit/LOJA001`: `{"action": "NAO_FAZER_NADA",
+"percentage": 10}`. Ou seja, **neste ambiente (HMG/LOJA001) o limite está configurado para não bloquear nada** — por
+isso o pedido com 10,10% fechou direto. Não é falha da correção deste card; é a configuração da loja de teste. Para
+validar o fluxo de liberação de verdade, seria preciso mudar essa config para uma ação de bloqueio, ou testar em uma
+loja que já tenha isso configurado.
+
 ## Passo a passo (reproduzível)
 
 **Fluxo base:** Vendas > Pedidos > Novo > Cliente `102` (lupa) > Continuar > Produtos.
