@@ -78,6 +78,10 @@ originalmente pelo Rômulo: "teve uma [opção] que apareceu mas depois sumiu".
 5. Clicar no campo "Forma de pagamento" da 2ª linha: campo fica em foco (cursor piscando), nenhuma lista aparece.
 6. Digitar um texto de busca (ex.: "din"): o valor é registrado no campo, mas a lista de opções continua sem
    aparecer.
+7. Clicar em outro campo (ex.: Conta corrente): o texto digitado **some**. Confirmado no código: o campo limpa a
+   busca no `onBlur` de propósito (`L("")`), porque o texto digitado nunca é um valor "de verdade" — só vira valor
+   real se o usuário clicar numa opção da lista. Como a lista nunca aparece, nunca há o que clicar, e o campo volta
+   sempre vazio ao perder o foco. Não é um bug à parte; é consequência direta do mesmo problema.
 
 **Evidência técnica (DevTools, console + Network + inspeção de DOM):**
 ```
