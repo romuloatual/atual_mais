@@ -194,12 +194,19 @@ Numeração do card/branch corrigida em 06/10/2026: o arquivo e a branch estavam
 Backend, citado como dependência no texto original do card de Frontend) em vez de `INTG-2727` (o próprio card).
 Corrigido antes de postar qualquer comentário no Jira.
 
+## Workaround encontrado (desbloqueia o teste)
+
+Editar o documento a receber e trocar a forma de pagamento de abertura para **"A Prazo"** libera a seleção de
+várias formas no modal de quitação. Com isso dá pra seguir e executar os critérios 1–8 e os complementares
+(B1-B3, N1-N3) da tabela BDD, usando documentos abertos como "A Prazo".
+
 ## Pendências
 
 - [ ] Reportar no INTG-2727: o filtro de formas de pagamento por forma de abertura do documento (Dinheiro = zero
   opções) não está na "Regra de Negócio" do card — perguntar ao time se é intencional ou é o bug.
 - [ ] Mapear a regra completa (qual forma de abertura libera quais formas na quitação) — hoje só temos 3 pontos
   (Dinheiro→nenhuma, A Prazo→várias, Pix→Dinheiro/PicPay), não a tabela inteira de `paymentType.code`.
+- [ ] Com o workaround (abrir como "A Prazo"), executar os critérios 1–8 e os complementares (B1-B3, N1-N3).
 - [ ] Confirmar com o time a discrepância do INTG-2726 (Backend): status no Jira é "Pronto Para Teste", mas a
   descrição técnica do card ainda fala em "gaps a resolver" — qual das duas está desatualizada?
 - [ ] Depois que o dev corrigir: reexecutar os critérios 1–8 e os complementares (B1-B3, N1-N3), com vídeo JAM.
