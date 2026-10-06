@@ -33,7 +33,7 @@ nominal da conta, ex. "A Prazo", porque lê a lista de contas em vez da lista de
 | 0 | Modal "Quitar contas a receber" em HMG | abrir a quitação de um título qualquer | mostra opção de adicionar mais de uma linha de forma de pagamento | ✅ mostra — feature de tela chegou em HMG |
 | 1 | total R$19,00 (doc. 5002, aberto como "A Prazo") | adicionar Dinheiro 10,00 + PicPay 9,00 | valor restante 0,00; confirma em 1 requisição; recibo lista as duas formas | ✅ passou — recibo #5002 lista Dinheiro R$10,00 e PicPay R$9,00, Total Pago R$19,00, Restante R$0,00. Requisição única não conferida (pendente). |
 | 2 | total R$25,00 | Dinheiro R$15,00 + PicPay R$15,00 (soma R$30,00) | bloqueia a confirmação, aviso de valores divergentes | ✅ passou — aviso "A soma dos valores das formas de pagamento não pode ultrapassar o valor total a pagar", valor restante exibido em vermelho (-R$5,00) |
-| 3 | total R$19,00 | soma das formas R$15,00 | valor restante 4,00; confirmação permitida (parcial) | ⛔ bloqueado |
+| 3 | total R$59,00 | Dinheiro R$20,00 + Pix R$20,00 (soma R$40,00) | valor restante recalcula; confirmação permitida (parcial) | ✅ passou — recibo #5007 gerado normalmente, situação "parcialmente paga", Total Pago R$40,00, Total Restante R$19,00 (bate com 59-40) |
 | 4 | 2 linhas adicionadas | remover uma | valor restante recalcula; última linha não pode ser removida (botão desabilitado) | ⛔ bloqueado |
 | 5 | 1 forma só (não-regressão) | quitar normalmente | funciona como a versão oficial; recibo mostra essa forma | ⛔ bloqueado — ver nota abaixo |
 | 6 | — | campo "Data de pagamento" | continua só com a data; hora é anexada no envio (conferir payload) | ⛔ bloqueado |
