@@ -1,4 +1,4 @@
-// Confere se cada tests/cards/INTG-XXXX-evidencias.md segue o modelo padrão (INTG-1005 / TEMPLATE-evidencias.md).
+// Confere se cada tests/cards/INTG-XXXX-evidencias.md segue o modelo padrão (TEMPLATE-evidencias.md).
 // Uso: npm run check:evidencias            (todos os arquivos)
 //      npm run check:evidencias -- INTG-2727 (só um card)
 import { readdirSync, readFileSync } from 'node:fs';
@@ -56,6 +56,6 @@ for (const f of arquivos) {
   }
 }
 if (falhou) {
-  console.log('\nModelo: tests/cards/TEMPLATE-evidencias.md (exemplo: tests/cards/INTG-1005-evidencias.md)');
+  console.log('\nModelo: tests/cards/TEMPLATE-evidencias.md');
   process.exit(1);
 }

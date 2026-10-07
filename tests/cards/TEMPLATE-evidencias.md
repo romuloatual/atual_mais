@@ -1,6 +1,6 @@
 # INTG-XXXX — Validação manual
 
-> Modelo padrão do arquivo de evidências de um card (baseado no INTG-1005). Siga **sempre** esta ordem de seções.
+> Modelo padrão do arquivo de evidências de um card. Siga **sempre** esta ordem de seções.
 > O arquivo mostra o **estado final**, não a ordem das descobertas. Sem "quem fez o quê". Texto enxuto, evidência à vontade.
 
 **Card:** `[TIPO] (Camada) {Módulo} Título do card`
