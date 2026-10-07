@@ -9,7 +9,7 @@ revisão de código OK (Winicios). Relacionados: INTG-2726 (Backend, `payments[]
 Jira, mas a descrição técnica ainda fala em "gaps a resolver").
 
 HMG, empresa `romulo`, PDV LOJA001, 06 e 07/10/2026. Clientes 102 (Maria das Dores) e 103 (Rômulo Alves).
-Evidência em vídeo (JAM): pendente
+Evidência em vídeo (JAM): https://jam.dev/c/a2730e10-b92d-4296-985d-01e7aefe6f6f
 
 ## O que o card pede
 
@@ -135,7 +135,7 @@ Data de emissão `07/10/2026` > Valor `100` > Salvar. Depois: marcar o título n
 
 ## Pendências
 
-- [ ] Postar o comentário no Jira (formato JAM) e anexar o vídeo.
+- [ ] Postar o comentário no Jira (formato JAM), com o link do vídeo.
 - [ ] Perguntar ao time: o filtro por forma de abertura é intencional? Houve deploy no HMG entre 06 e 07/10?
 - [ ] Confirmar a discrepância do INTG-2726 ("Pronto Para Teste" x "gaps a resolver").
 - [ ] Testar desconto/acréscimo no recibo com várias formas após a definição do Backend; regressão em Contas a Pagar.
