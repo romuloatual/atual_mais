@@ -50,6 +50,8 @@ _Em breve mais._
 
 ### O mínimo em todo bug
 
+Use o [modelo de card de defeito](../tests/cards/TEMPLATE-card-de-defeito.md) (mesmo padrão dos cards de defeito do time: Resumo, Ocorrência no Cliente, Objetivo, Regra de Negócio, BDD e Observações). Resumindo o que ele cobre:
+
 1. Título no padrão `[DEFEITO] (Camada) {Módulo} descrição`.
 2. Ambiente e versão onde ocorre (para comparar, citar produção e HMG).
 3. Passos curtos, resultado esperado e resultado obtido.
