@@ -39,7 +39,17 @@ No modal "Quitar contas a receber": várias linhas de forma de pagamento (forma 
 | 1017 | 100,00 | acréscimo 10,00 | 90,00 | restante 20,00 | parcial, restante 10,00 |
 | 0006 | 500,00 | acréscimo 50,00 | 500,00 | restante 50,00 | **PAID**, restante 0,00 |
 
-Regra do backend que explica os 4 casos (inferida): soma das formas ≤ título; **total pago = soma − desconto + acréscimo**; **restante = título − soma**. Na produção (forma única) funciona porque `amount` é o bruto do título.
+**Prova (chamadas diretas à API no HMG, 08/10, títulos de R$100,00):** o backend está coerente quando recebe o valor **bruto**.
+
+| Chamada | Enviado | Resultado |
+| --- | --- | --- |
+| A: formato antigo (forma única) + desconto 10 | `amount 100, total 90` | PAID, pago 90, restante 0 ✅ |
+| B: formato novo (`payments[]`) + desconto 10 | forma **100** (bruto) | PAID, pago 90, restante 0 ✅ |
+| C: formato novo + acréscimo 10 | forma **100** (bruto) | PAID, pago 110, restante 0 ✅ |
+
+Conclusão: o backend mantém o comportamento da produção; o que destoa é a **modal nova enviar o valor líquido** (450, 110) onde o backend espera o bruto (500, 100).
+
+Regra do backend que explica os 4 casos: soma das formas ≤ título; **total pago = soma − desconto + acréscimo**; **restante = título − soma**. Na produção (forma única) funciona porque `amount` é o bruto do título.
 
 ## Complementares — negativo e borda (não decidem o veredito)
 
@@ -68,7 +78,7 @@ Regra do backend que explica os 4 casos (inferida): soma das formas ≤ título;
 // Produção doc. 557 (forma única, referência): amount 10, discountAmount 1, total 9 -> PAID, totalPaid 9
 ```
 
-- Produção usa `amount` bruto + `total` líquido; o HMG manda só `payments[].amount` (líquido na tela) e o backend subtrai o desconto de novo.
+- Produção usa `amount` bruto + `total` líquido; o HMG manda só `payments[].amount` (líquido na tela) e o backend subtrai o desconto de novo. Com valor bruto o backend fecha certo (chamadas A, B e C acima).
 
 ## Print/preview
 
@@ -82,7 +92,7 @@ Regra do backend que explica os 4 casos (inferida): soma das formas ≤ título;
 
 ## Pendências
 
-- [ ] Time decide o contrato: o valor da forma é **bruto ou líquido**? (INTG-2726 e INTG-2727 divergem nesse ponto.)
+- [ ] Abrir bug de Frontend (subtarefa do INTG-2727): a modal envia o valor da forma como líquido; o backend (igual à produção) espera bruto. O time confirma qual lado muda (INTG-2726 e INTG-2727 divergem no texto).
 - [ ] Abrir card próprio: recibo imprime acréscimo como "Juros" e "RESTANTE" da parcela da Bobina inconsistente.
 - [ ] Perguntar ao time: filtro de formas pela forma de abertura (Dinheiro = nenhuma) é intencional?
 - [ ] Confirmar a discrepância de status do INTG-2726.
