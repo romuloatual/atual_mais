@@ -17,3 +17,5 @@ O arquivo de validação de cada card (`INTG-XXXX-evidencias.md`) segue **sempre
 Depois de preencher o arquivo de validação (`INTG-XXXX-evidencias.md`), resuma no comentário do Jira usando o
 modelo em [`TEMPLATE-comentario-jira.md`](./TEMPLATE-comentario-jira.md) (status, cenários validados, observações
 fora do escopo e conclusão).
+
+Para abrir um **card de defeito** no Jira, use [`TEMPLATE-card-de-defeito.md`](./TEMPLATE-card-de-defeito.md).
