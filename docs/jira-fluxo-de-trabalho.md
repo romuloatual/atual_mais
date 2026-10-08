@@ -34,6 +34,38 @@ Regra do supervisor (08/10/2026). Confira o **ícone** na lista de tipos antes d
 
 Outros tipos da lista: Tarefa, Projeto, Novo recurso, Tarefa Extra, Test Case, História e Automação.
 
+## Navegando no Jira: tipos de card e como ler um
+
+Sugestão do consultor de QA (08/10/2026): mostrar como navegar e o que são os tipos de card.
+
+### Tipos de card que o QA encontra
+
+| Tipo | O que costuma ser | O que o QA faz |
+| --- | --- | --- |
+| **História** | funcionalidade do ponto de vista do usuário; traz critérios de aceite e cenários BDD | testa pelos critérios do card: feliz, negativo e borda |
+| **Novo recurso** | funcionalidade nova | idem História |
+| **Tarefa** / **Tarefa Extra** | trabalho pontual ou técnico (ajuste, configuração); "Extra" é o que surgiu fora do planejado | confere o que foi pedido, sem inventar escopo |
+| **Bug**, **Bug (subtarefa)** | erro achado **antes** de chegar ao cliente | retesta depois da correção |
+| **Defeito** | erro achado **no cliente** (produção) | retesta e compara com a produção |
+| **Subtarefa** | parte de um card maior | acompanha, mas não é o lugar de bug |
+| **Test Case**, **Automação** | caso de teste registrado; trabalho de teste automatizado | seguem o fluxo do time |
+| **Projeto** | agrupador grande de cards | só consulta |
+
+_As definições de História, Novo recurso, Tarefa, Tarefa Extra, Test Case, Automação e Projeto são o significado geral do tipo; confirme com o supervisor e ajuste aqui. As de Bug, Bug (subtarefa) e Defeito vêm da regra do time (acima)._
+
+### Como ler um card
+
+Os cards do time costumam seguir esta ordem. O QA valida o que o card **pede**:
+
+1. **Título:** `[TIPO] (Camada) {Módulo} descrição` (ex.: `[MELHORIA] (Frontend) {Contas a Receber} ...`). A camada diz se é Frontend ou Backend.
+2. **"Aguardar: INTG-XXXX"** no topo: o card depende de outro; confira se o outro já está pronto.
+3. **Resumo e Objetivo:** o que muda e por quê.
+4. **Regra de Negócio e Cenário BDD:** **é o que o QA testa** (critérios de aceite).
+5. **Notas técnicas:** apoio ao dev; **não são critério de teste** e podem estar desatualizadas.
+6. **Ocorrência no Cliente** (cards de defeito): schema, tela, desde quando, frequência, impacto e workaround.
+
+Antes de testar, **confira o status real do card** no Jira, não só o texto: ele pode estar desatualizado.
+
 ## Quando o card precisa de subtarefa
 
 Regra do supervisor (08/10/2026). Se o teste encontra um defeito que exige correção, abra uma subtarefa de bug (veja o
