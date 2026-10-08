@@ -25,3 +25,40 @@ Guia curto do dia a dia no Jira. O trabalho no Git está em [`git-fluxo-de-traba
 - Siga sempre os padrões do repositório [`romuloatual/atual_mais`](https://github.com/romuloatual/atual_mais).
 
 _Em breve mais._
+
+## Como documentar no Jira (boas práticas)
+
+**Regra de ouro:** o Jira guarda a **decisão e o resumo**; o detalhe fica em lugar versionado (evidência em
+`tests/cards/INTG-XXXX-evidencias.md` e vídeo no JAM). Comentário no Jira não é documento longo.
+
+- **Um comentário por veredito, sem reescrever o antigo.** Correção ou descoberta nova vira um comentário novo,
+  começando por "Complemento". Assim o histórico mostra o que se sabia em cada momento.
+- **Comentário curto no [modelo padrão](../tests/cards/TEMPLATE-comentario-jira.md); detalhe por link.**
+- **Cada problema com dono diferente vira um item próprio**, ligado ao card de origem.
+- **Fato separado de hipótese:** "provado por API/payload" é uma coisa; "parece que" é outra.
+- **Sem dado sensível:** nada de CPF/CNPJ, token ou senha. Anexos com dado real vão tarjados.
+
+### Onde registrar cada achado
+
+| Achado | Onde | Como |
+| --- | --- | --- |
+| Veredito e complementos do card | comentários do próprio card | nunca editar; só acrescentar |
+| Defeito do que o card entrega | **subtarefa** do card, tipo Bug | passos, esperado x obtido, evidência |
+| Dúvida de regra entre dois cards | link "relates to" entre os cards | só a pergunta ao time, sem duplicar o bug |
+| Defeito que já existia antes do card (comparar com produção) | **card próprio**, tipo Bug, ligado ao card | escrever "pré-existente" |
+| Comportamento que o card não define | pergunta ao dev/PO nos comentários | não é bug até alguém confirmar |
+
+### O mínimo em todo bug
+
+1. Título no padrão `[DEFEITO] (Camada) {Módulo} descrição`.
+2. Ambiente e versão onde ocorre (para comparar, citar produção e HMG).
+3. Passos curtos, resultado esperado e resultado obtido.
+4. Evidência: payload (sem token) e JAM.
+5. Severidade e prioridade (quitação que fecha título com valor errado é alta).
+6. É regressão? Citar o card que introduziu; se já existia, escrever "pré-existente".
+
+### Depois de abrir o bug
+
+- **Anote o reteste no próprio bug** (ex.: "reteste com desconto e acréscimo, recibos A4 e Bobina").
+- O **status do card segue o veredito**: Parcial ou Reprovado não vai para deploy.
+- **Label de origem**, se o Jira tiver (ex.: `encontrado-pelo-qa`, `pre-existente`), ajuda a medir depois quantos defeitos escapam.
