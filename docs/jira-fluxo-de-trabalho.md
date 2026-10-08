@@ -16,7 +16,21 @@ Guia curto do dia a dia no Jira. O trabalho no Git está em [`git-fluxo-de-traba
 | Resultado | O que fazer |
 | --- | --- |
 | 🟢 Aprovado | Mova o card para **deploy** e comente: `Card movido para deploy` |
-| 🟡 Parcial / 🔴 Reprovado | _A definir_ (para onde o card volta e quem avisar) |
+| 🟡 Parcial / 🔴 Reprovado, com defeito a corrigir | Abra uma **subtarefa** e siga "Quando o card precisa de subtarefa" (abaixo) |
+| Outros casos de Parcial / Reprovado | _A definir_ |
+
+## Quando o card precisa de subtarefa
+
+Regra do supervisor (08/10/2026). Se o teste encontra um defeito que exige correção, abra uma subtarefa de bug (veja o
+[modelo](../tests/cards/TEMPLATE-card-de-defeito.md)) e:
+
+| Item | Status |
+| --- | --- |
+| **Card que está sendo testado** | continua em **Testando** (não vai para deploy) |
+| **Subtarefa** | status **Refação** |
+
+1. Comente no card principal: `Aguardar subtarefa INTG-XXXX` (o número da subtarefa criada).
+2. Quando a subtarefa for corrigida, reteste o que ela cobre e o que o card pedia; depois siga o fluxo normal (aprovado → deploy).
 
 ## Regras que valem sempre
 
