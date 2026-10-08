@@ -14,3 +14,15 @@ Fonte: [Help — Pedidos](https://www.atualsistemas.net.br/solucoes/IntegraMais/
 | P8 | Depois de concluído, "Mais Opções" permite imprimir, clonar, gerar NFC-e/NF-e, faturar, emitir promissória e carnê | 📖 |
 
 **Valores-limite para testar (borda):** 29, 30 e 31 minutos (NFC-e) e 23h59, 24h e 24h01 (NF-e).
+
+## Finalidade
+
+Criar e faturar pedidos de venda e tratar o que vem depois: devolução, estorno e carta de correção.
+
+**Como acessar:** Vendas > Pedidos.
+
+**Depende de:** **Operação**, cliente (endereço Favorito), vendedor (função Vendedor), produtos e **Forma de pagamento**.
+
+## Falhas conhecidas
+
+- _nenhuma registrada ainda_

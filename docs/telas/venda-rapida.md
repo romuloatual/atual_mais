@@ -15,3 +15,15 @@ Fonte: [Help — Venda rápida](https://www.atualsistemas.net.br/solucoes/Integr
 | V8 | Cliente, vendedor e operação padrão vêm de "Configurações padrões" (Empresas) | 📖 |
 
 Ver também: [`docs/fluxos-principais.md`](../fluxos-principais.md).
+
+## Finalidade
+
+Vender no balcão (PDV) de forma rápida: lançar itens, aplicar desconto, informar cliente e vendedor, receber em uma ou mais formas e emitir o cupom (NFC-e).
+
+**Como acessar:** Vendas > Venda Rápida.
+
+**Depende de:** **Operação** de venda, **Forma de pagamento**, produtos (SKU/código de barras) e, nas Configurações padrões da Empresa, cliente, vendedor e operação padrão.
+
+## Falhas conhecidas
+
+- _nenhuma registrada ainda_

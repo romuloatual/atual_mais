@@ -1,7 +1,6 @@
-# Regras de negócio do Atual Mais (documento vivo)
+# Telas do Atual Mais: finalidade e comportamento (documento vivo)
 
-Registramos aqui o que **descobrimos testando**: como cada tela ou fluxo realmente se comporta e qual regra está por trás.
-Um arquivo por tela/fluxo. Atualizamos **no fim de cada card**, junto com a evidência.
+Para cada tela ou fluxo registramos **para que ela serve e como ela se comporta**, com a fonte (Help ou teste). Regra de negócio entra só como comportamento **confirmado**. Um arquivo por tela; atualizamos **no fim de cada card**, junto com a evidência. Modelo: [`TEMPLATE-tela.md`](./TEMPLATE-tela.md). Falhas encontradas: [`../falhas/`](../falhas/README.md).
 
 ## Como ler
 

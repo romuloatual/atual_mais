@@ -3,6 +3,14 @@
 Atualizado em 08/10/2026 (após testes em HMG e produção), durante o INTG-2727. Cards: [INTG-2727](https://integramais.atlassian.net/browse/INTG-2727)
 (Frontend) e [INTG-2726](https://integramais.atlassian.net/browse/INTG-2726) (Backend).
 
+## Finalidade
+
+Quitar (dar baixa em) contas a receber, total ou parcialmente, registrando forma(s) de pagamento, conta corrente, desconto ou acréscimo, e emitir o recibo.
+
+**Como acessar:** Financeiro > Contas a receber > Quitar (também pelo submenu Lançamentos e em lote).
+
+**Depende de:** cadastro da **Forma de pagamento** (campo "Formas para Recebimento"), **Conta corrente**, **Plano de contas** e Configurações padrões da Empresa.
+
 ## 1. Cálculo da quitação
 
 | # | Regra | Grau | Fonte / onde |
@@ -51,3 +59,7 @@ Atualizado em 08/10/2026 (após testes em HMG e produção), durante o INTG-2727
 
 - Evidência do card: `tests/cards/INTG-2727-evidencias.md` (na branch `card/INTG-2727`).
 - Defeito separado: criar documento em Contas a Receber envia 2 requisições `POST /receivable` idênticas.
+
+## Falhas conhecidas
+
+- [`2026-10-08-contas-a-receber-quitacao-modal-bruto-liquido.md`](../falhas/2026-10-08-contas-a-receber-quitacao-modal-bruto-liquido.md) · [`2026-10-08-contas-a-receber-recibo-acrescimo-juros.md`](../falhas/2026-10-08-contas-a-receber-recibo-acrescimo-juros.md)

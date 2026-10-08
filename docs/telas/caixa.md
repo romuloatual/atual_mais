@@ -9,3 +9,15 @@ Fonte: [Help — Caixa](https://www.atualsistemas.net.br/solucoes/IntegraMais/Ca
 | C3 | Exclusão de lançamento avulso **só no mês corrente**; mês virado exige um **lançamento avulso reverso** (também dentro dos 30 dias) | 📖 |
 | C4 | Há **transferência entre contas** e filtros por período e conta | 📖 |
 | C5 | A **taxa do cartão** (cadastro da forma de pagamento) aparece como desconto no caixa e no relatório de contas a receber após a baixa | 📖 |
+
+## Finalidade
+
+Acompanhar o movimento financeiro por conta e fazer lançamentos avulsos e transferências entre contas.
+
+**Como acessar:** Financeiro > Caixa.
+
+**Depende de:** **Conta corrente**, **Plano de contas** e a taxa do cartão da **Forma de pagamento**.
+
+## Falhas conhecidas
+
+- _nenhuma registrada ainda_
