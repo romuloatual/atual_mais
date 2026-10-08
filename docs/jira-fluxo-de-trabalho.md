@@ -59,6 +59,6 @@ _Em breve mais._
 
 ### Depois de abrir o bug
 
-- **Anote o reteste no próprio bug** (ex.: "reteste com desconto e acréscimo, recibos A4 e Bobina").
+- **Anote o reteste no próprio bug** (ex.: "reteste com desconto e com acréscimo, um por vez, recibos A4 e Bobina").
 - O **status do card segue o veredito**: Parcial ou Reprovado não vai para deploy.
 - **Label de origem**, se o Jira tiver (ex.: `encontrado-pelo-qa`, `pre-existente`), ajuda a medir depois quantos defeitos escapam.

@@ -7,12 +7,13 @@ Atualizado em 08/10/2026 (após testes em HMG e produção), durante o INTG-2727
 
 | # | Regra | Grau | Fonte / onde |
 | --- | --- | --- | --- |
-| Q1 | **Total a pagar = valor do título − desconto + acréscimo**. Ex.: 19,00 − 5,00 + 2,00 = 16,00 | ✅ | produção (docs 557 e 558); modal do HMG mostra o mesmo "Total" |
+| Q1 | **Total a pagar = valor do título − desconto + acréscimo**. Ex.: 10,00 − 1,00 = 9,00 (desconto) ou 3,00 + 1,00 = 4,00 (acréscimo) | ✅ | produção (docs 557 e 558); modal do HMG mostra o mesmo "Total" |
 | Q2 | **Restante = total a pagar − total pago.** Quando o restante é 0, a situação vira **Pago** (`PAID`) | ✅ | produção 557/558 |
 | Q3 | Pagamento menor que o total é permitido: a situação vira **Pago parcial** e o restante fica em aberto | ✅ | HMG, doc. 5007 e card INTG-2727 |
 | Q4 | Desconto e acréscimo são **campos globais da quitação** (um valor só, não por forma de pagamento) | ✅ | card INTG-2727 |
 | Q5 | Contrato da forma única: `amount` = valor **bruto** do título; `total` = valor líquido (bruto − desconto + acréscimo) | ✅ | produção: `amount 10, desconto 1, total 9` |
 | Q6 | Na produção a data de pagamento vai com hora **fixa `12:00:00`**. No HMG (múltiplas formas) vai a **hora atual** (ex.: `10:31:46`), como o card pede | ✅ | produção (557, 558, 561) e HMG (0007) |
+| Q7 | **Desconto e acréscimo não podem ser usados ao mesmo tempo** na quitação | 🟡 | informado pelo Rômulo; falta a fonte (card/manual). Em 06/10 a modal do HMG aceitou os dois preenchidos juntos: ❓ verificar se a produção bloqueia |
 
 ## 2. Múltiplas formas de pagamento (INTG-2727)
 
