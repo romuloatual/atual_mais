@@ -19,6 +19,19 @@ Guia curto do dia a dia no Jira. O trabalho no Git está em [`git-fluxo-de-traba
 | 🟡 Parcial / 🔴 Reprovado, com defeito a corrigir | Abra uma **subtarefa** e siga "Quando o card precisa de subtarefa" (abaixo) |
 | Outros casos de Parcial / Reprovado | _A definir_ |
 
+## Tipos de item no Jira (atenção ao ícone)
+
+Regra do supervisor (08/10/2026). Confira o **ícone** na lista de tipos antes de criar.
+
+| Tipo | Quando usar |
+| --- | --- |
+| **Bug (subtarefa)** (ícone de bug vermelho) | defeito achado ao testar o card, **antes de chegar ao cliente**, aberto **dentro** do card |
+| **BUG** | mesmo caso, mas **sem card pai** (card próprio) |
+| **Defeito** | achado **no cliente** (produção) |
+| Subtarefa | tarefa comum dentro de um card; **não** é para bug |
+
+Outros tipos da lista: Tarefa, Projeto, Novo recurso, Tarefa Extra, Test Case, História e Automação.
+
 ## Quando o card precisa de subtarefa
 
 Regra do supervisor (08/10/2026). Se o teste encontra um defeito que exige correção, abra uma subtarefa de bug (veja o
@@ -29,8 +42,9 @@ Regra do supervisor (08/10/2026). Se o teste encontra um defeito que exige corre
 | **Card que está sendo testado** | continua em **Testando** (não vai para deploy) |
 | **Subtarefa** | status **Refação** |
 
-1. Comente no card principal: `Aguardar subtarefa INTG-XXXX` (o número da subtarefa criada).
-2. Quando a subtarefa for corrigida, reteste o que ela cobre e o que o card pedia; depois siga o fluxo normal (aprovado → deploy).
+1. **Atribua a subtarefa ao responsável do card original** (ex.: o dev que entregou o card).
+2. Comente no card principal: `Aguardar subtarefa INTG-XXXX` (o número da subtarefa criada).
+3. Quando a subtarefa for corrigida, reteste o que ela cobre e o que o card pedia; depois siga o fluxo normal (aprovado → deploy).
 
 ## Regras que valem sempre
 
@@ -57,16 +71,16 @@ _Em breve mais._
 | Achado | Onde | Como |
 | --- | --- | --- |
 | Veredito e complementos do card | comentários do próprio card | nunca editar; só acrescentar |
-| Defeito do que o card entrega | **subtarefa** do card, tipo Bug | passos, esperado x obtido, evidência |
+| Defeito do que o card entrega | **subtarefa** do card, tipo **Bug (subtarefa)** | passos, esperado x obtido, evidência |
 | Dúvida de regra entre dois cards | link "relates to" entre os cards | só a pergunta ao time, sem duplicar o bug |
-| Defeito que já existia antes do card (comparar com produção) | **card próprio**, tipo Bug, ligado ao card | escrever "pré-existente" |
+| Defeito que já existia antes do card (comparar com produção) | **card próprio**, tipo **BUG** (antes do cliente) ou **Defeito** (achado no cliente), ligado ao card | escrever "pré-existente" |
 | Comportamento que o card não define | pergunta ao dev/PO nos comentários | não é bug até alguém confirmar |
 
 ### O mínimo em todo bug
 
 Use o [modelo de card de defeito](../tests/cards/TEMPLATE-card-de-defeito.md) (mesmo padrão dos cards de defeito do time: Resumo, Ocorrência no Cliente, Objetivo, Regra de Negócio, BDD e Observações). Resumindo o que ele cobre:
 
-1. Título no padrão `[DEFEITO] (Camada) {Módulo} descrição`.
+1. Título no padrão `[BUG]` (antes do cliente) ou `[DEFEITO]` (achado no cliente) seguido de `(Camada) {Módulo} descrição`.
 2. Ambiente e versão onde ocorre (para comparar, citar produção e HMG).
 3. Passos curtos, resultado esperado e resultado obtido.
 4. Evidência: payload (sem token) e JAM.
