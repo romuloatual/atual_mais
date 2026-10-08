@@ -11,7 +11,8 @@
     "test:codegen": "playwright codegen",
     "test:smoke": "playwright test --grep @smoke",
     "test:regression": "playwright test --grep @regression",
-    "test:card": "playwright test --grep"
+    "test:card": "playwright test --grep",
+    "check:evidencias": "node tests/cards/check-evidencias.mjs"
   },
   "keywords": [],
   "author": "",
