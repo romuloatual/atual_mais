@@ -1,6 +1,6 @@
 # INTG-2727 — Validação manual
 
-> Estado final do conhecimento em 08/10/2026. Regras descobertas: `docs/regras-de-negocio/contas-a-receber-quitacao.md`.
+> Estado final do conhecimento em 08/10/2026. Regras descobertas: `docs/telas/contas-a-receber-quitacao.md`.
 
 **Card:** `[MELHORIA] (Frontend) {Contas a Receber} Permitir múltiplas formas de pagamento na quitação e exibi-las no recibo`
 https://integramais.atlassian.net/browse/INTG-2727
