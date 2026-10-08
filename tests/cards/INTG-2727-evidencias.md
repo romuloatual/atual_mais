@@ -57,6 +57,7 @@ Regra do backend que explica os 4 casos: soma das formas ≤ título; **total pa
 | --- | --- | --- | --- | --- |
 | N1 | Negativo | documento aberto como Dinheiro | lista de formas disponível | ⚠️ lista **vazia**; A Prazo libera várias, Pix libera Dinheiro/PicPay. Regra não escrita no card: pergunta ao time |
 | N2 | Negativo | linha com valor 0,00 / forma duplicada | card não define | ❓ não testado, pergunta ao dev |
+| N3 | Negativo | informar desconto **e** acréscimo juntos | regra informada: não é permitido | ⚠️ a modal aceitou os dois preenchidos (06/10); verificar se deve bloquear |
 | B1 | Borda | soma 0,01 a mais/menos que o total | bloqueia / permite | ⏳ não executado |
 
 ## Passo a passo (reproduzível)
