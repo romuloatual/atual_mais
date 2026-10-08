@@ -30,6 +30,8 @@ Regra do supervisor (08/10/2026). Confira o **ícone** na lista de tipos antes d
 | **Defeito** | achado **no cliente** (produção) |
 | Subtarefa | tarefa comum dentro de um card; **não** é para bug |
 
+**Quem fica como responsável:** na **subtarefa**, o responsável do card original; no **card próprio** (BUG ou Defeito), quem o abriu.
+
 Outros tipos da lista: Tarefa, Projeto, Novo recurso, Tarefa Extra, Test Case, História e Automação.
 
 ## Quando o card precisa de subtarefa
