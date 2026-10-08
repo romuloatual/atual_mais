@@ -40,6 +40,13 @@ Atualizado em 08/10/2026 (após testes em HMG e produção), durante o INTG-2727
 | R6 | Persistem no HMG e na produção: **acréscimo impresso como "Juros"** (linha "Acréscimos" zerada) e **"restante" da parcela da Bobina inconsistente** (1017: 0,00 contra 10,00; 0006: −50,00; 0007: 100,00 contra 50,00). **Card próprio** | ❌ | HMG 0006, 0007, 1017; produção 559, 561 |
 | R4 | Como o recibo deve exibir desconto/acréscimo quando há várias formas: o card diz que depende da definição do Backend | ❓ | card INTG-2727 |
 
+## Do Help (Contas a receber), 📖 ainda não confirmado por teste
+
+- Quitação **parcial ou integral**, pelo botão Quitar, pelo submenu Lançamentos ou **em lote** (as contas selecionadas devem ser do mesmo cliente/fornecedor).
+- **Estorno** de um pagamento só com data de pagamento dentro de **30 dias retroativos**.
+- **Lançamento em lote** gera uma conta a receber por parcela.
+- ⚠️ O artigo descreve só o fluxo de **forma única**; não menciona as múltiplas formas (INTG-2727).
+
 ## Ver também
 
 - Evidência do card: `tests/cards/INTG-2727-evidencias.md` (na branch `card/INTG-2727`).
