@@ -1,7 +1,7 @@
 # Testes por card
 
 Esta pasta guarda **evidências**, não testes: `INTG-XXXX-evidencias.md` de cada card, os modelos e o conferidor.
-Se um cenário do card merecer automação (crítico ou recorrente), o teste vai **direto** em `tests/regression/<módulo>/`,
+Se um cenário do card merecer automação (crítico ou recorrente), o teste vai **direto** em `tests/regression/<módulo>/<área>/`,
 com a tag do card ao lado de `@regression` (ex.: `['@regression', '@INTG-2645']`), sem cópia aqui.
 
 Veja a convenção completa em [`../README.md`](../README.md).
