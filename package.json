@@ -12,7 +12,8 @@
     "test:smoke": "playwright test --grep @smoke",
     "test:regression": "playwright test --grep @regression",
     "test:card": "playwright test --grep",
-    "check:evidencias": "node tests/cards/check-evidencias.mjs"
+    "check:evidencias": "node tests/cards/check-evidencias.mjs",
+    "limpar:titulos": "node scripts/limpar-titulos-teste.mjs"
   },
   "keywords": [],
   "author": "",
