@@ -9,6 +9,8 @@ npm install
 npx playwright install
 ```
 
+Para os **testes de API** (opcional): copie `.env.example` para `.env` e preencha com o usuário de teste do HMG. O `.env` nunca vai para o Git. Veja [`docs/testes-de-api.md`](./docs/testes-de-api.md).
+
 ## Configurar o ambiente de homologação (HMG)
 
 Antes de testar fluxos fiscais (NFC-e/NF-e), a empresa de teste em HMG precisa estar configurada:
@@ -56,8 +58,9 @@ O workflow [`.github/workflows/playwright.yml`](./.github/workflows/playwright.y
 
 - **Sempre primeiro:** a suíte de fumaça (`@smoke`) como gate rápido — se falhar, o resto nem roda.
 - **Push/PR para `main`:** suíte de regressão (feedback rápido).
-- **Todo dia às 03:00 (horário de Brasília):** a suíte completa (regressão + cards).
+- **Todo dia às 03:00 (horário de Brasília):** a suíte completa, **sem os testes de API**.
 - **Manual (`workflow_dispatch`):** você escolhe rodar regressão ou tudo.
+- **Testes de API (`@api`) ficam fora do CI**: precisam de credenciais e criam dados no HMG. Rodam sob demanda (`npm run test:api`).
 
 O relatório HTML de cada execução fica disponível como artefato do workflow por 14 dias, e
 também publicado (sempre a versão mais recente) em:
@@ -85,4 +88,6 @@ Consulte [`docs/git-fluxo-de-trabalho.md`](./docs/git-fluxo-de-trabalho.md) para
 
 - Todo teste deve estar vinculado a um card no Jira.
 - Os testes automatizados rodam por padrão contra o ambiente HMG - nunca contra produção.
+- Nunca versionar senha, token ou `.env`. O Jira guarda a decisão e o resumo; o detalhe fica no Git.
+- Depois de cada push na `main`, confira o CI (aba Actions) e atualize as branches de card abertas ([`docs/git-fluxo-de-trabalho.md`](./docs/git-fluxo-de-trabalho.md)).
 - Evite seletores baseados em classes com hash do CSS Modules; prefira `id`, `role`/texto visível ou `data-testid`.
