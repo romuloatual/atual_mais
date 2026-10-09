@@ -112,7 +112,7 @@ _Em breve mais._
 
 ### O mínimo em todo bug
 
-Use o [modelo de card de defeito](../tests/cards/TEMPLATE-card-de-defeito.md) (mesmo padrão dos cards de defeito do time: Resumo, Ocorrência no Cliente, Objetivo, Regra de Negócio, BDD e Observações). Resumindo o que ele cobre:
+Use o [modelo de card de defeito](../tests/cards/TEMPLATE-card-de-defeito.md) (mesmo padrão dos cards de defeito do time: Resumo, Objetivo, Regra de Negócio, BDD em Gherkin e Notas técnicas; Ocorrência no Cliente só no `[DEFEITO]`). Resumindo o que ele cobre:
 
 1. Título no padrão `[BUG]` (antes do cliente) ou `[DEFEITO]` (achado no cliente) seguido de `(Camada) {Módulo} descrição`.
 2. Ambiente e versão onde ocorre (para comparar, citar produção e HMG).
