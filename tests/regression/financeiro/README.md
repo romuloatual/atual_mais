@@ -2,7 +2,9 @@
 
 Fluxos críticos do módulo Financeiro pela **tela**: Contas a Receber, quitação e recibo. Cada spec usa a tag `@regression` e o nome `<assunto>.regression.spec.ts`.
 
-**Situação:** ainda sem testes de tela. O contrato da quitação já é coberto por API em [`tests/api/financeiro/`](../../api/financeiro) (sob demanda, fora do CI).
+**Situação:** ainda sem testes de tela. O contrato da quitação já é coberto por API em [`tests/api/financeiro/contas-a-receber/`](../../api/financeiro/contas-a-receber) (sob demanda, fora do CI).
+
+**Organização:** uma pasta por área, criada com o primeiro teste dela (ex.: `contas-a-receber/`).
 
 **Antes de escrever:**
 - Regras e comportamento: [`docs/telas/contas-a-receber-quitacao.md`](../../../docs/telas/contas-a-receber-quitacao.md).

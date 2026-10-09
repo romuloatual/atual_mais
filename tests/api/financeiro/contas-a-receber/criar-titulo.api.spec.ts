@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { obterToken } from '../../support/auth';
+import { obterToken } from '../../../support/auth';
 import { criarTitulo, excluirTitulo } from './receivable';
 
 test('cria um título a receber de R$ 100', { tag: '@api' }, async ({ request }) => {

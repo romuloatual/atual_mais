@@ -4,6 +4,8 @@ Fluxos críticos do módulo Vendas: Venda Rápida (PDV V2), Pedidos e emissão d
 
 **Situação:** ainda sem testes. O primeiro alvo é o fluxo feliz da **Venda Rápida V2** (`/pdv-v2`): item, cliente, pagamento em Dinheiro e faturar.
 
+**Organização:** uma pasta por área, criada com o primeiro teste dela (ex.: `venda-rapida/`).
+
 **Antes de escrever:**
 - Fluxos e regras: [`docs/telas/venda-rapida.md`](../../../docs/telas/venda-rapida.md), [`docs/telas/pedidos.md`](../../../docs/telas/pedidos.md) e [`docs/fluxos-principais.md`](../../../docs/fluxos-principais.md).
 - Pré-condição conhecida: Configurações padrões > Venda > "Venda Rápida: Tipo de faturamento" = `0-Outro`.

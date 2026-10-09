@@ -17,14 +17,14 @@ tests/
 ├─ support/                 usado por todos os módulos (ambiente, login por API, page objects)
 ├─ smoke/                   uma tela por módulo abre: <assunto>.smoke.spec.ts
 ├─ regression/<módulo>/     regressão macro do módulo (ex.: vendas/, financeiro/)
-├─ api/<módulo>/            testes de API do módulo (ex.: financeiro/) + helper só dele
+├─ api/<módulo>/<área>/     testes de API de uma área do módulo (ex.: financeiro/contas-a-receber/) + helper só dela
 └─ cards/                   evidências .md dos cards, modelos e o conferidor
 ```
 
 Regras:
 
-1. **Camada primeiro, módulo depois.** Pastas de módulo nascem com o primeiro teste.
-2. **Helpers:** o de um módulo mora no módulo; o de todos, em `support/`.
+1. **Camada primeiro, módulo depois, área dentro do módulo.** Módulo = Vendas, Financeiro. Área = Venda Rápida, Contas a Receber. A pasta da área nasce com o primeiro teste dela e vale em toda camada (ex.: `regression/vendas/venda-rapida/`, `api/financeiro/contas-a-receber/`). Não crie mais níveis que isso.
+2. **Helpers:** o de uma área mora na pasta da área; o que serve a vários módulos, em `support/`.
 3. **Nome:** `<assunto>.<camada>.spec.ts` (ex.: `quitacao.api.spec.ts`, `login.smoke.spec.ts`).
 4. **API e tela não se misturam** no mesmo arquivo.
 5. **`cards/` guarda evidência, não teste.** O card é registrado em `INTG-XXXX-evidencias.md`.
@@ -60,9 +60,9 @@ test('impressão em bobina não concatena telefone e celular', { tag: ['@regress
 });
 ```
 
-## `api/<módulo>/`: testes de API
+## `api/<módulo>/<área>/`: testes de API
 
-Falam direto com o backend, sem navegador: provam o contrato (o que o servidor aceita e responde). Hoje cobrem a quitação do Financeiro.
+Falam direto com o backend, sem navegador: provam o contrato (o que o servidor aceita e responde). Hoje cobrem a quitação de Contas a Receber (Financeiro).
 
 - Toda spec dessa pasta deve ter a tag `@api`.
 - Precisam do `.env` (nunca versionado) e **só rodam em HMG**; criam dados de teste que o sistema nem sempre deixa excluir. Por isso ficam **fora do CI**: rodam sob demanda, com `npm run test:api`.
