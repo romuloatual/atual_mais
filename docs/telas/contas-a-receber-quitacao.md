@@ -3,6 +3,14 @@
 Atualizado em 08/10/2026 (após testes em HMG e produção), durante o INTG-2727. Cards: [INTG-2727](https://integramais.atlassian.net/browse/INTG-2727)
 (Frontend) e [INTG-2726](https://integramais.atlassian.net/browse/INTG-2726) (Backend).
 
+## Finalidade
+
+Quitar (dar baixa em) contas a receber, total ou parcialmente, registrando forma(s) de pagamento, conta corrente, desconto ou acréscimo, e emitir o recibo.
+
+**Como acessar:** Financeiro > Contas a receber > Quitar (também pelo submenu Lançamentos e em lote).
+
+**Depende de:** cadastro da **Forma de pagamento** (campo "Formas para Recebimento"), **Conta corrente**, **Plano de contas** e Configurações padrões da Empresa.
+
 ## 1. Cálculo da quitação
 
 | # | Regra | Grau | Fonte / onde |
@@ -14,6 +22,7 @@ Atualizado em 08/10/2026 (após testes em HMG e produção), durante o INTG-2727
 | Q5 | Contrato da forma única: `amount` = valor **bruto** do título; `total` = valor líquido (bruto − desconto + acréscimo) | ✅ | produção: `amount 10, desconto 1, total 9` |
 | Q6 | Na produção a data de pagamento vai com hora **fixa `12:00:00`**. No HMG (múltiplas formas) vai a **hora atual** (ex.: `10:31:46`), como o card pede | ✅ | produção (557, 558, 561) e HMG (0007) |
 | Q7 | **Desconto e acréscimo não podem ser usados ao mesmo tempo** na quitação | 🟡 | informado pelo Rômulo; falta a fonte (card/manual). Em 06/10 a modal do HMG aceitou os dois preenchidos juntos: ❓ verificar se a produção bloqueia |
+| Q8 | A data de pagamento da quitação pode ser **retroativa em no máximo 30 dias** | ✅ | Help do Atual Mais (Contas a receber); não testado por nós |
 
 ## 2. Múltiplas formas de pagamento (INTG-2727)
 
@@ -23,7 +32,7 @@ Atualizado em 08/10/2026 (após testes em HMG e produção), durante o INTG-2727
 | M2 | Mínimo de 1 linha; com 1 linha só, o botão de remover fica **desabilitado** | ✅ | card; HMG |
 | M3 | "Valor restante" aparece **em tempo real** = total − soma das formas | ✅ | card; HMG |
 | M4 | Soma ≤ total confirma; soma **maior** que o total **bloqueia**, com o aviso "A soma dos valores das formas de pagamento não pode ultrapassar o valor total a pagar" | ✅ | card; HMG |
-| M5 | **As formas disponíveis na quitação dependem da forma de pagamento escolhida na abertura do documento**: Dinheiro → nenhuma; A Prazo → várias; Pix → Dinheiro ou PicPay | 🟡 / ❓ | HMG; no código há filtro por `paymentType.code`. **Não está na Regra de Negócio do card:** perguntar se é intencional |
+| M5 | **As formas disponíveis na quitação dependem da forma de pagamento de abertura do documento**: Dinheiro → nenhuma; A Prazo → várias; Pix → Dinheiro ou PicPay. **Explicação (Help):** no cadastro da forma de pagamento (Faturamento > Forma de pagamento) existe "Formas para Recebimento", que define com quais formas a parcela criada por ela pode ser quitada | 🟡 | HMG + Help do Atual Mais (Forma de pagamento). É **configuração, provavelmente não é bug**; falta conferir no cadastro de "Dinheiro" se o campo está vazio. O card não cita essa regra |
 | M6 | Linha com valor 0,00 e duas linhas com a mesma forma: o card não define o comportamento | ❓ | pergunta ao dev |
 | M7 | **Contrato bruto x líquido:** a modal nova envia o valor da forma como **líquido** (total ajustado); o backend espera **bruto**, igual à produção. Efeitos: desconto deixa o restante em aberto (0007), acréscimo igual ao total ajustado dá **400** (1017), acréscimo pode fechar como PAID com a tela dizendo parcial (0006) | ❌ | HMG 0006, 0007, 1017. **Provado por API:** com valor bruto o backend fecha certo (desconto 10 e acréscimo 10 em título de 100 → PAID). Defeito da modal; o time confirma qual lado muda |
 | M8 | **Regra do backend (múltiplas formas e forma única):** soma das formas ≤ título, senão 400 · total pago = soma − desconto + acréscimo · restante = título − soma · PAID quando restante = 0. O formato antigo (forma única) continua funcionando igual à produção | ✅ | HMG: 4 testes pela tela e 3 chamadas de API (08/10) |
@@ -39,7 +48,18 @@ Atualizado em 08/10/2026 (após testes em HMG e produção), durante o INTG-2727
 | R6 | Persistem no HMG e na produção: **acréscimo impresso como "Juros"** (linha "Acréscimos" zerada) e **"restante" da parcela da Bobina inconsistente** (1017: 0,00 contra 10,00; 0006: −50,00; 0007: 100,00 contra 50,00). **Card próprio** | ❌ | HMG 0006, 0007, 1017; produção 559, 561 |
 | R4 | Como o recibo deve exibir desconto/acréscimo quando há várias formas: o card diz que depende da definição do Backend | ❓ | card INTG-2727 |
 
+## Do Help (Contas a receber), 📖 ainda não confirmado por teste
+
+- Quitação **parcial ou integral**, pelo botão Quitar, pelo submenu Lançamentos ou **em lote** (as contas selecionadas devem ser do mesmo cliente/fornecedor).
+- **Estorno** de um pagamento só com data de pagamento dentro de **30 dias retroativos**.
+- **Lançamento em lote** gera uma conta a receber por parcela.
+- ⚠️ O artigo descreve só o fluxo de **forma única**; não menciona as múltiplas formas (INTG-2727).
+
 ## Ver também
 
 - Evidência do card: `tests/cards/INTG-2727-evidencias.md` (na branch `card/INTG-2727`).
 - Defeito separado: criar documento em Contas a Receber envia 2 requisições `POST /receivable` idênticas.
+
+## Falhas conhecidas
+
+- [`2026-10-08-contas-a-receber-quitacao-modal-bruto-liquido.md`](../falhas/2026-10-08-contas-a-receber-quitacao-modal-bruto-liquido.md) · [`2026-10-08-contas-a-receber-recibo-acrescimo-juros.md`](../falhas/2026-10-08-contas-a-receber-recibo-acrescimo-juros.md)
