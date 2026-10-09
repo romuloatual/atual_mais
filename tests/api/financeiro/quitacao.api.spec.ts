@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { obterToken } from './helpers/auth';
-import { criarTitulo, excluirTitulo, quitarTitulo } from './helpers/receivable';
+import { obterToken } from '../../support/auth';
+import { criarTitulo, excluirTitulo, quitarTitulo } from './receivable';
 
 // Quitações simultâneas do mesmo cliente e conta dão 409 (conflito); por isso este arquivo roda em fila.
 test.describe.configure({ mode: 'default' });
