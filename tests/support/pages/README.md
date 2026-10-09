@@ -26,8 +26,8 @@ export class VendaRapidaPage {
 }
 ```
 
-**Situação:** vazia. O primeiro mapa nasce com o primeiro teste de [`regression/vendas/venda-rapida/`](../../regression/vendas/venda-rapida), partindo de [`docs/telas/venda-rapida.md`](../../../docs/telas/venda-rapida.md).
+**Situação:** o primeiro mapa existe: [`vendas/venda-rapida.page.ts`](./vendas/venda-rapida.page.ts) (usado por `regression/vendas/venda-rapida/`). Os demais nascem com o primeiro teste de cada tela.
 
-**Antes do primeiro teste de tela:** o `baseURL` do `playwright.config.ts` aponta para `backoffice.hmg...`, mas o painel da empresa de teste é `<empresa>.hmg.atualmais.com.br` (ex.: o smoke usa `QA_PAINEL_URL`). Defina o endereço certo antes de escrever o teste.
+**Apoio ao teste de tela** (em `tests/support/`): `fixtures.ts` (abre o painel já logado por API e **pula** o teste sem credenciais) e `configuracoes-padrao.ts` (as configurações padrões do painel, que só existem no navegador). O endereço do painel vem de `QA_PAINEL_URL` ou de `https://<empresa>.hmg.atualmais.com.br`.
 
 Convenção de pastas: [`../../README.md`](../../README.md).
