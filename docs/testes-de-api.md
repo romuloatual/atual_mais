@@ -62,9 +62,9 @@ Regra do backend (provada por API no INTG-2727): `payments[].amount` é o valor 
 
 Cada teste cria um título real no HMG (cliente de teste 103, forma A Prazo). O número do documento começa com **`QA`** para filtrar e excluir depois. Cada rodada de `tests/api` (8 testes) cria 7 títulos e exclui 2 sozinha; ficam 5 quitados (4 pagos e 1 parcial) no HMG.
 
-- **Exclusão (capturada no HMG em 09/10/2026):** `DELETE /api/v1/receivable/{id}`, sem corpo, responde 200 com corpo vazio. A tela só mostra "Excluir" para título **Aberto** (e com a permissão de exclusão); título Pago ou Pago parcial não tem a opção. Se o **servidor** também recusa excluir título quitado, não foi testado: pergunta ao time.
+- **Exclusão (capturada no HMG em 09/10/2026):** `DELETE /api/v1/receivable/{id}`, sem corpo, responde 200 com corpo vazio. A tela só mostra "Excluir" para título **Aberto** (e com a permissão de exclusão); título Pago ou Pago parcial não tem a opção. **O servidor também recusa**: o `DELETE` de título **Pago** ou **Pago parcial** responde **400** (verificado em 09/10/2026 com `npm run limpar:titulos -- --executar`); só título **Aberto** é excluído (200).
 - Quitados por completo saem do filtro "Aberto"; use "Pago" ou "Todos". Os testes que deixam o título **aberto** (criar título e soma maior que o título) **se limpam sozinhos** com `excluirTitulo`, que só aceita documento com prefixo `QA` (trava de segurança). Os que quitam (5 dos 6 casos) deixam o título pago ou parcial no HMG.
-- **Limpeza em lote:** `npm run limpar:titulos` mostra a prévia (cliente 103; documentos `QA...`, de 9 dígitos ou `5500`); `npm run limpar:titulos -- --executar` exclui e mostra o HTTP de cada um. O filtro "Aberto" da API traz também os Pago parcial. Título quitado pode ser recusado pelo servidor.
+- **Limpeza em lote:** `npm run limpar:titulos` mostra a prévia (cliente 103; documentos `QA...`, de 9 dígitos ou `5500`); `npm run limpar:titulos -- --executar` exclui e mostra o HTTP de cada um. O filtro "Aberto" da API traz também os Pago parcial. Título quitado é recusado pelo servidor (400) e fica no HMG.
 - **Não ligue estes testes ao CI automático** enquanto não houver limpeza, para não encher o HMG.
 
 ## Limites
