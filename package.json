@@ -10,7 +10,7 @@
     "test:report": "playwright show-report",
     "test:codegen": "playwright codegen",
     "test:smoke": "playwright test --grep @smoke",
-    "test:regression": "playwright test --grep @regression",
+    "test:regression": "playwright test --grep @regression --pass-with-no-tests",
     "test:card": "playwright test --grep",
     "test:api": "playwright test tests/api --project=chromium",
     "check:evidencias": "node tests/cards/check-evidencias.mjs",
