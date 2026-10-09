@@ -1,93 +1,73 @@
-# Atual Mais - QA Automation
+# Atual Mais: QA
 
-Testes automatizados end-to-end do setor de QA do Projeto Atual Mais, usando [Playwright](https://playwright.dev/).
+Repositório do setor de QA do Atual Mais: **evidências dos cards, testes automatizados (Playwright), modelos e a documentação de como trabalhamos**.
 
-## Como começar
+## Comece aqui: o caminho de um card, em 6 passos
 
-```bash
-npm install
-npx playwright install
-```
+| # | Passo | Detalhe em |
+| --- | --- | --- |
+| 1 | **Prepare a máquina:** instale o Node.js e rode `npm install` e `npx playwright install` | este README, abaixo |
+| 2 | **Pegue um card** em *Prontos para testar*: mude a flag para **Testando** e se atribua em *Revisor QA* | [`docs/jira-fluxo-de-trabalho.md`](./docs/jira-fluxo-de-trabalho.md) |
+| 3 | **Crie a sua branch** a partir da `main`: `card/INTG-XXXX` (confira o número na URL do card) | [`docs/git-fluxo-de-trabalho.md`](./docs/git-fluxo-de-trabalho.md) |
+| 4 | **Teste no HMG** e registre em `tests/cards/INTG-XXXX-evidencias.md` (copie o modelo `TEMPLATE-evidencias.md`) | [`tests/cards/README.md`](./tests/cards/README.md) |
+| 5 | **Comente o veredito** no card. Se achou defeito: abra uma **subtarefa** (modelo de defeito) e deixe o card em Testando | [`docs/jira-fluxo-de-trabalho.md`](./docs/jira-fluxo-de-trabalho.md) |
+| 6 | **Confira e envie:** `npm run check:evidencias`, `git push`; o PR só abre quando o card termina | [`docs/git-fluxo-de-trabalho.md`](./docs/git-fluxo-de-trabalho.md) |
 
-Para os **testes de API** (opcional): copie `.env.example` para `.env` e preencha com o usuário de teste do HMG. O `.env` nunca vai para o Git. Veja [`docs/testes-de-api.md`](./docs/testes-de-api.md).
+> Primeira vez? Leia o **[Guia de Onboarding (PDF)](./Guia_Onboarding_QA_Automacao_Atual_Mais.pdf)**, começando pelo "Mapa visual" (páginas 2 e 3). Dúvida em um termo? Veja o **[glossário](./docs/glossario.md)**.
 
-## Configurar o ambiente de homologação (HMG)
+## Quero fazer... então abro
 
-Antes de testar fluxos fiscais (NFC-e/NF-e), a empresa de teste em HMG precisa estar configurada:
-
-1. Solicitar o link do ambiente HMG, se ainda não tiver.
-2. Em **Configurações → Editar → Dados Gerais**, preencher CNPJ e Inscrição Estadual da empresa de teste.
-3. Em **Configurações → Editar → Faturamento**, configurar NFC-e e NF-e (tipo de emissão, ambiente = Homologação, token/série de teste).
-
-Os valores exatos de token, série e demais campos estão documentados na seção 5 do
-[`Guia_Onboarding_QA_Automacao_Atual_Mais.pdf`](./Guia_Onboarding_QA_Automacao_Atual_Mais.pdf) — use sempre série/numeração alta (ex.: 511) para não conflitar com dados de outras pessoas testando no mesmo ambiente.
-
-## Scripts disponíveis
-
-| Script | Descrição |
+| Quero... | Abro |
 | --- | --- |
-| `npm test` | Roda a suíte de testes, sem os testes de API (`@api`) |
-| `npm run test:headed` | Roda os testes com o navegador visível |
-| `npm run test:ui` | Abre a interface interativa do Playwright |
-| `npm run test:report` | Abre o último relatório de execução |
-| `npm run test:codegen` | Grava ações no navegador e gera código de teste automaticamente |
-| `npm run test:smoke` | Roda só a suíte de fumaça (tag `@smoke`) |
-| `npm run test:regression` | Roda só a suíte de regressão (tag `@regression`) |
-| `npm run test:api` | Roda os testes de API (só em HMG, precisa do `.env`) |
-| `npm run test:card -- @INTG-2645` | Roda só os testes marcados com a tag de um card |
-| `npm run check:evidencias` | Confere se as evidências dos cards seguem o modelo |
-
-## Estrutura
-
-- `playwright.config.ts` - configuração global (baseURL, navegadores, timeouts, relatórios)
-- `tests/smoke/` - checagem rápida e rasa de que as telas principais abrem, tag `@smoke`.
-  Roda primeiro em toda execução de CI, como gate rápido antes do resto da suíte.
-- `tests/regression/<módulo>/` - suíte macro por módulo (ex.: Vendas), sempre com a tag `@regression`.
-  Roda automaticamente em todo push/PR e também à noite (agendado), pra pegar quando um
-  card quebra outra funcionalidade do mesmo processo/tela.
-- `tests/api/<módulo>/` - testes de API por módulo, tag `@api`. Sob demanda, fora do CI.
-- `tests/support/` - código compartilhado por todos os módulos (ambiente, login por API).
-- `tests/cards/` - **evidências** de cada card (`INTG-XXXX-evidencias.md`) e modelos; não tem testes.
-  Cenário crítico/recorrente de um card vai direto em `regression/<módulo>/`, com a tag do card.
-
-Veja a convenção completa em [`tests/README.md`](./tests/README.md).
-
-## CI
-
-O workflow [`.github/workflows/playwright.yml`](./.github/workflows/playwright.yml) roda:
-
-- **Sempre primeiro:** a suíte de fumaça (`@smoke`) como gate rápido — se falhar, o resto nem roda.
-- **Push/PR para `main`:** suíte de regressão (feedback rápido).
-- **Todo dia às 03:00 (horário de Brasília):** a suíte completa, **sem os testes de API**.
-- **Manual (`workflow_dispatch`):** você escolhe rodar regressão ou tudo.
-- **Testes de API (`@api`) ficam fora do CI**: precisam de credenciais e criam dados no HMG. Rodam sob demanda (`npm run test:api`).
-
-O relatório HTML de cada execução fica disponível como artefato do workflow por 14 dias, e
-também publicado (sempre a versão mais recente) em:
-
-**https://romuloatual.github.io/atual_mais/**
-
-> Setup único necessário: em **Settings → Pages** do repositório, defina "Source" como
-> **GitHub Actions**. Sem isso o passo de deploy do workflow falha.
-
-## Documentação
-
-Consulte [`Guia_Onboarding_QA_Automacao_Atual_Mais.pdf`](./Guia_Onboarding_QA_Automacao_Atual_Mais.pdf) para o guia completo de onboarding do setor de QA: ambientes, ferramentas, fluxo de trabalho, boas práticas de seletores e checklist de entrada.
-
-Consulte [`ROADMAP.md`](./ROADMAP.md) para o cronograma de implantação do setor de QA, fase a fase.
-
-Consulte [`docs/fluxos-principais.md`](./docs/fluxos-principais.md) para os 8 fluxos mais importantes do Atual Mais (como usar e o que observar como QA).
-
-Consulte [`docs/testes-de-api.md`](./docs/testes-de-api.md) para rodar os testes de API (login, criar título e quitação) e saber os cuidados com o HMG.
-
-Consulte [`docs/telas/`](./docs/telas/README.md) para a **finalidade e o comportamento de cada tela** (documento vivo, confirmado a cada card) e [`docs/falhas/`](./docs/falhas/README.md) para as falhas encontradas.
-
-Consulte [`docs/git-fluxo-de-trabalho.md`](./docs/git-fluxo-de-trabalho.md) para saber como versionar e trabalhar com Git no dia a dia (branch por card, docs na `main`, PR, o que fazer quando dá erro).
+| entender o sistema (módulos, telas, rotas) | [`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md) |
+| entender como uma tela funciona | [`docs/telas/`](./docs/telas/README.md) |
+| ver os fluxos mais importantes do sistema | [`docs/fluxos-principais.md`](./docs/fluxos-principais.md) |
+| abrir um bug ou defeito | [`tests/cards/TEMPLATE-card-de-defeito.md`](./tests/cards/TEMPLATE-card-de-defeito.md) |
+| ver falhas já encontradas | [`docs/falhas/`](./docs/falhas/README.md) |
+| escrever um teste automatizado | [`tests/README.md`](./tests/README.md) |
+| rodar os testes de API | [`docs/testes-de-api.md`](./docs/testes-de-api.md) |
+| configurar a empresa de teste fiscal (NFC-e/NF-e) | Guia de Onboarding, seção 5 |
+| entender um termo | [`docs/glossario.md`](./docs/glossario.md) |
+| ver o plano do setor | [`ROADMAP.md`](./ROADMAP.md) |
 
 ## Regras rápidas
 
-- Todo teste deve estar vinculado a um card no Jira.
-- Os testes automatizados rodam por padrão contra o ambiente HMG - nunca contra produção.
-- Nunca versionar senha, token ou `.env`. O Jira guarda a decisão e o resumo; o detalhe fica no Git.
-- Depois de cada push na `main`, confira o CI (aba Actions) e atualize as branches de card abertas ([`docs/git-fluxo-de-trabalho.md`](./docs/git-fluxo-de-trabalho.md)).
-- Evite seletores baseados em classes com hash do CSS Modules; prefira `id`, `role`/texto visível ou `data-testid`.
+1. Todo teste está vinculado a um card no Jira.
+2. Testes automatizados rodam **só em HMG**, nunca em produção.
+3. **Nunca** versione senha, token ou `.env`. O Jira guarda a decisão e o resumo; o detalhe fica no Git.
+4. Depois de cada push na `main`, **confira o CI** (aba Actions) e **atualize as branches de card abertas**.
+5. Seletores: prefira `id`, `role`/texto visível ou `data-testid`; evite classes com hash do CSS Modules.
+
+## Comandos
+
+| Comando | Para que serve |
+| --- | --- |
+| `npm test` | roda a suíte, sem os testes de API |
+| `npm run test:smoke` / `test:regression` | só a fumaça / só a regressão |
+| `npm run test:api` | testes de API (só em HMG, precisa do `.env`; veja [`docs/testes-de-api.md`](./docs/testes-de-api.md)) |
+| `npm run test:card -- @INTG-2645` | testes marcados com a tag de um card |
+| `npm run check:evidencias` | confere se as evidências seguem o modelo |
+| `npm run test:headed` / `test:ui` / `test:report` / `test:codegen` | ver o navegador / interface do Playwright / último relatório / gravar um teste |
+
+Para os **testes de API**: copie `.env.example` para `.env` e preencha com o usuário de teste do HMG.
+
+## Onde está cada regra (fonte única)
+
+Cada assunto tem **um** documento completo; os outros só resumem e apontam para ele.
+
+| Assunto | Fonte | Estado |
+| --- | --- | --- |
+| Fluxo do card no Jira, tipos de item, subtarefa | [`docs/jira-fluxo-de-trabalho.md`](./docs/jira-fluxo-de-trabalho.md) | Pronto; um caso "a confirmar" com o supervisor |
+| Git: branches, push, CI depois do push | [`docs/git-fluxo-de-trabalho.md`](./docs/git-fluxo-de-trabalho.md) | Pronto |
+| Pastas de teste e tags | [`tests/README.md`](./tests/README.md) | Pronto |
+| Evidência e modelos de card | [`tests/cards/README.md`](./tests/cards/README.md) | Pronto |
+| Módulos e rotas do sistema | [`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md) | Pronto; 2 nomes a confirmar |
+| Comportamento de cada tela | [`docs/telas/`](./docs/telas/README.md) | **Em construção** (1 de 6 telas confirmada por teste) |
+| Falhas encontradas | [`docs/falhas/`](./docs/falhas/README.md) | Vivo, atualizado a cada card |
+| Ambientes e dados fiscais de teste | Guia de Onboarding, seções 4 e 5 | Pronto |
+
+## Para quem mantém o CI
+
+O workflow [`.github/workflows/playwright.yml`](./.github/workflows/playwright.yml) roda o **smoke primeiro** e depois a regressão (push/PR) ou a suíte completa sem API (todo dia, 03:00); o disparo manual escolhe. A API nunca roda no CI. O quadro completo está em [`tests/README.md`](./tests/README.md). O relatório de cada execução fica publicado em **https://romuloatual.github.io/atual_mais/**.
+
+> Setup único: em **Settings → Pages** do repositório, defina "Source" como **GitHub Actions**. Sem isso o passo de deploy falha.

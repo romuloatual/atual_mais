@@ -22,6 +22,7 @@ você não está no dia 1, está entrando na Fase 2.
 - [x] Decidir a estratégia de teste de API (Playwright `request`, sem ferramenta separada)
 - [x] Fluxo de cards no Jira, tipos de item e modelos de comentário e de card de defeito ([`docs/jira-fluxo-de-trabalho.md`](./docs/jira-fluxo-de-trabalho.md), `tests/cards/TEMPLATE-*.md`)
 - [x] Evidência por card em modelo único, conferida por `npm run check:evidencias`
+- [x] Mapa do sistema (módulos, áreas e rotas do painel, ligados ao Help) e estrutura de pastas por módulo e área, com README ([`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md))
 - [x] Documentos vivos de telas e de falhas ([`docs/telas/`](./docs/telas/README.md), [`docs/falhas/`](./docs/falhas/README.md))
 
 ---
@@ -43,7 +44,7 @@ você não está no dia 1, está entrando na Fase 2.
 
 ## Fase 3 — Primeiros testes reais (semana 2-4)
 
-- [ ] Escrever o primeiro teste de tela em `tests/regression/vendas/` (Venda Rápida V2, com a tag do card, ex.: `@INTG-2645`), usando os seletores já mapeados
+- [ ] Escrever o primeiro teste de tela em `tests/regression/vendas/venda-rapida/` (Venda Rápida V2, com a tag do card, ex.: `@INTG-2645`), usando os seletores já mapeados
 - [ ] Escrever 1-2 testes em `tests/regression/` para os fluxos mais críticos identificados na Fase 2
 - [ ] Rodar a suíte no CI (push real) e confirmar que o relatório publica certo no GitHub Pages
 - [ ] Escrever o primeiro teste de API com a `request` fixture do Playwright (escolher um endpoint simples pra validar o padrão antes de escalar)
