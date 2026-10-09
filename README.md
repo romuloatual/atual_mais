@@ -24,26 +24,29 @@ Os valores exatos de token, série e demais campos estão documentados na seçã
 
 | Script | Descrição |
 | --- | --- |
-| `npm test` | Roda toda a suíte de testes |
+| `npm test` | Roda a suíte de testes, sem os testes de API (`@api`) |
 | `npm run test:headed` | Roda os testes com o navegador visível |
 | `npm run test:ui` | Abre a interface interativa do Playwright |
 | `npm run test:report` | Abre o último relatório de execução |
 | `npm run test:codegen` | Grava ações no navegador e gera código de teste automaticamente |
 | `npm run test:smoke` | Roda só a suíte de fumaça (tag `@smoke`) |
 | `npm run test:regression` | Roda só a suíte de regressão (tag `@regression`) |
-| `npm run test:card -- @INTG-2645` | Roda só os testes de um card específico |
+| `npm run test:api` | Roda os testes de API (só em HMG, precisa do `.env`) |
+| `npm run test:card -- @INTG-2645` | Roda só os testes marcados com a tag de um card |
+| `npm run check:evidencias` | Confere se as evidências dos cards seguem o modelo |
 
 ## Estrutura
 
 - `playwright.config.ts` - configuração global (baseURL, navegadores, timeouts, relatórios)
 - `tests/smoke/` - checagem rápida e rasa de que as telas principais abrem, tag `@smoke`.
   Roda primeiro em toda execução de CI, como gate rápido antes do resto da suíte.
-- `tests/regression/` - suíte macro por módulo (ex.: Vendas), sempre com a tag `@regression`.
+- `tests/regression/<módulo>/` - suíte macro por módulo (ex.: Vendas), sempre com a tag `@regression`.
   Roda automaticamente em todo push/PR e também à noite (agendado), pra pegar quando um
   card quebra outra funcionalidade do mesmo processo/tela.
-- `tests/cards/` - um arquivo por card do Jira, com a tag do card (ex.: `@INTG-2645`).
-  Roda sob demanda enquanto o card está em andamento; cenários críticos/recorrentes são
-  promovidos para `regression/` depois de validados.
+- `tests/api/<módulo>/` - testes de API por módulo, tag `@api`. Sob demanda, fora do CI.
+- `tests/support/` - código compartilhado por todos os módulos (ambiente, login por API).
+- `tests/cards/` - **evidências** de cada card (`INTG-XXXX-evidencias.md`) e modelos; não tem testes.
+  Cenário crítico/recorrente de um card vai direto em `regression/<módulo>/`, com a tag do card.
 
 Veja a convenção completa em [`tests/README.md`](./tests/README.md).
 
