@@ -5,3 +5,6 @@ blob-report/
 playwright/.cache/
 .pdfbuild-tmp/
 .vs/
+.env
+.env.*
+!.env.example
