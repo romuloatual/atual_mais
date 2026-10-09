@@ -9,6 +9,19 @@ Os testes ficam divididos em três pastas, com convenções de tag diferentes.
 | Quando roda | Primeiro, sempre, bem rápido | Todo push/PR | Sob demanda |
 | Objetivo | "O sistema não está pegando fogo" | "Essa regra específica continua certa" | "Esse card específico funciona" |
 
+## Onde cada coisa fica (por camada e por módulo)
+
+```
+tests/
+├─ support/                 usado por todos os módulos (ambiente, login por API, page objects)
+├─ smoke/                   uma tela por módulo abre: <assunto>.smoke.spec.ts
+├─ regression/<módulo>/     regressão macro do módulo (ex.: vendas/, financeiro/)
+├─ api/<módulo>/            testes de API do módulo (ex.: financeiro/) + helper só dele
+└─ cards/                   evidências .md dos cards
+```
+
+Regras: **camada primeiro, módulo depois**; helper de um módulo mora no módulo, helper de todos em `support/`; nome `<assunto>.<camada>.spec.ts`; API e tela não se misturam no mesmo arquivo; spec não fica em pasta por card (o card é registrado na evidência `.md`, e o teste que sobra migra para `regression/<módulo>/`). Pastas de módulo são criadas quando entra o primeiro teste.
+
 ## `smoke/` — testes de fumaça
 
 Checagem rápida e rasa de que as telas principais abrem e as ações mais básicas
