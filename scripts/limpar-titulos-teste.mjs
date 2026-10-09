@@ -64,6 +64,10 @@ for (const t of lista) {
   if (executar) {
     const r = await fetch(`${api}/api/v1/receivable/${t.id}`, { method: 'DELETE', headers });
     resultado = ` -> HTTP ${r.status}`;
+    if (!r.ok) {
+      const msg = (await r.text()).replace(/s+/g, " ").slice(0, 160);
+      resultado += ` ${msg}`;
+    }
   }
   console.log(`  id=${t.id} doc=${t.documentNumber} ${t.status} valor=${t.amount}${resultado}`);
 }
