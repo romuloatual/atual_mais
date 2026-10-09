@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { obterToken } from './helpers/auth';
-import { criarTitulo, excluirTitulo } from './helpers/receivable';
+import { obterToken } from '../../support/auth';
+import { criarTitulo, excluirTitulo } from './receivable';
 
 test('cria um título a receber de R$ 100', { tag: '@api' }, async ({ request }) => {
   const token = await obterToken(request);

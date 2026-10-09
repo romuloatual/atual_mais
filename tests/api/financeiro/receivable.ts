@@ -1,5 +1,5 @@
 import type { APIRequestContext } from '@playwright/test';
-import { lerAmbiente } from './ambiente';
+import { lerAmbiente } from '../../support/ambiente';
 
 const CLIENTE_TESTE_ID = '103'; // cliente de teste do HMG (empresa romulo)
 const FORMA_A_PRAZO_ID = '2'; // forma de pagamento "A Prazo"
