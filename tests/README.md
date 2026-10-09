@@ -2,7 +2,7 @@
 
 Os testes são divididos por **camada** e, dentro da camada, por **módulo** (Vendas, Financeiro...). A camada define **quando** o teste roda; o módulo define **o assunto**.
 
-| | `smoke/` | `regression/<módulo>/` | `api/<módulo>/` | `cards/` |
+| | `smoke/` | `regression/<módulo>/<área>/` | `api/<módulo>/<área>/` | `cards/` |
 | --- | --- | --- | --- | --- |
 | O que é | teste de tela | teste de tela | teste de API (sem navegador) | **só evidência** (`.md`), não tem teste |
 | Profundidade | rasa: a tela abre, ação básica funciona | funda: regra de negócio do módulo | funda: contrato do backend | o que o card pede |
@@ -16,7 +16,7 @@ Os testes são divididos por **camada** e, dentro da camada, por **módulo** (Ve
 tests/
 ├─ support/                 usado por todos os módulos (ambiente, login por API, page objects)
 ├─ smoke/                   uma tela por módulo abre: <assunto>.smoke.spec.ts
-├─ regression/<módulo>/     regressão macro do módulo (ex.: vendas/, financeiro/)
+├─ regression/<módulo>/<área>/   teste de tela (ex.: vendas/venda-rapida/)
 ├─ api/<módulo>/<área>/     testes de API de uma área do módulo (ex.: financeiro/contas-a-receber/) + helper só dela
 └─ cards/                   evidências .md dos cards, modelos e o conferidor
 ```
@@ -28,7 +28,7 @@ Regras:
 3. **Nome:** `<assunto>.<camada>.spec.ts` (ex.: `quitacao.api.spec.ts`, `login.smoke.spec.ts`).
 4. **API e tela não se misturam** no mesmo arquivo.
 5. **`cards/` guarda evidência, não teste.** O card é registrado em `INTG-XXXX-evidencias.md`.
-6. **Teste automatizado de um card** só existe se o cenário for **crítico ou recorrente**. Ele vai **direto** em `regression/<módulo>/`, com a tag do card ao lado de `@regression`, e **nunca fica copiado em dois lugares**.
+6. **Teste automatizado de um card** só existe se o cenário for **crítico ou recorrente**. Ele vai **direto** em `regression/<módulo>/<área>/`, com a tag do card ao lado de `@regression`, e **nunca fica copiado em dois lugares**.
 
 ## `smoke/`: testes de fumaça
 
@@ -44,7 +44,7 @@ test('Venda Rápida V2 abre sem erro', { tag: '@smoke' }, async ({ page }) => {
 });
 ```
 
-## `regression/<módulo>/`: suíte de regressão
+## `regression/<módulo>/<área>/`: suíte de regressão
 
 Suíte **macro**, organizada por **módulo** (Vendas, Financeiro, Compras), e não por tela solta. Cada módulo reúne os fluxos que, se quebrarem, geram o maior estrago (em Vendas: Venda Rápida, Pedido, Orçamento). É a rede de segurança que roda em **todo push/PR** e também à noite, para pegar quando uma alteração quebra outra funcionalidade do mesmo processo.
 
@@ -71,6 +71,20 @@ Falam direto com o backend, sem navegador: provam o contrato (o que o servidor a
 ## `support/`
 
 Código compartilhado por todos os módulos: leitura do `.env` com a trava de HMG (`ambiente.ts`), login por API (`auth.ts`) e os mapas de tela em [`support/pages/`](./support/pages/README.md) (page objects, por módulo). O que é de **um** módulo só fica na pasta dele.
+
+### `support/pages/`: o mapa de cada tela
+
+Cada arquivo guarda **como achar e usar** os botões e campos de **uma tela**; o teste só diz **o que fazer**. Se a tela mudar, corrige-se **um** arquivo e todos os testes continuam funcionando.
+
+```ts
+// sem pages: o seletor se repete em todo teste
+await page.locator('#customerSelected').fill('Rômulo');
+
+// com pages: o seletor mora num arquivo só, e o teste chama
+await vendaRapida.escolherCliente('Rômulo');
+```
+
+Regras: um arquivo por tela, em `support/pages/<módulo>/<área>.page.ts`; só ações e leituras (o `expect` fica no teste); seletores estáveis. Detalhes em [`support/pages/README.md`](./support/pages/README.md).
 
 ## `cards/`: evidência por card
 

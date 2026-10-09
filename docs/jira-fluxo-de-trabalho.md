@@ -17,7 +17,7 @@ Guia curto do dia a dia no Jira. O trabalho no Git está em [`git-fluxo-de-traba
 | --- | --- |
 | 🟢 Aprovado | Mova o card para **deploy** e comente: `Card movido para deploy` |
 | 🟡 Parcial / 🔴 Reprovado, com defeito a corrigir | Abra uma **subtarefa** e siga "Quando o card precisa de subtarefa" (abaixo) |
-| Outros casos de Parcial / Reprovado | _A definir_ |
+| Outros casos de Parcial / Reprovado | ⏳ **A confirmar com o supervisor** (ainda sem regra definida) |
 
 ## Tipos de item no Jira (atenção ao ícone)
 

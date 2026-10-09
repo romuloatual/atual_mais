@@ -9,7 +9,7 @@ Histórico das falhas achadas nos testes. O **Jira** guarda decisão e status; a
 | Data | Falha | Tipo | Onde ocorre | Status | Jira | Arquivo |
 | --- | --- | --- | --- | --- | --- | --- |
 | 08/10/2026 | Salvar documento sem bloqueio de duplo envio cria várias contas | **Defeito** | HMG e produção | aberta, card a abrir | — | [`criacao-documento-duplicado`](./2026-10-08-contas-a-receber-criacao-documento-duplicado.md) |
-| 08/10/2026 | Modal de quitação envia o valor da forma como líquido; backend espera bruto | **Bug (subtarefa)** do INTG-2727 | HMG | aberta, subtarefa a abrir | — | [`modal-bruto-liquido`](./2026-10-08-contas-a-receber-quitacao-modal-bruto-liquido.md) |
+| 08/10/2026 | Modal de quitação envia o valor da forma como líquido; backend espera bruto | **Bug (subtarefa)** do INTG-2727 | HMG | aberta, subtarefa aberta pelo supervisor | — | [`modal-bruto-liquido`](./2026-10-08-contas-a-receber-quitacao-modal-bruto-liquido.md) |
 | 08/10/2026 | Recibo imprime acréscimo como "Juros" e restante da Bobina inconsistente | **Defeito** | produção e HMG | aberta, card a abrir | — | [`recibo-acrescimo-juros`](./2026-10-08-contas-a-receber-recibo-acrescimo-juros.md) |
 
 Telas relacionadas: [`../telas/`](../telas/README.md).
