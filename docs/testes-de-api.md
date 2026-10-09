@@ -60,7 +60,8 @@ Regra do backend (provada por API no INTG-2727): `payments[].amount` é o valor 
 
 Cada teste cria um título real no HMG (cliente de teste 103, forma A Prazo). O número do documento começa com **`QA`** para filtrar e excluir depois. Cada rodada de `tests/api` cria 8 títulos.
 
-- Quitados por completo saem do filtro "Aberto"; use "Pago" ou "Todos". Se o sistema permite excluir título pago ainda é pergunta ao time.
+- **Exclusão (capturada no HMG em 09/10/2026):** `DELETE /api/v1/receivable/{id}`, sem corpo, responde 200 com corpo vazio. A tela só mostra "Excluir" para título **Aberto** (e com a permissão de exclusão); título Pago ou Pago parcial não tem a opção. Se o **servidor** também recusa excluir título quitado, não foi testado: pergunta ao time.
+- Quitados por completo saem do filtro "Aberto"; use "Pago" ou "Todos". Os testes que deixam o título **aberto** (criar título e soma maior que o título) podem se limpar com o `DELETE`; os que quitam não.
 - **Não ligue estes testes ao CI automático** enquanto não houver limpeza, para não encher o HMG.
 
 ## Limites
