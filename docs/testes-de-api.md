@@ -32,10 +32,10 @@ npm run test:api
 | --- | --- |
 | `tests/support/ambiente.ts` (compartilhado) | lê o `.env`, avisa qual variável falta e **recusa rodar fora do HMG** |
 | `tests/support/auth.ts` (compartilhado) | login por `POST /oauth/token`, devolve o token |
-| `tests/api/financeiro/receivable.ts` | `criarTitulo`, `quitarTitulo` e `excluirTitulo` (só do módulo Financeiro) |
+| `tests/api/financeiro/contas-a-receber/receivable.ts` | `criarTitulo`, `quitarTitulo` e `excluirTitulo` (só de Contas a Receber) |
 | `tests/api/login.api.spec.ts` | o login devolve um token (vale para todos os módulos) |
-| `tests/api/financeiro/criar-titulo.api.spec.ts` | cria um título de R$ 100 |
-| `tests/api/financeiro/quitacao.api.spec.ts` | 6 casos de quitação, em tabela de dados |
+| `tests/api/financeiro/contas-a-receber/criar-titulo.api.spec.ts` | cria um título de R$ 100 |
+| `tests/api/financeiro/contas-a-receber/quitacao.api.spec.ts` | 6 casos de quitação, em tabela de dados |
 
 ## Casos de quitação cobertos (título de R$ 100)
 
