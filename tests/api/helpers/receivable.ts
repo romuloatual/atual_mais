@@ -9,7 +9,7 @@ export async function criarTitulo(request: APIRequestContext, token: string, val
   const amb = lerAmbiente();
   const data = new Date().toISOString().slice(0, 10) + 'T12:00:00';
   // Número único, porque o sistema não aceita o mesmo documento duas vezes para o mesmo cliente.
-  const documentNumber = String(Date.now()).slice(-9);
+  const documentNumber = String(Date.now()).slice(-7) + String(Math.floor(Math.random() * 100)).padStart(2, '0');
 
   const resposta = await request.post(`${amb.apiUrl}/api/v1/receivable`, {
     headers: { Authorization: `bearer ${token}`, schema: amb.tenant },
