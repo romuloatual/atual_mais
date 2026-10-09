@@ -30,3 +30,29 @@ export async function criarTitulo(request: APIRequestContext, token: string, val
   const corpo = await resposta.json();
   return { id: corpo.id as number, documentNumber };
 }
+
+type Forma = { paymentGatewayId: string; checkingAccountId: number; valor: number };
+
+// Quita um título com uma ou mais formas de pagamento.
+// Devolve a resposta "crua", para o teste poder conferir tanto o sucesso (200) quanto o erro (400).
+export async function quitarTitulo(
+  request: APIRequestContext,
+  token: string,
+  opcoes: { tituloId: number; formas: Forma[]; desconto?: number; acrescimo?: number },
+) {
+  const amb = lerAmbiente();
+  return request.post(`${amb.apiUrl}/api/v1/receivable/payment`, {
+    headers: { Authorization: `bearer ${token}`, schema: amb.tenant },
+    data: {
+      paymentDate: new Date().toISOString().slice(0, 19),
+      increaseAmount: opcoes.acrescimo ?? 0,
+      discountAmount: opcoes.desconto ?? 0,
+      items: [{ id: opcoes.tituloId }],
+      payments: opcoes.formas.map((f) => ({
+        paymentGateway: { id: f.paymentGatewayId },
+        checkingAccount: { id: f.checkingAccountId },
+        amount: f.valor,
+      })),
+    },
+  });
+}
