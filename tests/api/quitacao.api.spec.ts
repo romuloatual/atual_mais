@@ -13,7 +13,9 @@ test('quitação com 1 forma pelo valor total', { tag: '@api' }, async ({ reques
 
   const corpo = await resposta.json();
   console.log('HTTP', resposta.status(), '| chaves:', Object.keys(corpo).join(','));
-  console.log('status:', corpo.status, '| amount:', corpo.amount, '| totalPaid:', corpo.totalPaid, '| total:', corpo.total);
+  const conta = corpo.receivables[0];
+  console.log('qtd:', corpo.receivables.length, '| campos:', Object.keys(conta).join(','));
+  console.log('status:', conta.status, '| amount:', conta.amount, '| totalPaid:', conta.totalPaid, '| total:', conta.total);
   console.log(`Título: id=${titulo.id} documento=${titulo.documentNumber}`);
 
   expect(resposta.status()).toBe(200);
