@@ -2,6 +2,8 @@
 
 Cada arquivo guarda os **seletores e as ações de uma tela**, para os testes não repetirem seletor. Se a tela mudar, ajusta-se um arquivo só.
 
+**Por quê:** sem o mapa, o mesmo seletor se repete em todo teste, e uma mudança na tela obriga a mexer em todos. Com o mapa, corrige-se um arquivo.
+
 **Onde fica:** `tests/support/pages/<módulo>/<área>.page.ts`, espelhando as pastas de `regression/` (ex.: `vendas/venda-rapida.page.ts`).
 
 **Regras:**

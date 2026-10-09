@@ -42,13 +42,13 @@ Os valores exatos de token, série e demais campos estão documentados na seçã
 - `playwright.config.ts` - configuração global (baseURL, navegadores, timeouts, relatórios)
 - `tests/smoke/` - checagem rápida e rasa de que as telas principais abrem, tag `@smoke`.
   Roda primeiro em toda execução de CI, como gate rápido antes do resto da suíte.
-- `tests/regression/<módulo>/` - suíte macro por módulo (ex.: Vendas), sempre com a tag `@regression`.
+- `tests/regression/<módulo>/<área>/` - suíte macro por módulo e área (ex.: `vendas/venda-rapida/`), sempre com a tag `@regression`.
   Roda automaticamente em todo push/PR e também à noite (agendado), pra pegar quando um
   card quebra outra funcionalidade do mesmo processo/tela.
-- `tests/api/<módulo>/` - testes de API por módulo, tag `@api`. Sob demanda, fora do CI.
-- `tests/support/` - código compartilhado por todos os módulos (ambiente, login por API).
+- `tests/api/<módulo>/<área>/` - testes de API por módulo e área, tag `@api`. Sob demanda, fora do CI.
+- `tests/support/` - código compartilhado (ambiente, login por API) e `pages/`, os mapas de tela por módulo.
 - `tests/cards/` - **evidências** de cada card (`INTG-XXXX-evidencias.md`) e modelos; não tem testes.
-  Cenário crítico/recorrente de um card vai direto em `regression/<módulo>/`, com a tag do card.
+  Cenário crítico/recorrente de um card vai direto em `regression/<módulo>/<área>/`, com a tag do card.
 
 Veja a convenção completa em [`tests/README.md`](./tests/README.md).
 
@@ -77,6 +77,8 @@ Consulte [`Guia_Onboarding_QA_Automacao_Atual_Mais.pdf`](./Guia_Onboarding_QA_Au
 Consulte [`ROADMAP.md`](./ROADMAP.md) para o cronograma de implantação do setor de QA, fase a fase.
 
 Consulte [`docs/fluxos-principais.md`](./docs/fluxos-principais.md) para os 8 fluxos mais importantes do Atual Mais (como usar e o que observar como QA).
+
+Consulte [`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md) para os **módulos, áreas e rotas do sistema**, ligados ao Help e às pastas de teste.
 
 Consulte [`docs/testes-de-api.md`](./docs/testes-de-api.md) para rodar os testes de API (login, criar título e quitação) e saber os cuidados com o HMG.
 
