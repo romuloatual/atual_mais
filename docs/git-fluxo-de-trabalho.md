@@ -5,12 +5,15 @@ online, onde todo mundo vê o trabalho. Repositório: `romuloatual/atual_mais`.
 
 ## A regra em uma frase
 
-> **Cada card tem a sua branch. Documentação geral vai direto na `main`. O PR só abre quando o card termina.**
+> **Cada card tem a sua branch. O que serve a todos (docs, modelos, testes gerais, scripts) vai direto na `main`. O PR só abre quando o card termina. Depois de cada push na `main`, as branches de card abertas são atualizadas.**
 
 | O que é | Onde vai | Por quê |
 | --- | --- | --- |
 | Validação e testes de um card (`tests/cards/INTG-XXXX-evidencias.md`) | branch `card/INTG-XXXX` | o trabalho do card fica isolado até ser concluído |
 | Docs gerais (README, ROADMAP, `docs/`, templates, guia) | direto na `main` | todos precisam ter tudo, sem esperar um card |
+| Testes e código de apoio (`tests/smoke`, `regression`, `api`, `support`, `scripts/`, CI) | direto na `main` | servem a todos os módulos e cards |
+
+A evidência de um card (`INTG-XXXX-evidencias.md`) só chega à `main` quando o PR do card é aprovado; até lá ela existe **só na branch do card**.
 
 **Palavras que aparecem:** *branch* = uma linha de trabalho separada; *commit* = uma "foto" salva do que mudou;
 *push* = enviar os commits ao GitHub; *PR (pull request)* = pedido para juntar a branch na `main`.
@@ -55,10 +58,25 @@ git push origin main
 git checkout card/INTG-XXXX && git merge main    # traz a novidade para a branch do card
 ```
 
+## Depois de cada push na `main`
+
+1. **Confira o CI:** abra a aba **Actions** do GitHub e veja se o run do seu push ficou verde. Um run vermelho que ninguém olha vira rotina.
+2. **Atualize as branches de card abertas** (merge da `main` em cada uma) e envie:
+
+```bash
+for b in card/INTG-1005 card/INTG-2676 card/INTG-2727; do   # as branches abertas
+  git checkout $b && git merge origin/main && git push origin $b
+done
+git checkout main
+npm run check:evidencias        # as evidências continuam no padrão?
+```
+
+Se der conflito, resolva mantendo os dois lados e rode `npm run check:evidencias` antes de enviar.
+
 ## Mensagem de commit
 
 - Card: `INTG-XXXX: o que foi feito` (ex.: `INTG-2727: evidencias no modelo padrao`).
-- Docs gerais: frase curta dizendo o que mudou, sem o número do card.
+- Docs e testes gerais: `tipo: o que mudou`, sem o número do card. Tipos usados: `docs`, `test`, `feat`, `chore`, `refactor` (ex.: `test: quitacao por API com 6 casos`).
 - Sem acentos nas mensagens evita caracteres quebrados em alguns terminais.
 
 ## Fazer e evitar
@@ -70,7 +88,9 @@ git checkout card/INTG-XXXX && git merge main    # traz a novidade para a branch
 | `git merge main` na branch do card | **Rebase** em branch que já foi enviada (reescreve o histórico e atrapalha quem usa a branch) |
 | Confirmar o autor (`git config user.name`) | Commitar com o usuário errado |
 | Docs gerais direto na `main` | Deixar documentação geral presa na branch de um card |
-| Nunca guardar senha, token ou credencial em arquivo versionado | Colar dados reais de cliente em evidências (usar só dados de teste) |
+| Nunca guardar senha, token ou credencial em arquivo versionado. Segredos ficam no `.env`, que o Git ignora (modelo: `.env.example`) | Colar dados reais de cliente em evidências (usar só dados de teste) |
+| `git add` **pelo nome do arquivo** e conferir o `git status` antes do commit | `git add .` ou `git add -A` sem olhar o que entra (pode levar um segredo ou lixo) |
+| Confirmar que o `.env` está ignorado: `git check-ignore -v .env` | Subir senha ou token "só por um minuto": o repositório é público e o histórico guarda tudo |
 | Trocar de branch só com a árvore limpa (ou usar `git stash`) | Trocar de branch com alterações soltas |
 
 ## Quando algo dá errado
