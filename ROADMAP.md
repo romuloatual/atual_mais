@@ -43,7 +43,7 @@ você não está no dia 1, está entrando na Fase 2.
 
 ## Fase 3 — Primeiros testes reais (semana 2-4)
 
-- [ ] Escrever o primeiro teste em `tests/cards/` (ex.: `INTG-2645.spec.ts`) usando os seletores já mapeados da tela de Venda Rápida V2
+- [ ] Escrever o primeiro teste de tela em `tests/regression/vendas/` (Venda Rápida V2, com a tag do card, ex.: `@INTG-2645`), usando os seletores já mapeados
 - [ ] Escrever 1-2 testes em `tests/regression/` para os fluxos mais críticos identificados na Fase 2
 - [ ] Rodar a suíte no CI (push real) e confirmar que o relatório publica certo no GitHub Pages
 - [ ] Escrever o primeiro teste de API com a `request` fixture do Playwright (escolher um endpoint simples pra validar o padrão antes de escalar)
@@ -53,7 +53,7 @@ você não está no dia 1, está entrando na Fase 2.
 ## Fase 4 — Consolidar o processo (mês 1-2)
 
 - [ ] Formalizar o fluxo bug → card → teste → automação → CI num único lugar (o guia de onboarding já tem a base; revisar depois de rodar de verdade)
-- [ ] Definir critério objetivo de "quando promover um teste de `cards/` pra `regression/`" (ex.: 2+ regressões no mesmo fluxo, ou fluxo usado todo dia)
+- [ ] Definir critério objetivo de "quando o teste de um card merece entrar em `regression/`" (ex.: 2+ regressões no mesmo fluxo, ou fluxo usado todo dia)
 - [ ] Configurar alerta de falha da CI (ex.: notificação no Slack/Teams/e-mail quando a suíte de regressão quebra)
 - [ ] Definir com o supervisor o fluxo de Parcial/Reprovado sem subtarefa (hoje "a definir" no doc do Jira)
 - [ ] Levantar uma métrica simples de baseline: quantos bugs chegaram em produção nos últimos meses, pra comparar depois
