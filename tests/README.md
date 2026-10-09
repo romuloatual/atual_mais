@@ -70,7 +70,7 @@ Falam direto com o backend, sem navegador: provam o contrato (o que o servidor a
 
 ## `support/`
 
-Código compartilhado por todos os módulos: leitura do `.env` com a trava de HMG (`ambiente.ts`), login por API (`auth.ts`) e os mapas de tela em [`support/pages/`](./support/pages/README.md) (page objects, por módulo). O que é de **um** módulo só fica na pasta dele.
+Código compartilhado por todos os módulos: leitura do `.env` com a trava de HMG (`ambiente.ts`), login por API (`auth.ts`), a base dos **testes de tela** (`fixtures.ts`: painel já logado por API; o teste é **pulado** sem credenciais ou fora do Chromium, e `configuracoes-padrao.ts`) e os mapas de tela em [`support/pages/`](./support/pages/README.md) (page objects, por módulo). O que é de **um** módulo só fica na pasta dele.
 
 ### `support/pages/`: o mapa de cada tela
 

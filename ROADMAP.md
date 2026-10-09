@@ -44,7 +44,8 @@ você não está no dia 1, está entrando na Fase 2.
 
 ## Fase 3 — Primeiros testes reais (semana 2-4)
 
-- [ ] Escrever o primeiro teste de tela em `tests/regression/vendas/venda-rapida/` (Venda Rápida V2, com a tag do card, ex.: `@INTG-2645`), usando os seletores já mapeados
+- [x] Primeiro teste de tela: fluxo feliz do Venda Rápida V2 em `tests/regression/vendas/venda-rapida/` (pedido e nota conferidos; roda só com `.env`, fora do CI por enquanto)
+- [ ] Próximos casos do Venda Rápida (cliente cadastrado, desconto, pagamento parcial, impressão) e decidir a limpeza dos pedidos de teste
 - [ ] Escrever 1-2 testes em `tests/regression/` para os fluxos mais críticos identificados na Fase 2
 - [ ] Rodar a suíte no CI (push real) e confirmar que o relatório publica certo no GitHub Pages
 - [ ] Escrever o primeiro teste de API com a `request` fixture do Playwright (escolher um endpoint simples pra validar o padrão antes de escalar)

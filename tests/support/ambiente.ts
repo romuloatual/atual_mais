@@ -17,10 +17,15 @@ export function lerAmbiente() {
     usuario: obrigatoria('QA_USER'),
     senha: obrigatoria('QA_PASS'),
   };
+  // Endereço do painel (teste de tela). Por padrão: https://<empresa>.hmg.atualmais.com.br
+  const painelUrl = process.env.QA_PAINEL_URL || `https://${ambiente.tenant}.hmg.atualmais.com.br`;
 
   // Trava: teste de API só roda em HMG, nunca em produção.
   if (!ambiente.apiUrl.includes('hmg')) {
     throw new Error(`QA_API_URL não parece HMG (${ambiente.apiUrl}). Teste de API só roda em HMG.`);
   }
-  return ambiente;
+  if (!painelUrl.includes('hmg')) {
+    throw new Error(`QA_PAINEL_URL não parece HMG (${painelUrl}). Teste de tela só roda em HMG.`);
+  }
+  return { ...ambiente, painelUrl };
 }
