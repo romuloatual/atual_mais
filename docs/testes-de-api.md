@@ -19,8 +19,10 @@ Valores com `$` ou `#` na senha vão entre aspas simples no `.env`.
 ## Como rodar
 
 ```bash
-npx playwright test tests/api --project=chromium
+npm run test:api
 ```
+
+(equivale a `npx playwright test tests/api --project=chromium`). O `npm test` e o CI **não** rodam os testes `@api` (`--grep-invert @api`): eles precisam do `.env` e criam dados no HMG.
 
 `--project=chromium` roda uma vez só (sem ele, o mesmo teste de API repetiria em 3 navegadores).
 
