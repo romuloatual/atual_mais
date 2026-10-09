@@ -57,3 +57,19 @@ export async function quitarTitulo(
     },
   });
 }
+
+// Exclui um título de TESTE. Trava de segurança: só aceita documento que começa com "QA".
+// No HMG a exclusão (DELETE) funciona para título Aberto; para título quitado não foi testada.
+export async function excluirTitulo(
+  request: APIRequestContext,
+  token: string,
+  titulo: { id: number; documentNumber: string },
+) {
+  if (!titulo.documentNumber.startsWith('QA')) {
+    throw new Error(`Exclusão recusada: o documento ${titulo.documentNumber} não é de teste (precisa começar com QA).`);
+  }
+  const amb = lerAmbiente();
+  return request.delete(`${amb.apiUrl}/api/v1/receivable/${titulo.id}`, {
+    headers: { Authorization: `bearer ${token}`, schema: amb.tenant },
+  });
+}
