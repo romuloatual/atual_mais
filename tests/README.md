@@ -23,7 +23,7 @@ tests/
 
 Regras:
 
-1. **Camada primeiro, módulo depois, área dentro do módulo.** Módulo = Vendas, Financeiro. Área = Venda Rápida, Contas a Receber. A pasta da área nasce com o primeiro teste dela e vale em toda camada (ex.: `regression/vendas/venda-rapida/`, `api/financeiro/contas-a-receber/`). Não crie mais níveis que isso.
+1. **Camada primeiro, módulo depois, área dentro do módulo.** Módulo = Vendas, Financeiro. Área = Venda Rápida, Contas a Receber. A estrutura vale em toda camada (ex.: `regression/vendas/venda-rapida/`, `api/financeiro/contas-a-receber/`). Os módulos e as áreas dos fluxos principais **já têm pasta e README**, saídos do [mapa do sistema](../docs/mapa-do-sistema.md); as demais áreas nascem com o primeiro teste. Não crie mais níveis que isso.
 2. **Helpers:** o de uma área mora na pasta da área; o que serve a vários módulos, em `support/`.
 3. **Nome:** `<assunto>.<camada>.spec.ts` (ex.: `quitacao.api.spec.ts`, `login.smoke.spec.ts`).
 4. **API e tela não se misturam** no mesmo arquivo.
