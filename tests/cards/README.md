@@ -1,7 +1,8 @@
 # Testes por card
 
-Um arquivo por card do Jira (ex.: `INTG-2645.spec.ts`). Toda spec aqui deve usar a tag do
-card correspondente (ex.: `@INTG-2645`).
+Esta pasta guarda **evidências**, não testes: `INTG-XXXX-evidencias.md` de cada card, os modelos e o conferidor.
+Se um cenário do card merecer automação (crítico ou recorrente), o teste vai **direto** em `tests/regression/<módulo>/`,
+com a tag do card ao lado de `@regression` (ex.: `['@regression', '@INTG-2645']`), sem cópia aqui.
 
 Veja a convenção completa em [`../README.md`](../README.md).
 
