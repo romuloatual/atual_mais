@@ -1,15 +1,16 @@
 # Organização dos testes
 
-Os testes ficam divididos em três pastas, com convenções de tag diferentes.
+Os testes são divididos por **camada** e, dentro da camada, por **módulo** (Vendas, Financeiro...). A camada define **quando** o teste roda; o módulo define **o assunto**.
 
-| | `smoke/` | `regression/` | `cards/` |
-| --- | --- | --- | --- |
-| Profundidade | Rasa (tela abre, ação básica funciona) | Funda (regra de negócio específica) | Funda (o que o card pede) |
-| Abrangência | Todos os módulos principais | Um módulo inteiro (macro), ex.: Vendas | Só o escopo do card |
-| Quando roda | Primeiro, sempre, bem rápido | Todo push/PR | Sob demanda |
-| Objetivo | "O sistema não está pegando fogo" | "Essa regra específica continua certa" | "Esse card específico funciona" |
+| | `smoke/` | `regression/<módulo>/` | `api/<módulo>/` | `cards/` |
+| --- | --- | --- | --- | --- |
+| O que é | teste de tela | teste de tela | teste de API (sem navegador) | **só evidência** (`.md`), não tem teste |
+| Profundidade | rasa: a tela abre, ação básica funciona | funda: regra de negócio do módulo | funda: contrato do backend | o que o card pede |
+| Quando roda | primeiro, sempre, em todo CI (gate) | todo push/PR e à noite | **sob demanda**, fora do CI | não roda |
+| Objetivo | "o sistema não está pegando fogo" | "essa regra continua certa" | "o backend responde como combinamos" | registrar o que foi validado |
+| Tag | `@smoke` | `@regression` | `@api` | n/a |
 
-## Onde cada coisa fica (por camada e por módulo)
+## Onde cada coisa fica
 
 ```
 tests/
@@ -17,16 +18,21 @@ tests/
 ├─ smoke/                   uma tela por módulo abre: <assunto>.smoke.spec.ts
 ├─ regression/<módulo>/     regressão macro do módulo (ex.: vendas/, financeiro/)
 ├─ api/<módulo>/            testes de API do módulo (ex.: financeiro/) + helper só dele
-└─ cards/                   evidências .md dos cards
+└─ cards/                   evidências .md dos cards, modelos e o conferidor
 ```
 
-Regras: **camada primeiro, módulo depois**; helper de um módulo mora no módulo, helper de todos em `support/`; nome `<assunto>.<camada>.spec.ts`; API e tela não se misturam no mesmo arquivo; spec não fica em pasta por card (o card é registrado na evidência `.md`, e o teste que sobra migra para `regression/<módulo>/`). Pastas de módulo são criadas quando entra o primeiro teste.
+Regras:
 
-## `smoke/` — testes de fumaça
+1. **Camada primeiro, módulo depois.** Pastas de módulo nascem com o primeiro teste.
+2. **Helpers:** o de um módulo mora no módulo; o de todos, em `support/`.
+3. **Nome:** `<assunto>.<camada>.spec.ts` (ex.: `quitacao.api.spec.ts`, `login.smoke.spec.ts`).
+4. **API e tela não se misturam** no mesmo arquivo.
+5. **`cards/` guarda evidência, não teste.** O card é registrado em `INTG-XXXX-evidencias.md`.
+6. **Teste automatizado de um card** só existe se o cenário for **crítico ou recorrente**. Ele vai **direto** em `regression/<módulo>/`, com a tag do card ao lado de `@regression`, e **nunca fica copiado em dois lugares**.
 
-Checagem rápida e rasa de que as telas principais abrem e as ações mais básicas
-funcionam. Roda **primeiro** em toda execução de CI — se falhar, o resto da suíte nem
-chega a rodar (gate rápido, barato de manter).
+## `smoke/`: testes de fumaça
+
+Checagem rápida e rasa de que as telas principais abrem e as ações mais básicas funcionam. Roda **primeiro** em toda execução de CI: se falhar, o resto da suíte nem chega a rodar (gate rápido, barato de manter). É separado da regressão de propósito: não se repete cenário de smoke dentro dela.
 
 - Toda spec dessa pasta deve ter a tag `@smoke`.
 
@@ -38,52 +44,47 @@ test('Venda Rápida V2 abre sem erro', { tag: '@smoke' }, async ({ page }) => {
 });
 ```
 
-## `regression/` — suíte de regressão
+## `regression/<módulo>/`: suíte de regressão
 
-É uma suíte **macro**, organizada por **módulo** (ex.: Vendas, Financeiro, Compras), e não por
-tela solta. Cada módulo reúne os fluxos que, se quebrarem, geram o maior estrago (ex.: em
-Vendas: Venda Rápida, Pedido, Orçamento). Testar tela por tela gasta energia demais. É a rede de segurança que roda **automaticamente em todo push/PR** e
-também à noite (agendado), pra pegar quando uma alteração em um card quebra outra
-funcionalidade do mesmo processo/tela.
+Suíte **macro**, organizada por **módulo** (Vendas, Financeiro, Compras), e não por tela solta. Cada módulo reúne os fluxos que, se quebrarem, geram o maior estrago (em Vendas: Venda Rápida, Pedido, Orçamento). É a rede de segurança que roda em **todo push/PR** e também à noite, para pegar quando uma alteração quebra outra funcionalidade do mesmo processo.
 
-- Um teste entra aqui quando o cenário é **crítico ou recorrente o suficiente** para
-  valer a pena rodar sempre.
+- Um teste entra aqui quando o cenário é **crítico ou recorrente** o suficiente para valer rodar sempre.
 - Toda spec dessa pasta deve ter a tag `@regression`.
+- Se o teste nasceu de um card, acrescente a **tag do card** para rastrear (`@INTG-2645`). Assim `npm run test:card -- @INTG-2645` encontra o teste sem precisar de uma pasta por card.
 
 ```ts
 import { test, expect } from '@playwright/test';
 
-test('cliente à vista mantém telefone e celular separados no cupom', { tag: '@regression' }, async ({ page }) => {
+test('impressão em bobina não concatena telefone e celular', { tag: ['@regression', '@INTG-2645'] }, async ({ page }) => {
   // ...
 });
 ```
 
-## `cards/` — testes por card
+## `api/<módulo>/`: testes de API
 
-Um arquivo por card do Jira (ex.: `INTG-2645.spec.ts`), criado junto com a validação
-daquele card específico. Roda sob demanda enquanto o card está em andamento.
+Falam direto com o backend, sem navegador: provam o contrato (o que o servidor aceita e responde). Hoje cobrem a quitação do Financeiro.
 
-- Toda spec dessa pasta deve ter a tag do card (ex.: `@INTG-2645`).
-- Se o cenário for crítico/recorrente, "promova" o teste (ou uma versão dele) para
-  `regression/` depois que o card for validado e fechado.
+- Toda spec dessa pasta deve ter a tag `@api`.
+- Precisam do `.env` (nunca versionado) e **só rodam em HMG**; criam dados de teste que o sistema nem sempre deixa excluir. Por isso ficam **fora do CI**: rodam sob demanda, com `npm run test:api`.
+- Guia completo: [`docs/testes-de-api.md`](../docs/testes-de-api.md).
 
-```ts
-import { test, expect } from '@playwright/test';
+## `support/`
 
-test('impressão em bobina não concatena telefone e celular', { tag: '@INTG-2645' }, async ({ page }) => {
-  // ...
-});
-```
+Código compartilhado por todos os módulos: leitura do `.env` com a trava de HMG (`ambiente.ts`), login por API (`auth.ts`) e, quando existirem, os mapas de tela (page objects). O que é de **um** módulo só fica na pasta dele.
 
-## Rodando por tag
+## `cards/`: evidência por card
+
+Cada card tem `INTG-XXXX-evidencias.md` no modelo padrão (`TEMPLATE-evidencias.md`), conferido por `npm run check:evidencias`. A pasta também guarda os modelos de comentário do Jira, de caso de teste e de card de defeito. Veja [`cards/README.md`](./cards/README.md).
+
+## Rodando
 
 ```bash
-# Só a suíte de fumaça
-npm run test:smoke
-
-# Só a suíte de regressão
-npm run test:regression
-
-# Só os testes de um card específico
-npm run test:card -- @INTG-2645
+npm test                       # a suíte, sem os testes de API
+npm run test:smoke             # só a suíte de fumaça
+npm run test:regression        # só a suíte de regressão
+npm run test:api               # só os testes de API (HMG, precisa do .env)
+npm run test:card -- @INTG-2645   # só os testes marcados com a tag do card
+npm run check:evidencias       # confere se as evidências seguem o modelo
 ```
+
+**No CI:** push/PR roda smoke e depois regressão; o agendado das 03:00 roda smoke e a suíte completa **sem** `@api`; o manual permite escolher. A API nunca roda no CI.
