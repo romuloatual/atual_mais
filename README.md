@@ -72,7 +72,7 @@ Consulte [`ROADMAP.md`](./ROADMAP.md) para o cronograma de implantação do seto
 
 Consulte [`docs/fluxos-principais.md`](./docs/fluxos-principais.md) para os 8 fluxos mais importantes do Atual Mais (como usar e o que observar como QA).
 
-Consulte [`docs/regras-de-negocio/`](./docs/regras-de-negocio/README.md) para as regras de negócio que vamos confirmando nos testes (documento vivo, uma tela por arquivo).
+Consulte [`docs/telas/`](./docs/telas/README.md) para a **finalidade e o comportamento de cada tela** (documento vivo, confirmado a cada card) e [`docs/falhas/`](./docs/falhas/README.md) para as falhas encontradas.
 
 Consulte [`docs/git-fluxo-de-trabalho.md`](./docs/git-fluxo-de-trabalho.md) para saber como versionar e trabalhar com Git no dia a dia (branch por card, docs na `main`, PR, o que fazer quando dá erro).
 

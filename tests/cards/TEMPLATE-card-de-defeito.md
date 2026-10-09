@@ -3,8 +3,8 @@
 Padrão que o time de desenvolvimento já usa nos cards `[DEFEITO]` (ex.: INTG-3545). Siga **a mesma ordem de seções**.
 Descreva o comportamento **correto** (Objetivo, Regra e BDD), não só o erro. Sem dado real de cliente, token ou senha.
 
-**Título:** `[DEFEITO] (Camada) {Módulo} descrição curta do problema` · Se for achado durante outro card, abra como
-**subtarefa** dele; se já existia antes (comparar com produção), abra **card próprio** ligado ao de origem.
+**Título:** `[BUG]` se achado antes de chegar ao cliente, `[DEFEITO]` se achado no cliente (produção), seguido de `(Camada) {Módulo} descrição curta do problema` · Se for achado durante outro card, abra como
+**subtarefa** dele (tipo **Bug (subtarefa)**, atribuída ao responsável do card original); se já existia antes (comparar com produção), abra **card próprio** ligado ao de origem.
 
 ```
 Resumo
