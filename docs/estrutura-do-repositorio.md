@@ -19,6 +19,7 @@ atual_mais/
 ├─ docs/                          documentação de processos e de conhecimento
 │  ├─ jira-fluxo-de-trabalho.md     como trabalhar o card no Jira
 │  ├─ git-fluxo-de-trabalho.md      branches, push, CI depois do push
+│  ├─ rotina-diaria.md              o dia a dia do QA, com checklist
 │  ├─ mapa-do-sistema.md            módulos, telas e rotas do sistema
 │  ├─ fluxos-principais.md          os 8 fluxos mais importantes
 │  ├─ testes-de-api.md              como rodar e cuidar dos testes de API
