@@ -14,7 +14,7 @@ atual_mais/
 ├─ playwright.config.ts           configuração dos testes
 │
 ├─ .github/workflows/             o robô do GitHub (CI): roda os testes a cada envio
-├─ scripts/                       utilitários (ex.: limpeza dos títulos de teste)
+├─ scripts/                       utilitários (limpeza dos títulos de teste; cálculo das métricas)
 │
 ├─ docs/                          documentação de processos e de conhecimento
 │  ├─ jira-fluxo-de-trabalho.md     como trabalhar o card no Jira
@@ -23,6 +23,8 @@ atual_mais/
 │  ├─ mapa-do-sistema.md            módulos, telas e rotas do sistema
 │  ├─ fluxos-principais.md          os 8 fluxos mais importantes
 │  ├─ testes-de-api.md              como rodar e cuidar dos testes de API
+│  ├─ metricas-qa.md                o que medir (qualidade) e como calcular
+│  ├─ TEMPLATE-relatorio-mensal.md  modelo do relatório mensal de 1 página
 │  ├─ glossario.md                  termos em linguagem simples
 │  └─ telas/                        finalidade e comportamento de cada tela
 │
