@@ -8,7 +8,7 @@ Comportamento da tela: [`docs/telas/contas-a-receber-quitacao.md`](../../../../d
 
 **Cuidados:**
 - O contrato da quitação já é coberto por API em [`tests/api/financeiro/contas-a-receber/`](../../../api/financeiro/contas-a-receber).
-- Falhas conhecidas que valem teste: [`docs/falhas/`](../../../../docs/falhas/README.md).
+- Falhas conhecidas desta área estão no Jira e na evidência do card (INTG-2727); valem teste de tela quando forem corrigidas.
 - Título quitado não pode ser excluído (o servidor responde 400): teste de tela que quita deixa dado no HMG.
 
 **Situação:** ainda sem testes. Teste de card entra aqui com a tag do card (`['@regression', '@INTG-XXXX']`).
