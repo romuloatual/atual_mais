@@ -76,6 +76,15 @@ Regra do supervisor (08/10/2026). Se o teste encontra um defeito que exige corre
 | **Card que está sendo testado** | continua em **Testando** (não vai para deploy) |
 | **Subtarefa** | status **Refação** |
 
+**Caminho da subtarefa até o reteste:**
+
+```
+Refação ──▶ Revisão de Código ──▶ Pronto Para Teste ──▶ Testando
+(dev corrige)  (outro dev revisa)   (volta ao QA)        (QA reteste)
+```
+
+Por isso é normal ver subtarefa de bug em **Testando**: ela voltou da correção e está sendo retestada.
+
 1. **Atribua a subtarefa ao responsável do card original** (ex.: o dev que entregou o card).
 2. Comente no card principal: `Aguardar subtarefa INTG-XXXX` (o número da subtarefa criada).
 3. Quando a subtarefa for corrigida, reteste o que ela cobre e o que o card pedia; depois siga o fluxo normal (aprovado → deploy).
