@@ -9,7 +9,7 @@ Os termos que aparecem nos documentos, em linguagem simples. Em ordem de assunto
 | **Card** | uma tarefa do Jira (melhoria, defeito, etc.) que o QA testa. Número no formato `INTG-2727` |
 | **Subtarefa** | um card filho de outro. Quando o teste acha um defeito, abre-se uma subtarefa do tipo *Bug (subtarefa)* |
 | **Testando** | a coluna dos cards que estão sendo testados |
-| **Refação** | a coluna da subtarefa de bug aberta durante o teste de um card; o dev corrige ali |
+| **Refação** | a coluna da subtarefa de bug aberta durante o teste de um card; o dev corrige ali, depois vai para Revisão de Código e volta em Pronto Para Teste |
 | **BUG / Defeito** | **BUG**: achado antes de chegar ao cliente. **Defeito**: achado no cliente (produção) |
 | **Veredito** | o resultado do teste do card: aprovado, parcial ou reprovado |
 | **Evidência** | a prova do que foi testado: o arquivo `INTG-XXXX-evidencias.md` mais prints, vídeo ou payload |
