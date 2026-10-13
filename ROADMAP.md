@@ -1,104 +1,65 @@
-# Roadmap — Montando o setor de QA do zero (Atual Mais)
+# Roadmap do setor de QA (Atual Mais)
 
-Cronograma prático pra quem está começando um setor de QA hoje, sem nada pronto antes.
-As caixas já marcadas são coisas que já fizemos juntos nesta configuração inicial —
-você não está no dia 1, está entrando na Fase 2.
+> **Em uma frase:** a fundação está pronta; o que falta é **dados e ambiente confiáveis**, **mais fluxos automatizados** e **fechar combinados com o time**. Atualizado em 13/10/2026.
 
-> Ajuste os prazos pra sua realidade (carga de trabalho, se tem mais alguém no time, etc.).
-> O que importa é a **ordem**: fundação antes de processo, processo antes de escalar automação.
+## Onde estamos
 
----
-
-## Fase 0 — Fundação técnica (feito)
-
-- [x] Definir ambientes de teste e a regra de uso (HMG → PREPROD → Produção)
-- [x] Documentar dados de teste fiscal (NFC-e, certificado digital)
-- [x] Escolher o stack de automação (Playwright + TypeScript + Node)
-- [x] Criar o projeto de automação e subir pro GitHub (`romuloatual/atual_mais`)
-- [x] Escrever o guia de onboarding do setor (PDF, identidade visual da empresa)
-- [x] Definir convenção de organização dos testes (`tests/regression/` vs `tests/cards/`, tags)
-- [x] Configurar CI no GitHub Actions (regressão em todo push/PR, suíte completa à noite)
-- [x] Publicar relatório de execução no GitHub Pages
-- [x] Decidir a estratégia de teste de API (Playwright `request`, sem ferramenta separada)
-- [x] Fluxo de cards no Jira, tipos de item e modelos de comentário e de card de defeito ([`docs/jira-fluxo-de-trabalho.md`](./docs/jira-fluxo-de-trabalho.md), `tests/cards/TEMPLATE-*.md`)
-- [x] Evidência por card em modelo único, conferida por `npm run check:evidencias`
-- [x] Mapa do sistema (módulos, áreas e rotas do painel, ligados ao Help) e estrutura de pastas por módulo e área, com README ([`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md))
-- [x] Documento vivo de telas ([`docs/telas/`](./docs/telas/README.md)); as falhas ficam no Jira e na evidência do card
-
----
-
-## Fase 1 — Fechar a fundação (esta semana)
-
-- [ ] **Settings → Pages** do repositório: definir "Source" como GitHub Actions (passo manual pendente)
-- [ ] Rodar `npm test` local pela primeira vez contra HMG e confirmar que passa (suíte vazia, mas valida a config)
-- [ ] Conseguir os acessos que faltam: Jira, Clockify, Clarity, certificado digital (se aplicável)
-- [ ] Definir como a autenticação vai funcionar nos testes (login via UI? token de API? usuário de teste dedicado?) e configurar como secret no GitHub Actions
-
-## Fase 2 — Mapear risco antes de automatizar (semana 1-2)
-
-- [x] Listar os módulos/telas do Atual Mais por **frequência de uso** e **impacto de um bug** (fiscal e pagamento primeiro) — feito a partir do manual oficial, documentado em [`docs/fluxos-principais.md`](./docs/fluxos-principais.md) e no mapa mental "Fluxos Principais do Atual Mais e como usar" (Venda Rápida, Pedidos, Orçamento, Ordem de Serviço, Caixa, Entrada de NF, Clientes, Produtos)
-- [ ] Para cada módulo crítico, listar os fluxos "caminho feliz" que, se quebrarem, geram o maior estrago
-- [ ] Dessa lista, escolher os 2-3 **módulos** (ex.: Vendas) que viram a base da suíte `tests/regression/`. Regressão é macro (um conjunto de testes por módulo), não tela por tela
-- [ ] **Shift-left:** ler o card e o BDD **antes** de o dev começar e apontar furos de lógica ou critério ausente (hoje só testamos depois de pronto)
-- [ ] Definir a "Definição de Pronto" de QA: o que precisa estar verdade pra um card ser considerado testado (validado em HMG? evidência anexada? automatizado se crítico?)
-
-## Fase 3 — Primeiros testes reais (semana 2-4)
-
-- [x] Primeiro teste de tela: fluxo feliz do Venda Rápida V2 em `tests/regression/vendas/venda-rapida/` (pedido e nota conferidos; roda só com `.env`, fora do CI por enquanto)
-- [ ] Próximos casos do Venda Rápida (cliente cadastrado, desconto, pagamento parcial, impressão) e decidir a limpeza dos pedidos de teste
-- [ ] Escrever 1-2 testes em `tests/regression/` para os fluxos mais críticos identificados na Fase 2
-- [ ] Rodar a suíte no CI (push real) e confirmar que o relatório publica certo no GitHub Pages
-- [ ] Escrever o primeiro teste de API com a `request` fixture do Playwright (escolher um endpoint simples pra validar o padrão antes de escalar)
-- [ ] **Conferência no banco (SQL, somente leitura):** onde houver acesso, checar se o que a tela grava bate com o banco (ex.: quitação, bruto x líquido). Depende de o time liberar o acesso
-- [ ] Ajustar o fluxo de trabalho conforme a prática mostra o que não funciona (é normal a convenção mudar um pouco no início)
-
-## Fase 4 — Consolidar o processo (mês 1-2)
-
-- [ ] Formalizar o fluxo bug → card → teste → automação → CI num único lugar (o guia de onboarding já tem a base; revisar depois de rodar de verdade)
-- [ ] Definir critério objetivo de "quando o teste de um card merece entrar em `regression/`" (ex.: 2+ regressões no mesmo fluxo, ou fluxo usado todo dia)
-- [ ] Configurar alerta de falha da CI (ex.: notificação no Slack/Teams/e-mail quando a suíte de regressão quebra)
-- [ ] Definir com o supervisor o fluxo de Parcial/Reprovado sem subtarefa (hoje "a definir" no doc do Jira)
-- [ ] Levantar uma métrica simples de baseline: quantos bugs chegaram em produção nos últimos meses, pra comparar depois — **roteiro, modelo de relatório e script prontos** ([`docs/metricas-qa.md`](./docs/metricas-qa.md)); falta exportar o CSV do Jira e rodar
-
-## Fase 5 — Mostrar valor e escalar (mês 2-3+)
-
-- [ ] Comparar a métrica de bugs em produção antes/depois de ter QA e automação
-- [ ] Medir tempo de ciclo de validação (tempo entre "card pronto pra teste" e "validado")
-- [ ] Se o time crescer, definir revisão de código pros testes (PR review dos arquivos de teste, não só do produto)
-- [ ] Avaliar se vale a pena expandir cobertura (Venda Rápida V1, mais módulos) ou aprofundar (testes de carga, visual regression, etc.)
-- [ ] Revisitar este roadmap — ele é o ponto de partida, não o plano final
-
----
-
-## Diagnóstico de maturidade (13/10/2026)
-
-Comparação do setor com um modelo de referência de QA maduro (5 pilares). É uma **bússola**, não uma meta de "perfeição": parte dos itens depende da empresa (refinamento, frequência de deploy, testes unitários dos devs), e a **ordem** importa mais que a lista. Não sabemos ainda os itens marcados "a confirmar".
-
-| Pilar | O que já temos | O que falta | Situação |
+| Pilar | Situação | O que já temos | O que falta |
 | --- | --- | --- | --- |
-| **1. Qualidade desde o início** (shift-left) | Leitura do BDD do card antes de testar; conferência do status real do card; notas técnicas tratadas como não confiáveis | Participar do refinamento e ler o card **antes** do dev começar (a confirmar se o QA pode participar) | 🟡 parcial |
-| **2. Automação inteligente** | 10 testes: smoke (no CI), regressão de tela (1 fluxo, Venda Rápida), API (8, quitação); CI com smoke como gate, regressão a cada push e suíte à noite | Mais fluxos críticos (só 1 de tela); credenciais no CI para o teste de tela deixar de ser pulado; API fora do CI; **a confirmar** se o CI bloqueia o código quando falha (proteção de branch) | 🟡 base pronta, pouca cobertura |
-| **3. Métricas de negócio** | Os tipos do Jira já separam **BUG** (antes do cliente) de **Defeito** (no cliente), o que permite medir escapes | **Nada medido ainda**: escapes para produção, tempo do card (Testando até deploy), tempo de correção | 🔴 não iniciado |
-| **4. Engenharia de qualidade** | Leitura do código do painel, captura de payloads, prova de causa por API, entendimento do contrato do backend | Acesso a banco (SQL), testes de performance e de segurança, análise de logs | 🟡 parcial |
-| **5. Dados e ambiente confiáveis** | `.env` fora do Git, trava de HMG, prefixo `QA` nos dados, script de limpeza | **Ponto mais fraco.** HMG com indisponibilidade (503 em 13/10); título quitado e pedidos de teste não se apagam; ids fixos no código; sem gerador de dados nem rotina de reset | 🔴 fraco |
+| **1. Qualidade desde o início** | 🟡 parcial | Leitura do BDD e conferência do status real do card antes de testar | Ler o card **antes** do dev começar; participar do refinamento (a confirmar se o QA pode) |
+| **2. Automação** | 🟡 base pronta, pouca cobertura | 10 testes: smoke (no CI), 1 fluxo de tela (Venda Rápida) e 8 de API (quitação). CI com smoke como gate, regressão a cada push e suíte noturna | Mais fluxos críticos; credenciais no CI (hoje o teste de tela é pulado); API fora do CI |
+| **3. Métricas** | 🟡 base pronta | Doc, modelo de relatório e script ([`docs/metricas-qa.md`](./docs/metricas-qa.md)); linha de base de outubro calculada | Tempo de teste por card (precisa do histórico de status); primeira rotina mensal |
+| **4. Engenharia de qualidade** | 🟡 parcial | Leitura do código do painel, captura de payloads, prova de causa por API | Acesso a banco (SQL), performance, segurança, logs |
+| **5. Dados e ambiente** | 🔴 fraco | `.env` fora do Git, trava de HMG, prefixo `QA`, script de limpeza | HMG com 503 em 13/10; título quitado e pedido de teste não se apagam; ids fixos no código; sem gerador de dados nem rotina de reset |
 
-### Ordem de ataque proposta
+## Próximos passos (em ordem)
 
-| # | Foco | Por quê |
-| --- | --- | --- |
-| 1 | **Ambiente e dados** (pilar 5) | sem isso nada se sustenta; levar ao time a estabilidade do HMG e uma rotina de limpeza dos dados de teste |
-| 2 | **Mais 3 a 5 fluxos críticos** + credenciais no CI | para a regressão rodar de verdade a cada push |
-| 3 | **Duas métricas mensais** tiradas do Jira: Defeitos no cliente (escapes) e tempo de Testando até deploy | mostra valor com pouco esforço |
-| 4 | **Shift-left** | combinar com o supervisor ler o BDD dos próximos cards antes do dev |
-| 5 | **SQL, performance e segurança** | depois que o resto estiver firme |
+| # | Foco | Por quê | Quem destrava |
+| --- | --- | --- | --- |
+| 1 | **Ambiente e dados:** estabilidade do HMG, rotina de limpeza, usuário dedicado `QA_AUTOMACAO` | sem isso nada se sustenta | time + supervisor |
+| 2 | **Mais 3 a 5 fluxos críticos** (próximos do Venda Rápida: cliente cadastrado, desconto, pagamento parcial) e **credenciais no CI** | a regressão rodar de verdade a cada push | QA (depende do HMG) |
+| 3 | **Métricas:** exportar o CSV todo mês, medir o tempo em Testando e fechar o significado dos demais status | mostra valor com pouco esforço | QA + supervisor |
+| 4 | **Shift-left:** ler o BDD dos próximos cards antes do dev | pega furo de lógica antes de codar | supervisor |
+| 5 | **SQL, performance e segurança** | só depois que o resto estiver firme | time (acesso ao banco) |
 
-Perguntas abertas que dependem do supervisor ou do time: estabilidade e reset do HMG, se o QA pode participar do refinamento, se o CI bloqueia o código ao falhar, e o fluxo de Parcial/Reprovado sem subtarefa.
+## Depende de outras pessoas
 
----
+| Pendência | Com quem |
+| --- | --- |
+| Estabilidade e reset do HMG; limpeza dos dados de teste | time |
+| Trocar a senha do `root` ou criar o `QA_AUTOMACAO` | você / time |
+| O QA pode participar do refinamento? | supervisor |
+| O CI bloqueia o código quando falha (proteção de branch)? | time |
+| Fluxo de Parcial/Reprovado sem subtarefa | supervisor |
+| Significado de Versão, Deploy, IMPEDIMENTO QA, Impedimento Dev e Negados | supervisor |
+| Fechar o card na data real e ligar o Defeito ao card de origem | time |
+| Acessos que faltam: Clockify, Clarity, certificado digital (a confirmar) | time |
+| Liberar acesso de leitura ao banco (SQL) | time |
 
-## Referências rápidas
+## O que falta, por tema
 
-- Guia de onboarding completo: [`Guia_Onboarding_QA_Automacao_Atual_Mais.pdf`](./Guia_Onboarding_QA_Automacao_Atual_Mais.pdf)
-- Convenção de testes: [`tests/README.md`](./tests/README.md)
-- Workflow de CI: [`.github/workflows/playwright.yml`](./.github/workflows/playwright.yml)
+| Tema | Itens |
+| --- | --- |
+| **Mapeamento de risco** | listar os fluxos "caminho feliz" de cada módulo crítico; escolher 2 a 3 módulos que viram a base da regressão; definir a "Definição de Pronto" de QA |
+| **Testes** | próximos casos do Venda Rápida (inclui impressão e limpeza dos pedidos de teste); 1 a 2 testes de regressão nos fluxos mais críticos; conferência no banco (SQL, só leitura) |
+| **Processo** | critério de quando um teste de card entra em `regression/` (ex.: 2 ou mais regressões no mesmo fluxo); alerta de falha do CI (Slack, Teams ou e-mail); revisar o fluxo bug → card → teste → automação → CI depois de rodar de verdade |
+| **Escalar (mês 2 a 3+)** | comparar escapes antes e depois do QA; revisão de código dos testes se o time crescer; expandir cobertura (Venda Rápida V1, mais módulos) ou aprofundar (carga, visual) |
+
+## Já feito
+
+| Área | Entregas |
+| --- | --- |
+| **Fundação** | ambientes e regra de uso (HMG → PREPROD → Produção); stack Playwright + TypeScript; repositório `romuloatual/atual_mais`; dados de teste fiscal documentados |
+| **CI** | GitHub Actions (smoke como gate, regressão em push e PR, suíte às 03:00); relatório no GitHub Pages |
+| **Organização** | `tests/` por camada, módulo e área; mapa do sistema; documento vivo de telas; README "Comece aqui" e glossário |
+| **Jira** | fluxo de cards, tipos de item e modelos de comentário e de defeito; evidência por card em modelo único, conferida por `npm run check:evidencias` |
+| **Automação** | login por API; 8 testes de API de quitação; teste de tela do Venda Rápida (fluxo feliz) |
+| **Métricas** | doc, modelo mensal, script e linha de base de outubro |
+| **Guia** | PDF de onboarding (v1.13) na identidade visual da empresa |
+
+## Referências
+
+- [Guia de onboarding (PDF)](./Guia_Onboarding_QA_Automacao_Atual_Mais.pdf) · [Convenção de testes](./tests/README.md) · [Workflow de CI](./.github/workflows/playwright.yml)
 - Relatório publicado: https://romuloatual.github.io/atual_mais/
+
+> Os prazos dependem da sua carga e do time. O que importa é a **ordem**: fundação antes de processo, processo antes de escalar a automação.
