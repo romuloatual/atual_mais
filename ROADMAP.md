@@ -70,6 +70,32 @@ você não está no dia 1, está entrando na Fase 2.
 
 ---
 
+## Diagnóstico de maturidade (13/10/2026)
+
+Comparação do setor com um modelo de referência de QA maduro (5 pilares). É uma **bússola**, não uma meta de "perfeição": parte dos itens depende da empresa (refinamento, frequência de deploy, testes unitários dos devs), e a **ordem** importa mais que a lista. Não sabemos ainda os itens marcados "a confirmar".
+
+| Pilar | O que já temos | O que falta | Situação |
+| --- | --- | --- | --- |
+| **1. Qualidade desde o início** (shift-left) | Leitura do BDD do card antes de testar; conferência do status real do card; notas técnicas tratadas como não confiáveis | Participar do refinamento e ler o card **antes** do dev começar (a confirmar se o QA pode participar) | 🟡 parcial |
+| **2. Automação inteligente** | 10 testes: smoke (no CI), regressão de tela (1 fluxo, Venda Rápida), API (8, quitação); CI com smoke como gate, regressão a cada push e suíte à noite | Mais fluxos críticos (só 1 de tela); credenciais no CI para o teste de tela deixar de ser pulado; API fora do CI; **a confirmar** se o CI bloqueia o código quando falha (proteção de branch) | 🟡 base pronta, pouca cobertura |
+| **3. Métricas de negócio** | Os tipos do Jira já separam **BUG** (antes do cliente) de **Defeito** (no cliente), o que permite medir escapes | **Nada medido ainda**: escapes para produção, tempo do card (Testando até deploy), tempo de correção | 🔴 não iniciado |
+| **4. Engenharia de qualidade** | Leitura do código do painel, captura de payloads, prova de causa por API, entendimento do contrato do backend | Acesso a banco (SQL), testes de performance e de segurança, análise de logs | 🟡 parcial |
+| **5. Dados e ambiente confiáveis** | `.env` fora do Git, trava de HMG, prefixo `QA` nos dados, script de limpeza | **Ponto mais fraco.** HMG com indisponibilidade (503 em 13/10); título quitado e pedidos de teste não se apagam; ids fixos no código; sem gerador de dados nem rotina de reset | 🔴 fraco |
+
+### Ordem de ataque proposta
+
+| # | Foco | Por quê |
+| --- | --- | --- |
+| 1 | **Ambiente e dados** (pilar 5) | sem isso nada se sustenta; levar ao time a estabilidade do HMG e uma rotina de limpeza dos dados de teste |
+| 2 | **Mais 3 a 5 fluxos críticos** + credenciais no CI | para a regressão rodar de verdade a cada push |
+| 3 | **Duas métricas mensais** tiradas do Jira: Defeitos no cliente (escapes) e tempo de Testando até deploy | mostra valor com pouco esforço |
+| 4 | **Shift-left** | combinar com o supervisor ler o BDD dos próximos cards antes do dev |
+| 5 | **SQL, performance e segurança** | depois que o resto estiver firme |
+
+Perguntas abertas que dependem do supervisor ou do time: estabilidade e reset do HMG, se o QA pode participar do refinamento, se o CI bloqueia o código ao falhar, e o fluxo de Parcial/Reprovado sem subtarefa.
+
+---
+
 ## Referências rápidas
 
 - Guia de onboarding completo: [`Guia_Onboarding_QA_Automacao_Atual_Mais.pdf`](./Guia_Onboarding_QA_Automacao_Atual_Mais.pdf)
