@@ -1,5 +1,7 @@
 # Organização dos testes
 
+> Visão do repositório inteiro: [`docs/estrutura-do-repositorio.md`](../docs/estrutura-do-repositorio.md).
+
 Os testes são divididos por **camada** e, dentro da camada, por **módulo** (Vendas, Financeiro...). A camada define **quando** o teste roda; o módulo define **o assunto**.
 
 | | `smoke/` | `regression/<módulo>/<área>/` | `api/<módulo>/<área>/` | `cards/` |
