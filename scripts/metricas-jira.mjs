@@ -55,6 +55,7 @@ function lerData(s) {
 }
 const mesDe = (dt) => `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, '0')}`;
 const dias = (a, b) => (b - a) / 86400000;
+const mediana = (v) => { if (!v.length) return null; const s = [...v].sort((a, b) => a - b), n = s.length; return n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2; };
 const media = (v) => (v.length ? v.reduce((x, y) => x + y, 0) / v.length : null);
 const fmt = (n, c = 1) => (n === null || n === undefined || Number.isNaN(n) ? 'n/d' : n.toFixed(c).replace('.', ','));
 const pct = (n) => (n === null ? 'n/d' : `${(n * 100).toFixed(0)}%`);
@@ -69,6 +70,7 @@ const ALIAS = {
   resolvido: ['resolved', 'resolvido', 'resolvida'],
   pai: ['parent', 'principal', 'pai', 'parent key', 'parent id'],
   titulo: ['summary', 'resumo'],
+  paiResumo: ['parent summary', 'resumo do pai', 'resumo principal', 'principal resumo'],
 };
 const linhas = lerCsv(readFileSync(arquivo, 'utf8'));
 if (linhas.length < 2) { console.error('CSV vazio ou sem dados.'); process.exit(1); }
@@ -104,6 +106,8 @@ for (const l of linhas.slice(1)) {
     chave: l[col.chave], id: col.idIssue !== undefined ? l[col.idIssue] : null, tipo: l[col.tipo], classe: classe(l[col.tipo]),
     criado, resolvido: col.resolvido !== undefined ? lerData(l[col.resolvido]) : null,
     pai: col.pai !== undefined ? (l[col.pai] || '').trim() : '',
+    status: col.status !== undefined ? (l[col.status] || '').trim() : '',
+    area: col.paiResumo !== undefined ? (l[col.paiResumo] || '').trim() : '',
   });
 }
 // Se "Parent" vier como número (id), traduz para a chave do card.
@@ -130,7 +134,7 @@ for (const i of itens) {
 const ordem = [...meses.keys()].sort();
 const tot = { escapes: 0, detectados: 0, entregues: 0, retrabalho: 0, tempos: [] };
 console.log(`# Métricas de QA (${arquivo})\n`);
-console.log('| Mês | Escapes (Defeito no cliente) | Detectados antes (BUG + Bug subtarefa) | Eficiência de detecção | Cards entregues | Com retrabalho | Aprovação de primeira | Correção de Defeito (média / máx, dias) |');
+console.log('| Mês | Escapes (Defeito no cliente) | Detectados antes (BUG + Bug subtarefa) | Eficiência de detecção | Cards entregues | Com retrabalho | Aprovação de primeira | Correção de Defeito resolvido (mediana / máx, dias) |');
 console.log('| --- | --- | --- | --- | --- | --- | --- | --- |');
 for (const k of ordem) {
   const m = meses.get(k);
@@ -138,17 +142,54 @@ for (const k of ordem) {
   const dre = det + m.escapes > 0 ? det / (det + m.escapes) : null;
   const apr = m.entregues > 0 ? 1 - m.retrabalho / m.entregues : null;
   tot.escapes += m.escapes; tot.detectados += det; tot.entregues += m.entregues; tot.retrabalho += m.retrabalho; tot.tempos.push(...m.tempos);
-  console.log(`| ${k} | ${m.escapes} | ${det} | ${pct(dre)} | ${m.entregues} | ${m.retrabalho} | ${pct(apr)} | ${fmt(media(m.tempos))} / ${fmt(m.tempos.length ? Math.max(...m.tempos) : null)} |`);
+  console.log(`| ${k} | ${m.escapes} | ${det} | ${pct(dre)} | ${m.entregues} | ${m.retrabalho} | ${pct(apr)} | ${fmt(mediana(m.tempos))} / ${fmt(m.tempos.length ? Math.max(...m.tempos) : null)} |`);
 }
 const dreT = tot.detectados + tot.escapes > 0 ? tot.detectados / (tot.detectados + tot.escapes) : null;
 const aprT = tot.entregues > 0 ? 1 - tot.retrabalho / tot.entregues : null;
-console.log(`| **Total** | **${tot.escapes}** | **${tot.detectados}** | **${pct(dreT)}** | **${tot.entregues}** | **${tot.retrabalho}** | **${pct(aprT)}** | **${fmt(media(tot.tempos))} / ${fmt(tot.tempos.length ? Math.max(...tot.tempos) : null)}** |`);
+console.log(`| **Total** | **${tot.escapes}** | **${tot.detectados}** | **${pct(dreT)}** | **${tot.entregues}** | **${tot.retrabalho}** | **${pct(aprT)}** | **${fmt(mediana(tot.tempos))} / ${fmt(tot.tempos.length ? Math.max(...tot.tempos) : null)}** |`);
+
+// ---------- Defeitos ainda abertos (o que a mediana dos resolvidos esconde) ----------
+const NEGADO = /negad|cancelad|rejeitad|duplicad|won.?t/i;
+const hoje = new Date();
+const abertos = itens.filter((i) => i.classe === 'defeito' && !i.resolvido && !NEGADO.test(i.status));
+const negados = itens.filter((i) => i.classe === 'defeito' && !i.resolvido && NEGADO.test(i.status)).length;
+console.log('\n## Defeitos ainda abertos (idade até hoje)\n');
+if (abertos.length) {
+  const idades = abertos.map((i) => dias(i.criado, hoje));
+  console.log(`- **${abertos.length}** abertos; idade média **${fmt(media(idades), 0)} dias**, o mais antigo **${fmt(Math.max(...idades), 0)} dias**${negados ? `; ${negados} negados (fora da conta)` : ''}.`);
+  console.log('- A mediana de correção acima considera **só os resolvidos**: os abertos puxariam o tempo para cima.');
+} else console.log('- Nenhum Defeito aberto no arquivo.');
+
+// ---------- Fila: itens sem data de resolução, por status ----------
+if (col.status !== undefined) {
+  const fila = new Map();
+  for (const i of itens) if (!i.resolvido && i.status && !NEGADO.test(i.status)) fila.set(i.status, (fila.get(i.status) || 0) + 1);
+  console.log('\n## Itens exportados ainda sem resolução, por status\n');
+  console.log('| Status | Itens |\n| --- | --- |');
+  for (const [s, n] of [...fila.entries()].sort((a, b) => b[1] - a[1])) console.log(`| ${s} | ${n} |`);
+  console.log('\nO que cada status significa (e de quem é a vez) precisa ser confirmado com o time antes de chamar uma fila de gargalo do QA.');
+}
+
+// ---------- Escapes por área (só se a exportação trouxer o resumo do pai) ----------
+if (col.paiResumo !== undefined) {
+  const por = new Map();
+  for (const i of itens) if (i.classe === 'defeito') por.set(i.area || '(sem área)', (por.get(i.area || '(sem área)') || 0) + 1);
+  console.log('\n## Escapes por área (pai do Defeito)\n');
+  console.log('| Área | Defeitos |\n| --- | --- |');
+  for (const [a, n] of [...por.entries()].sort((x, y) => y[1] - x[1])) console.log(`| ${a} | ${n} |`);
+}
+
+// ---------- alerta de fechamento em lote ----------
+const minutos = new Map();
+for (const i of itens) if (i.classe === 'card' && i.resolvido) { const k = i.resolvido.toISOString().slice(0, 16); minutos.set(k, (minutos.get(k) || 0) + 1); }
+const emLote = [...minutos.values()].filter((n) => n >= 3).length;
 
 console.log('\n## Como ler e limites dos dados\n');
 console.log('- **Mês** de escapes e detectados = mês de **criação** do item; cards entregues e correção de Defeito = mês de **resolução**.');
 console.log('- **Cards entregues** = itens que não são Bug, Defeito, subtarefa, Test Case, Projeto nem Automação, com data de resolução.');
 console.log(`- **Retrabalho** = card entregue que teve ao menos 1 **Bug (subtarefa)** como filha${col.pai === undefined ? ' (**coluna de pai não encontrada: este número não é confiável**)' : ''}.`);
 console.log('- **Tempo de teste do card (Testando até deploy)** não vem na exportação padrão: precisa do histórico de status do Jira (relatório "Control Chart" ou app de tempo em status). Veja docs/metricas-qa.md.');
+if (emLote) console.log(`- **Atenção:** ${emLote} grupo(s) de 3 ou mais cards resolvidos no **mesmo minuto** (fechamento em lote). A data de resolução não é a da entrega: "cards entregues" e "aprovação de primeira" podem estar errados.`);
 if (col.resolvido === undefined) console.log('- **Coluna de resolução não encontrada:** cards entregues e correção de Defeito ficam em zero ou n/d.');
 if (datasRuins) console.log(`- ${datasRuins} linha(s) ignoradas por data de criação ilegível.`);
 console.log(`\nTipos encontrados: ${[...new Set(itens.map((i) => i.tipo))].map((t) => `${t} → ${classe(t)}`).join('; ')}`);
