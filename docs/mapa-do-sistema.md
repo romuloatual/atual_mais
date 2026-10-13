@@ -78,7 +78,7 @@ Estrutura do Atual Mais como o **próprio sistema** a organiza (menu e rotas do 
 
 - **Escolher o que automatizar:** comece pelas áreas P1 (Venda Rápida, Pedidos, Contas a Receber, Entrada de NF), que são os fluxos de maior risco (fiscal e pagamento).
 - **Criar teste:** ponha na pasta da área; se a área ainda não tem pasta, ela nasce com o primeiro teste (módulo > área, sem mais níveis).
-- **Documentar a tela:** o comportamento fica em [`docs/telas/`](./telas/README.md), e as falhas em [`docs/falhas/`](./falhas/README.md).
+- **Documentar a tela:** o comportamento fica em [`docs/telas/`](./telas/README.md). As falhas encontradas ficam no Jira (decisão e status) e na evidência do card.
 - **Dúvida de regra:** o Help (coluna Help) é o ponto de partida; o que for confirmado em teste sobe para `docs/telas/`.
 
 > Pontos a confirmar: "Caixa" ser `/financial/statement`, e o nome de "Financeiras" em Pessoas. As rotas vêm do código do painel; o menu pode esconder áreas conforme a permissão do usuário.

@@ -23,7 +23,7 @@ você não está no dia 1, está entrando na Fase 2.
 - [x] Fluxo de cards no Jira, tipos de item e modelos de comentário e de card de defeito ([`docs/jira-fluxo-de-trabalho.md`](./docs/jira-fluxo-de-trabalho.md), `tests/cards/TEMPLATE-*.md`)
 - [x] Evidência por card em modelo único, conferida por `npm run check:evidencias`
 - [x] Mapa do sistema (módulos, áreas e rotas do painel, ligados ao Help) e estrutura de pastas por módulo e área, com README ([`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md))
-- [x] Documentos vivos de telas e de falhas ([`docs/telas/`](./docs/telas/README.md), [`docs/falhas/`](./docs/falhas/README.md))
+- [x] Documento vivo de telas ([`docs/telas/`](./docs/telas/README.md)); as falhas ficam no Jira e na evidência do card
 
 ---
 
