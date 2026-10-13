@@ -19,6 +19,7 @@ Repositório do setor de QA do Atual Mais: **evidências dos cards, testes autom
 
 | Quero... | Abro |
 | --- | --- |
+| ver o **desenho das pastas** e para que serve cada uma | [`docs/estrutura-do-repositorio.md`](./docs/estrutura-do-repositorio.md) |
 | entender o sistema (módulos, telas, rotas) | [`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md) |
 | entender como uma tela funciona | [`docs/telas/`](./docs/telas/README.md) |
 | ver os fluxos mais importantes do sistema | [`docs/fluxos-principais.md`](./docs/fluxos-principais.md) |
@@ -58,6 +59,7 @@ Cada assunto tem **um** documento completo; os outros só resumem e apontam para
 | --- | --- | --- |
 | Fluxo do card no Jira, tipos de item, subtarefa | [`docs/jira-fluxo-de-trabalho.md`](./docs/jira-fluxo-de-trabalho.md) | Pronto; um caso "a confirmar" com o supervisor |
 | Git: branches, push, CI depois do push | [`docs/git-fluxo-de-trabalho.md`](./docs/git-fluxo-de-trabalho.md) | Pronto |
+| Mapa visual das pastas do repositório | [`docs/estrutura-do-repositorio.md`](./docs/estrutura-do-repositorio.md) | Pronto |
 | Pastas de teste e tags | [`tests/README.md`](./tests/README.md) | Pronto |
 | Evidência e modelos de card | [`tests/cards/README.md`](./tests/cards/README.md) | Pronto |
 | Módulos e rotas do sistema | [`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md) | Pronto; 2 nomes a confirmar |
