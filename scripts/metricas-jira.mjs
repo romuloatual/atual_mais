@@ -167,7 +167,7 @@ if (col.status !== undefined) {
   console.log('\n## Itens exportados ainda sem resolução, por status\n');
   console.log('| Status | Itens |\n| --- | --- |');
   for (const [s, n] of [...fila.entries()].sort((a, b) => b[1] - a[1])) console.log(`| ${s} | ${n} |`);
-  console.log('\nO que cada status significa (e de quem é a vez) precisa ser confirmado com o time antes de chamar uma fila de gargalo do QA.');
+  console.log('\nO que cada status significa (e de quem é a vez) precisa ser confirmado com o time antes de tirar conclusões sobre o fluxo.');
 }
 
 // ---------- Escapes por área (só se a exportação trouxer o resumo do pai) ----------

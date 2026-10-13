@@ -1,6 +1,6 @@
 # Métricas do QA
 
-Poucos números, mensais, que mostram **se a qualidade está chegando ao cliente** e **se o QA ajuda ou atrasa a entrega**. Os dados já existem (Jira, Clockify, GitHub); aqui definimos o que medir e como juntar.
+Poucos números, mensais, que mostram **se a qualidade está chegando ao cliente** e **se o fluxo de entrega está fluindo**. Os dados já existem (Jira, Clockify, GitHub); aqui definimos o que medir e como juntar.
 
 ## Princípios
 
@@ -15,7 +15,7 @@ Poucos números, mensais, que mostram **se a qualidade está chegando ao cliente
 | **1. Escapes** | quantos erros chegaram ao cliente? | itens do tipo **Defeito** criados no mês | Jira |
 | **2. Eficiência de detecção** | o QA pega os erros antes do cliente? | `(BUG + Bug subtarefa)` ÷ `(BUG + Bug subtarefa + Defeito)` | Jira |
 | **3. Aprovação de primeira** | a entrega chega boa? | `1 − (cards com Bug subtarefa ÷ cards entregues)` no mês | Jira |
-| **4. Tempo de teste do card** | o QA é gargalo? | de "Prontos para testar" até sair de Testando (média e pior caso) | Jira, histórico de status |
+| **4. Tempo de teste do card** | quanto tempo um card espera entre a entrega do dev e o veredito? | de "Prontos para testar" até sair de Testando (mediana e pior caso) | Jira, histórico de status |
 
 **Indicadores complementares** (o script já calcula os três primeiros):
 
@@ -23,7 +23,7 @@ Poucos números, mensais, que mostram **se a qualidade está chegando ao cliente
 | --- | --- | --- |
 | **Tempo de correção de Defeito** | quanto o time leva para corrigir um erro que chegou ao cliente | usar a **mediana** dos resolvidos (com quantidade par, é a média dos dois valores centrais) |
 | **Idade dos Defeitos abertos** | o que a mediana esconde: os que ainda não foram corrigidos | **sempre mostrar junto** com a mediana |
-| **Fila por status** | quantos itens estão em cada etapa hoje (ex.: Testando, Pronto Para Teste) | só vira "gargalo do QA" depois de confirmar o que cada status significa |
+| **Fila por status** | quantos itens estão em cada etapa hoje (ex.: Testando, Pronto Para Teste) | só vira conclusão sobre o fluxo depois de confirmar o que cada status significa e de quem é a vez |
 | **Escapes por área** | em qual área os erros chegam ao cliente | exige o "Resumo do pai" na exportação (o pai do Defeito é o Projeto) |
 | **Saúde do CI** | runs verdes ÷ total | está na aba Actions do GitHub |
 
