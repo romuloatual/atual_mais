@@ -19,6 +19,7 @@ Repositório do setor de QA do Atual Mais: **evidências dos cards, testes autom
 
 | Quero... | Abro |
 | --- | --- |
+| ver a **rotina do dia a dia** do QA | [`docs/rotina-diaria.md`](./docs/rotina-diaria.md) |
 | ver o **desenho das pastas** e para que serve cada uma | [`docs/estrutura-do-repositorio.md`](./docs/estrutura-do-repositorio.md) |
 | entender o sistema (módulos, telas, rotas) | [`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md) |
 | entender como uma tela funciona | [`docs/telas/`](./docs/telas/README.md) |
@@ -58,6 +59,7 @@ Cada assunto tem **um** documento completo; os outros só resumem e apontam para
 | Assunto | Fonte | Estado |
 | --- | --- | --- |
 | Fluxo do card no Jira, tipos de item, subtarefa | [`docs/jira-fluxo-de-trabalho.md`](./docs/jira-fluxo-de-trabalho.md) | Pronto; um caso "a confirmar" com o supervisor |
+| Rotina diária (resumo do dia a dia, com checklist) | [`docs/rotina-diaria.md`](./docs/rotina-diaria.md) | Pronto; 1 ponto a confirmar com o supervisor |
 | Git: branches, push, CI depois do push | [`docs/git-fluxo-de-trabalho.md`](./docs/git-fluxo-de-trabalho.md) | Pronto |
 | Mapa visual das pastas do repositório | [`docs/estrutura-do-repositorio.md`](./docs/estrutura-do-repositorio.md) | Pronto |
 | Pastas de teste e tags | [`tests/README.md`](./tests/README.md) | Pronto |
