@@ -14,6 +14,7 @@
     "test:card": "playwright test --grep",
     "test:api": "playwright test tests/api --project=chromium",
     "check:evidencias": "node tests/cards/check-evidencias.mjs",
+    "metricas": "node scripts/metricas-jira.mjs",
     "limpar:titulos": "node scripts/limpar-titulos-teste.mjs"
   },
   "keywords": [],

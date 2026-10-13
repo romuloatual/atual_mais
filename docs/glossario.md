@@ -12,6 +12,8 @@ Os termos que aparecem nos documentos, em linguagem simples. Em ordem de assunto
 | **BUG / Defeito** | **BUG**: achado antes de chegar ao cliente. **Defeito**: achado no cliente (produção) |
 | **Veredito** | o resultado do teste do card: aprovado, parcial ou reprovado |
 | **Evidência** | a prova do que foi testado: o arquivo `INTG-XXXX-evidencias.md` mais prints, vídeo ou payload |
+| **Escape** | erro que passou pelo QA e chegou ao cliente (no Jira, o tipo *Defeito*). Quanto menos, melhor |
+| **Eficiência de detecção** | de todos os erros, que parte foi pega **antes** do cliente |
 | **JAM** | extensão do navegador que grava o passo a passo, usada como evidência em vídeo |
 
 ## Ambientes
