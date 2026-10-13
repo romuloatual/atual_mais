@@ -188,7 +188,7 @@ console.log('\n## Como ler e limites dos dados\n');
 console.log('- **Mês** de escapes e detectados = mês de **criação** do item; cards entregues e correção de Defeito = mês de **resolução**.');
 console.log('- **Cards entregues** = itens que não são Bug, Defeito, subtarefa, Test Case, Projeto nem Automação, com data de resolução.');
 console.log(`- **Retrabalho** = card entregue que teve ao menos 1 **Bug (subtarefa)** como filha${col.pai === undefined ? ' (**coluna de pai não encontrada: este número não é confiável**)' : ''}.`);
-console.log('- **Tempo de teste do card (Testando até deploy)** não vem na exportação padrão: precisa do histórico de status do Jira (relatório "Control Chart" ou app de tempo em status). Veja docs/metricas-qa.md.');
+console.log('- **Tempo de teste do card (só em Testando) e tempo nas etapas do retrabalho** não vêm na exportação padrão: precisa do histórico de status do Jira (relatório "Control Chart" ou app de tempo em status). Veja docs/metricas-qa.md.');
 if (emLote) console.log(`- **Atenção:** ${emLote} grupo(s) de 3 ou mais cards resolvidos no **mesmo minuto** (fechamento em lote). A data de resolução não é a da entrega: "cards entregues" e "aprovação de primeira" podem estar errados.`);
 if (col.resolvido === undefined) console.log('- **Coluna de resolução não encontrada:** cards entregues e correção de Defeito ficam em zero ou n/d.');
 if (datasRuins) console.log(`- ${datasRuins} linha(s) ignoradas por data de criação ilegível.`);

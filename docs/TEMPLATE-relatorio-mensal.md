@@ -13,7 +13,8 @@
 | Escapes (Defeitos no cliente) | | | |
 | Eficiência de detecção | | | |
 | Aprovação de primeira | | | |
-| Tempo de teste do card (média / pior) | | | |
+| Tempo de teste do card (só em Testando; mediana / pior) | | | |
+| Tempo nas etapas do retrabalho (Refação a Pronto Para Teste; mediana) | | | |
 | Tempo de correção de Defeito (média / máx, dias) | | | |
 | CI: runs verdes ÷ total | | | |
 

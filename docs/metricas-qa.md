@@ -9,7 +9,7 @@
 | 1 | **Escapes** | quantos erros chegaram ao cliente? | itens **Defeito** criados no mês | Jira |
 | 2 | **Eficiência de detecção** | pegamos os erros antes do cliente? | `(BUG + Bug subtarefa) ÷ (BUG + Bug subtarefa + Defeito)` | Jira |
 | 3 | **Aprovação de primeira** | a entrega chega boa? | `1 − cards com Bug subtarefa ÷ cards entregues` | Jira |
-| 4 | **Tempo de teste do card** | quanto o card espera entre a entrega do dev e o veredito? | de "Prontos para testar" até sair de Testando (mediana e pior caso) | Jira, histórico de status |
+| 4 | **Tempo de teste do card** | quanto o card espera entre a entrega do dev e o veredito? | soma só dos períodos **em Testando** (1º teste + retestes), mediana e pior caso. Refação e Revisão de Código ficam **à parte** | Jira, histórico de status |
 
 **Não medir:** "quantidade de bugs achados" (premiaria um código ruim) nem pessoas.
 
@@ -19,7 +19,8 @@
 | --- | --- | --- |
 | Tempo de correção de Defeito | quanto leva para corrigir um erro do cliente | usar a **mediana** dos resolvidos |
 | Idade dos Defeitos abertos | o que a mediana esconde | mostrar **sempre junto** |
-| Fila por status | onde os itens estão hoje | confirmar o significado de cada status |
+| Tempo nas etapas do retrabalho | quanto o card fica em Refação, Revisão de Código e Pronto Para Teste | mostrar **à parte** do tempo de teste; é o fluxo, não uma pessoa |
+| Fila por status | onde os itens estão hoje | ver o glossário para o significado de cada status |
 | Escapes por área | onde os erros chegam ao cliente | precisa do "Resumo do pai" |
 | Saúde do CI | runs verdes ÷ total | aba Actions |
 
