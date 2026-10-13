@@ -20,6 +20,7 @@ Repositório do setor de QA do Atual Mais: **evidências dos cards, testes autom
 | Quero... | Abro |
 | --- | --- |
 | ver a **rotina do dia a dia** do QA | [`docs/rotina-diaria.md`](./docs/rotina-diaria.md) |
+| ver as **métricas de qualidade** e como calculá-las | [`docs/metricas-qa.md`](./docs/metricas-qa.md) |
 | ver o **desenho das pastas** e para que serve cada uma | [`docs/estrutura-do-repositorio.md`](./docs/estrutura-do-repositorio.md) |
 | entender o sistema (módulos, telas, rotas) | [`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md) |
 | entender como uma tela funciona | [`docs/telas/`](./docs/telas/README.md) |
@@ -48,6 +49,7 @@ Repositório do setor de QA do Atual Mais: **evidências dos cards, testes autom
 | `npm run test:api` | testes de API (só em HMG, precisa do `.env`; veja [`docs/testes-de-api.md`](./docs/testes-de-api.md)) |
 | `npm run test:card -- @INTG-2645` | testes marcados com a tag de um card |
 | `npm run check:evidencias` | confere se as evidências seguem o modelo |
+| `npm run metricas -- <arquivo.csv>` | calcula as métricas de QA a partir de uma exportação do Jira |
 | `npm run test:headed` / `test:ui` / `test:report` / `test:codegen` | ver o navegador / interface do Playwright / último relatório / gravar um teste |
 
 Para os **testes de API**: copie `.env.example` para `.env` e preencha com o usuário de teste do HMG.
@@ -62,6 +64,7 @@ Cada assunto tem **um** documento completo; os outros só resumem e apontam para
 | Rotina diária (resumo do dia a dia, com checklist) | [`docs/rotina-diaria.md`](./docs/rotina-diaria.md) | Pronto; 1 ponto a confirmar com o supervisor |
 | Git: branches, push, CI depois do push | [`docs/git-fluxo-de-trabalho.md`](./docs/git-fluxo-de-trabalho.md) | Pronto |
 | Mapa visual das pastas do repositório | [`docs/estrutura-do-repositorio.md`](./docs/estrutura-do-repositorio.md) | Pronto |
+| Métricas de QA (o que medir e como) | [`docs/metricas-qa.md`](./docs/metricas-qa.md) | Pronto; 4 pontos a confirmar com o time |
 | Pastas de teste e tags | [`tests/README.md`](./tests/README.md) | Pronto |
 | Evidência e modelos de card | [`tests/cards/README.md`](./tests/cards/README.md) | Pronto |
 | Módulos e rotas do sistema | [`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md) | Pronto; 2 nomes a confirmar |

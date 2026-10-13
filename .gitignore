@@ -8,3 +8,7 @@ playwright/.cache/
 .env
 .env.*
 !.env.example
+
+# Exportacoes do Jira (dados internos): nao versionar
+exports/
+jira-*.csv

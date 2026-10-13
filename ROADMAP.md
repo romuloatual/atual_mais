@@ -58,7 +58,7 @@ você não está no dia 1, está entrando na Fase 2.
 - [ ] Definir critério objetivo de "quando o teste de um card merece entrar em `regression/`" (ex.: 2+ regressões no mesmo fluxo, ou fluxo usado todo dia)
 - [ ] Configurar alerta de falha da CI (ex.: notificação no Slack/Teams/e-mail quando a suíte de regressão quebra)
 - [ ] Definir com o supervisor o fluxo de Parcial/Reprovado sem subtarefa (hoje "a definir" no doc do Jira)
-- [ ] Levantar uma métrica simples de baseline: quantos bugs chegaram em produção nos últimos meses, pra comparar depois
+- [ ] Levantar uma métrica simples de baseline: quantos bugs chegaram em produção nos últimos meses, pra comparar depois — **roteiro, modelo de relatório e script prontos** ([`docs/metricas-qa.md`](./docs/metricas-qa.md)); falta exportar o CSV do Jira e rodar
 
 ## Fase 5 — Mostrar valor e escalar (mês 2-3+)
 
