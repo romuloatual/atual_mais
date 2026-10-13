@@ -110,6 +110,8 @@ _Em breve mais._
 | Defeito que já existia antes do card (comparar com produção) | **card próprio**, tipo **BUG** (antes do cliente) ou **Defeito** (achado no cliente), ligado ao card | escrever "pré-existente" |
 | Comportamento que o card não define | pergunta ao dev/PO nos comentários | não é bug até alguém confirmar |
 
+O **detalhe de uma falha** (capturas de rede, comparações com a produção) fica na pasta local do QA e anexado ao card; o repositório é público e **não guarda falhas abertas**.
+
 ### O mínimo em todo bug
 
 Use o [modelo de card de defeito](../tests/cards/TEMPLATE-card-de-defeito.md) (mesmo padrão dos cards de defeito do time: Resumo, Objetivo, Regra de Negócio, BDD em Gherkin e Notas técnicas; Ocorrência no Cliente só no `[DEFEITO]`). Resumindo o que ele cobre:
