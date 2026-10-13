@@ -23,7 +23,6 @@ Repositório do setor de QA do Atual Mais: **evidências dos cards, testes autom
 | entender como uma tela funciona | [`docs/telas/`](./docs/telas/README.md) |
 | ver os fluxos mais importantes do sistema | [`docs/fluxos-principais.md`](./docs/fluxos-principais.md) |
 | abrir um bug ou defeito | [`tests/cards/TEMPLATE-card-de-defeito.md`](./tests/cards/TEMPLATE-card-de-defeito.md) |
-| ver falhas já encontradas | [`docs/falhas/`](./docs/falhas/README.md) |
 | escrever um teste automatizado | [`tests/README.md`](./tests/README.md) |
 | rodar os testes de API | [`docs/testes-de-api.md`](./docs/testes-de-api.md) |
 | configurar a empresa de teste fiscal (NFC-e/NF-e) | Guia de Onboarding, seção 5 |
@@ -63,7 +62,7 @@ Cada assunto tem **um** documento completo; os outros só resumem e apontam para
 | Evidência e modelos de card | [`tests/cards/README.md`](./tests/cards/README.md) | Pronto |
 | Módulos e rotas do sistema | [`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md) | Pronto; 2 nomes a confirmar |
 | Comportamento de cada tela | [`docs/telas/`](./docs/telas/README.md) | **Em construção** (1 de 6 telas confirmada por teste) |
-| Falhas encontradas | [`docs/falhas/`](./docs/falhas/README.md) | Vivo, atualizado a cada card |
+| Falhas encontradas | Jira (decisão e status) e a evidência de cada card | Vivo, atualizado a cada card |
 | Ambientes e dados fiscais de teste | Guia de Onboarding, seções 4 e 5 | Pronto |
 
 ## Para quem mantém o CI

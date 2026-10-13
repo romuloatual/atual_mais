@@ -62,4 +62,6 @@ Quitar (dar baixa em) contas a receber, total ou parcialmente, registrando forma
 
 ## Falhas conhecidas
 
-- [`2026-10-08-contas-a-receber-quitacao-modal-bruto-liquido.md`](../falhas/2026-10-08-contas-a-receber-quitacao-modal-bruto-liquido.md) · [`2026-10-08-contas-a-receber-recibo-acrescimo-juros.md`](../falhas/2026-10-08-contas-a-receber-recibo-acrescimo-juros.md)
+- Modal de quitação envia o valor da forma como líquido; o backend espera bruto (INTG-2727).
+- Recibo imprime o acréscimo como "Juros" (pré-existente na produção).
+- O detalhe e a evidência estão no Jira e na evidência do card.
