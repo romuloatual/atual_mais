@@ -22,4 +22,4 @@ Fonte: [Help]() e testes. Marcas: ✅ confirmado · 🟡 inferido · ❓ dúvida
 
 ## Falhas conhecidas
 
-- [link para docs/falhas/ ou "nenhuma registrada ainda"]
+- [o que foi encontrado, com o número do card, ou "nenhuma registrada ainda"]
