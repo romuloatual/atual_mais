@@ -49,6 +49,14 @@ O script **só lê o arquivo**, não acessa o Jira. Ele reconhece colunas em ing
 - **Aprovação de primeira** é uma **aproximação**: conta o card entregue que teve ao menos um Bug (subtarefa). Cards reprovados sem subtarefa (caso ainda sem regra definida) **não aparecem** como retrabalho.
 - Mês de **escapes e detectados** = mês de criação do item. **Cards entregues** e **correção de Defeito** = mês de resolução.
 
+## Cuidados com os dados do Jira (vistos na primeira extração, 13/10/2026)
+
+- **Data de resolução não é data de entrega:** vários cards são fechados em lote (mesmo carimbo de data e hora). Por isso "cards entregues" e "aprovação de primeira" por data de resolução **não são confiáveis** até o time fechar o card na data real.
+- **O pai de Defeito e de BUG é o *Projeto* (a área)**, não o card que originou o erro. Dá para medir escapes **por área**, mas não separar regressão de dívida antiga. Ligar o Defeito ao card de origem (link "relates to") resolveria.
+- **Status em uso:** além de Testando e Refação existem Pronto Para Teste, Versão, Deploy, IMPEDIMENTO QA, Impedimento Dev, Negados e Revisão de Código. Antes de medir tempo, confirmar o que cada um significa e quem está com o card.
+- **Contagem aproximada:** o conector devolve contagens aproximadas para consultas com vários tipos; conferir contra a lista antes de usar o número.
+- **Dados internos:** extração e relatório preenchido ficam em `exports/` (ignorado pelo Git); o repositório é público.
+
 ## Rotina mensal (~30 minutos)
 
 1. Exportar o CSV do Jira e rodar o `npm run metricas`.
