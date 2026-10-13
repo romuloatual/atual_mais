@@ -51,7 +51,7 @@ Jira  ──▶  CSV em exports/  ──▶  npm run metricas -- arquivo.csv  �
 | **Resolução em lote:** cards fechados no mesmo minuto | fechar na data real; sem isso, "cards entregues" e "aprovação de primeira" **não são confiáveis** |
 | **Pai do Defeito é o Projeto** (a área), não o card | ligar ao card de origem |
 | **Só os resolvidos enganam** | mostrar a idade dos abertos ao lado |
-| **Status:** o documento diz Refação, a prática é Testando | alinhar o significado de cada status |
+| **Status:** **Testando** = card em teste; **Refação** = subtarefa de bug aberta durante o teste. Na exportação, 36 de 80 Bugs (subtarefa) estavam em Testando | conferir se são subtarefas que deveriam estar em Refação ou cards pai; contar bugs pelo **tipo**, não pelo status |
 | **Contagem aproximada** do conector em consultas com vários tipos | conferir contra a lista |
 | **Dados internos** | só em `exports/`; o repositório é público |
 
