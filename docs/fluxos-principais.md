@@ -3,7 +3,7 @@
 Os 8 fluxos mais importantes para o QA, escolhidos pelo critério de risco do projeto (frequência de uso ×
 impacto de um bug), priorizando o caminho **vendas → fiscal → financeiro → compras**. É o mesmo critério da
 regra de PREPROD do guia (vendas, entradas, tributos, orçamentos, OS) e resolve o item "mapear risco" da
-Fase 2 do [`ROADMAP.md`](../ROADMAP.md).
+Mapeamento de risco do [`ROADMAP.md`](../ROADMAP.md).
 
 Fonte: manual oficial do Atual Mais (https://www.atualsistemas.net.br/solucoes/IntegraMais/HelpAtualMais.html)
 e o que foi observado nos testes em HMG.

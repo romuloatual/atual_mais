@@ -8,7 +8,7 @@ Um desenho do que existe e **para que serve cada pasta**. Para saber por onde co
 atual_mais/
 ├─ README.md                      porta de entrada: "Comece aqui" e o índice
 ├─ Guia_Onboarding (PDF)          manual de introdução ao setor, visual e direto
-├─ ROADMAP.md                     o plano do setor, fase a fase
+├─ ROADMAP.md                     o plano do setor: onde estamos e próximos passos
 ├─ .env.example                   modelo das variáveis (o .env real nunca vai ao Git)
 ├─ package.json                   os comandos (npm test, npm run test:api...)
 ├─ playwright.config.ts           configuração dos testes
