@@ -53,6 +53,26 @@ atual_mais/
 | **`.github/workflows/`** | A receita do **robô do GitHub (CI)**: roda os testes sozinho a cada envio e mostra verde ou vermelho |
 | **`scripts/`** | Utilitários de apoio, como a limpeza dos títulos de teste no HMG |
 
+## As camadas da documentação
+
+Do geral ao específico: você começa pelo README e desce só quando precisa.
+
+```
+1  PORTA DE ENTRADA          "por onde começo?"          README.md, Guia (PDF), docs/glossario.md
+2  COMO TRABALHAMOS          "qual o passo a passo?"     docs/jira-fluxo, git-fluxo, rotina-diaria, testes-de-api, metricas-qa
+3  COMO O SISTEMA FUNCIONA   "o que o Atual+ faz?"       docs/mapa-do-sistema, fluxos-principais, telas/
+4  COMO USAR CADA PASTA      "como mexo nesta pasta?"    tests/README, tests/cards/README, README de cada módulo
+5  MODELOS                   "em que formato escrevo?"   TEMPLATE-* (evidência, defeito, comentário, caso de teste, tela, relatório)
+```
+
+| Regra | O que significa |
+| --- | --- |
+| **Fonte única** | cada assunto tem **um** documento completo; os outros só resumem e apontam para ele |
+| **Quem atualiza** | telas: no fim de cada card; processos: quando o supervisor mudar uma regra; pastas: ao criar módulo ou área; modelos: só se o formato mudar |
+| **Objetivo e visual** | tabelas e passos curtos, sem texto corrido |
+
+O `ROADMAP.md` fica fora da pilha: é o plano do setor.
+
 ## Como ler as pastas de teste
 
 ```
