@@ -14,6 +14,8 @@ Os termos que aparecem nos documentos, em linguagem simples. Em ordem de assunto
 | **Veredito** | o resultado do teste do card: aprovado, parcial ou reprovado |
 | **Evidência** | a prova do que foi testado: o arquivo `INTG-XXXX-evidencias.md` mais prints, vídeo ou payload |
 | **Escape** | erro que passou pelo QA e chegou ao cliente (no Jira, o tipo *Defeito*). Quanto menos, melhor |
+| **Reteste** | testar de novo o que foi corrigido (a subtarefa de bug volta ao QA em Pronto Para Teste e é retestada em Testando) |
+| **Fora do escopo** | o que o card ou a entrega **não** cobre, combinado com o dev ou o supervisor; não se registra como bug |
 | **Eficiência de detecção** | de todos os erros, que parte foi pega **antes** do cliente |
 | **JAM** | extensão do navegador que grava o passo a passo, usada como evidência em vídeo |
 

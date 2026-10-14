@@ -24,7 +24,7 @@ Fonte: [`jira-fluxo-de-trabalho.md`](./jira-fluxo-de-trabalho.md) e [`git-fluxo-
 | 4 | **Testar no HMG:** cenários feliz, negativo e borda; gravar o JAM; registrar o tempo no Clockify | sistema |
 | 5 | **Registrar a evidência** em `tests/cards/INTG-XXXX-evidencias.md` (copiar o modelo) e rodar `npm run check:evidencias` | Git |
 | 6 | **Comentar o veredito** no card, em texto curto, no modelo | Jira |
-| 7 | **Aprovado:** mover para **deploy** e comentar "Card movido para deploy". **Defeito:** subtarefa **Bug (subtarefa)** em **Refação**, atribuída ao responsável do card; o card fica em **Testando** com "Aguardar subtarefa INTG-XXXX" | Jira |
+| 7 | **Aprovado:** mover para **deploy** e comentar "Card movido para deploy". **Defeito:** subtarefa **Bug (subtarefa)** em **Refação**, atribuída ao responsável do card; o card fica em **Testando** com "Aguardar subtarefa INTG-XXXX". Corrigida, a subtarefa volta em **Pronto Para Teste** e você faz o **reteste** | Jira |
 | 8 | **Enviar a branch** (`git push`). O **PR só abre quando o card termina** | Git |
 | 9 | **Atualizar a doc da tela** (`docs/telas/`) se o teste confirmou ou corrigiu algo | Git |
 
