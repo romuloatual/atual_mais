@@ -1,119 +1,120 @@
 # Como versionar e trabalhar com Git (setor de QA)
 
-Guia curto do dia a dia. **Git** guarda o histórico dos nossos arquivos (evidências, testes, docs); o **GitHub** é a cópia
-online, onde todo mundo vê o trabalho. Repositório: `romuloatual/atual_mais`.
+> **Em uma frase:** cada card tem a sua branch; o que serve a todos vai direto na `main`; o PR só abre quando o card termina; e, depois de cada push na `main`, você confere o CI e atualiza as branches de card abertas.
 
-## A regra em uma frase
+**Git** guarda o histórico dos arquivos (evidências, testes, docs). O **GitHub** é a cópia online: `romuloatual/atual_mais`.
 
-> **Cada card tem a sua branch. O que serve a todos (docs, modelos, testes gerais, scripts) vai direto na `main`. O PR só abre quando o card termina. Depois de cada push na `main`, as branches de card abertas são atualizadas.**
+| Palavra | Quer dizer |
+| --- | --- |
+| *branch* | uma linha de trabalho separada |
+| *commit* | uma "foto" salva do que mudou |
+| *push* | enviar os commits ao GitHub |
+| *PR* (pull request) | pedido para juntar a branch na `main` |
 
-| O que é | Onde vai | Por quê |
-| --- | --- | --- |
-| Validação e testes de um card (`tests/cards/INTG-XXXX-evidencias.md`) | branch `card/INTG-XXXX` | o trabalho do card fica isolado até ser concluído |
-| Docs gerais (README, ROADMAP, `docs/`, templates, guia) | direto na `main` | todos precisam ter tudo, sem esperar um card |
-| Testes e código de apoio (`tests/smoke`, `regression`, `api`, `support`, `scripts/`, CI) | direto na `main` | servem a todos os módulos e cards |
+## Onde cada coisa vai
 
-A evidência de um card (`INTG-XXXX-evidencias.md`) só chega à `main` quando o PR do card é aprovado; até lá ela existe **só na branch do card**.
+| O que é | Onde vai |
+| --- | --- |
+| Evidência e testes de um card (`tests/cards/INTG-XXXX-evidencias.md`) | branch `card/INTG-XXXX`; só chega à `main` quando o PR é aprovado |
+| Docs gerais (README, ROADMAP, `docs/`, templates, guia) | direto na `main` |
+| Testes e apoio (`smoke`, `regression`, `api`, `support`, `scripts/`, CI) | direto na `main` |
 
-**Palavras que aparecem:** *branch* = uma linha de trabalho separada; *commit* = uma "foto" salva do que mudou;
-*push* = enviar os commits ao GitHub; *PR (pull request)* = pedido para juntar a branch na `main`.
+## Um card novo
 
-## Passo a passo — um card novo
-
-1. **Confira o número do card na URL do Jira** (ex.: `.../browse/INTG-2727`). Não use o primeiro número que aparece no
-   texto do card: ele pode ser de uma dependência (já houve branch criada com o número errado).
-2. Crie a branch a partir da `main` atualizada:
+| # | O que fazer |
+| --- | --- |
+| 1 | **Confira o número do card na URL do Jira** (`.../browse/INTG-2727`), não o primeiro número do texto: pode ser de uma dependência (já houve branch com o número errado) |
+| 2 | Crie a branch a partir da `main` atualizada |
+| 3 | Copie `TEMPLATE-evidencias.md` para `tests/cards/INTG-XXXX-evidencias.md` e preencha durante a validação |
+| 4 | Salve com commits **pequenos e frequentes** e envie |
+| 5 | Ao concluir: rode o conferidor, junte a `main` na branch e só então abra o PR |
 
 ```bash
+# passo 2
 git checkout main && git pull
 git checkout -b card/INTG-XXXX
-```
 
-3. Copie o modelo e preencha durante a validação: `tests/cards/TEMPLATE-evidencias.md` → `tests/cards/INTG-XXXX-evidencias.md`.
-4. Salve o trabalho **várias vezes** (commit pequeno e frequente) e envie:
-
-```bash
+# passo 4
 git add tests/cards/INTG-XXXX-evidencias.md
 git commit -m "INTG-XXXX: o que foi feito, em uma linha"
 git push -u origin card/INTG-XXXX
-```
 
-5. Ao concluir o card: confira o padrão, junte a `main` na sua branch e só então abra o PR:
-
-```bash
+# passo 5
 npm run check:evidencias
 git checkout main && git pull
 git checkout card/INTG-XXXX && git merge main
 git push
 ```
 
-## Passo a passo — documentação geral (vai na `main`)
+## Documentação geral (vai na `main`)
 
 ```bash
 git checkout main && git pull
 # edite o arquivo (README, docs/, templates...)
 git add <arquivo>
-git commit -m "Descrição curta do que mudou"
+git commit -m "docs: o que mudou"
 git push origin main
-git checkout card/INTG-XXXX && git merge main    # traz a novidade para a branch do card
 ```
 
 ## Depois de cada push na `main`
 
-1. **Confira o CI:** abra a aba **Actions** do GitHub e veja se o run do seu push ficou verde. Um run vermelho que ninguém olha vira rotina.
-2. **Atualize as branches de card abertas** (merge da `main` em cada uma) e envie:
+| # | O que fazer |
+| --- | --- |
+| 1 | **Conferir o CI:** aba **Actions** do GitHub; o run do seu push deve ficar verde. Run vermelho que ninguém olha vira rotina |
+| 2 | **Atualizar as branches de card abertas** (merge da `main` em cada uma) e enviar |
+| 3 | `npm run check:evidencias`: as evidências continuam no padrão? |
 
 ```bash
-for b in card/INTG-1005 card/INTG-2676 card/INTG-2727; do   # as branches abertas
+for b in card/INTG-1005 card/INTG-2676; do   # liste aqui as branches abertas
   git checkout $b && git merge origin/main && git push origin $b
 done
 git checkout main
-npm run check:evidencias        # as evidências continuam no padrão?
 ```
 
-Se der conflito, resolva mantendo os dois lados e rode `npm run check:evidencias` antes de enviar.
+Se der conflito, mantenha os dois lados e rode `npm run check:evidencias` antes de enviar.
 
 ## Mensagem de commit
 
-- Card: `INTG-XXXX: o que foi feito` (ex.: `INTG-2727: evidencias no modelo padrao`).
-- Docs e testes gerais: `tipo: o que mudou`, sem o número do card. Tipos usados: `docs`, `test`, `feat`, `chore`, `refactor` (ex.: `test: quitacao por API com 6 casos`).
-- Sem acentos nas mensagens evita caracteres quebrados em alguns terminais.
+| Tipo de trabalho | Formato | Exemplo |
+| --- | --- | --- |
+| Card | `INTG-XXXX: o que foi feito` | `INTG-2727: evidencias no modelo padrao` |
+| Docs e testes gerais | `tipo: o que mudou` (`docs`, `test`, `feat`, `chore`, `refactor`) | `test: quitacao por API com 6 casos` |
+
+Sem acentos nas mensagens evita caracteres quebrados em alguns terminais.
 
 ## Fazer e evitar
 
 | Fazer | Evitar |
 | --- | --- |
-| `git status` antes de commitar e de dizer "feito" | Dizer que enviou sem conferir o `git status` |
-| Commits pequenos, um assunto por commit | Um commit gigante no fim do card |
-| `git merge main` na branch do card | **Rebase** em branch que já foi enviada (reescreve o histórico e atrapalha quem usa a branch) |
-| Confirmar o autor (`git config user.name`) | Commitar com o usuário errado |
-| Docs gerais direto na `main` | Deixar documentação geral presa na branch de um card |
-| Nunca guardar senha, token ou credencial em arquivo versionado. Segredos ficam no `.env`, que o Git ignora (modelo: `.env.example`) | Colar dados reais de cliente em evidências (usar só dados de teste) |
-| `git add` **pelo nome do arquivo** e conferir o `git status` antes do commit | `git add .` ou `git add -A` sem olhar o que entra (pode levar um segredo ou lixo) |
-| Confirmar que o `.env` está ignorado: `git check-ignore -v .env` | Subir senha ou token "só por um minuto": o repositório é público e o histórico guarda tudo |
-| Trocar de branch só com a árvore limpa (ou usar `git stash`) | Trocar de branch com alterações soltas |
+| `git status` antes de commitar e de dizer "feito" | dizer que enviou sem conferir |
+| commits pequenos, um assunto por commit | um commit gigante no fim do card |
+| `git merge main` na branch do card | **rebase** em branch já enviada (reescreve o histórico) |
+| `git add` **pelo nome do arquivo** | `git add .` ou `-A` sem olhar o que entra |
+| confirmar o autor (`git config user.name`) | commitar com o usuário errado |
+| segredos só no `.env`, que o Git ignora (modelo: `.env.example`); conferir com `git check-ignore -v .env` | subir senha ou token "só por um minuto": o repositório é público e o histórico guarda tudo |
+| só dados de teste nas evidências | dados reais de cliente |
+| trocar de branch com a árvore limpa (ou `git stash`) | trocar com alterações soltas |
 
 ## Quando algo dá errado
 
-| Situação | O que significa | O que fazer |
-| --- | --- | --- |
-| `rejected ... fetch first` ou `non-fast-forward` | O GitHub tem commits que você ainda não tem | `git pull` (ou `git merge origin/main`), resolva e envie de novo |
-| Conflito no merge (`<<<<<<<` no arquivo) | Duas pessoas mudaram o mesmo trecho | Abra o arquivo, deixe a versão certa, apague as marcas, `git add` e `git commit` |
-| `Internal Server Error` / erro 500 no push | Falha do lado do GitHub, não sua | Espere uns minutos e repita; se persistir, veja githubstatus.com |
-| Alterações soltas atrapalham a troca de branch | O Git protege o que você não salvou | `git stash` (guarda), troque de branch, `git stash pop` (devolve) |
-| Commitei na branch errada | Acontece | Não force nada: peça ajuda antes de usar `reset` |
-| Branch com nome errado | Número do card trocado | `git branch -m novo-nome` e atualize o remoto (peça ajuda se já foi enviada) |
+| Situação | O que fazer |
+| --- | --- |
+| `rejected ... fetch first` ou `non-fast-forward` (o GitHub tem commits que você não tem) | `git pull` (ou `git merge origin/main`), resolva e envie de novo |
+| conflito no merge (`<<<<<<<` no arquivo) | deixe a versão certa, apague as marcas, `git add` e `git commit` |
+| erro 500 no push | falha do GitHub: espere uns minutos e repita; veja githubstatus.com |
+| alterações soltas atrapalham a troca de branch | `git stash`, troque de branch, `git stash pop` |
+| commitei na branch errada | não force nada: peça ajuda antes de usar `reset` |
+| branch com nome errado | `git branch -m novo-nome` e atualize o remoto (peça ajuda se já foi enviada) |
 
 ## Comandos que mais usamos
 
-| Comando | Para que serve |
+| Comando | Serve para |
 | --- | --- |
 | `git status` | ver o que mudou e em qual branch você está |
-| `git branch --show-current` | mostrar só o nome da branch atual |
+| `git branch --show-current` | mostrar só o nome da branch |
 | `git log --oneline -5` | ver os últimos 5 commits |
 | `git diff` | ver as mudanças ainda não salvas |
 | `git pull` | trazer as novidades do GitHub |
 | `git stash` / `git stash pop` | guardar e devolver alterações soltas |
 
-> Em caso de dúvida **antes** de apagar, forçar ou reescrever algo: pare e pergunte. Comandos como `git push --force` e
-> `git reset --hard` podem apagar trabalho de forma definitiva.
+> Na dúvida **antes** de apagar, forçar ou reescrever algo: pare e pergunte. `git push --force` e `git reset --hard` podem apagar trabalho de forma definitiva.

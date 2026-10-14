@@ -70,9 +70,28 @@ Falam direto com o backend, sem navegador: provam o contrato (o que o servidor a
 - Precisam do `.env` (nunca versionado) e **só rodam em HMG**; criam dados de teste que o sistema nem sempre deixa excluir. Por isso ficam **fora do CI**: rodam sob demanda, com `npm run test:api`.
 - Guia completo: [`docs/testes-de-api.md`](../docs/testes-de-api.md).
 
-## `support/`
+## `support/`: a caixa de ferramentas
 
-Código compartilhado por todos os módulos: leitura do `.env` com a trava de HMG (`ambiente.ts`), login por API (`auth.ts`), a base dos **testes de tela** (`fixtures.ts`: painel já logado por API; o teste é **pulado** sem credenciais ou fora do Chromium, e `configuracoes-padrao.ts`) e os mapas de tela em [`support/pages/`](./support/pages/README.md) (page objects, por módulo). O que é de **um** módulo só fica na pasta dele.
+Guarda o que mais de um teste precisa. **Não tem teste nenhum**: quem tem teste são `smoke/`, `regression/` e `api/`. O que é de **um** módulo só fica na pasta dele.
+
+| Arquivo | O que faz |
+| --- | --- |
+| `ambiente.ts` | lê o `.env` e **recusa rodar fora do HMG** |
+| `auth.ts` | login por API, devolve o token ou a sessão |
+| `configuracoes-padrao.ts` | configurações padrão da loja (o painel as guarda só no navegador) |
+| `fixtures.ts` | entrega o painel já logado; o teste é **pulado** sem credenciais ou fora do Chromium |
+| `pages/<módulo>/<área>.page.ts` | o mapa de uma tela (veja abaixo) |
+
+**Quem usa o quê** (a ligação é de mão única: `support/` não conhece os testes):
+
+```
+api/         ──▶  ambiente.ts, auth.ts
+regression/  ──▶  fixtures.ts (que usa ambiente, auth e configuracoes-padrao) + pages/
+smoke/       ──   por enquanto não usa nada
+cards/       ──   só evidência, não usa
+```
+
+**Onde vai este código?** Só **um** teste usa: fica dentro dele. **Vários** usam: `support/`. Nunca ponha `.spec.ts` em `support/`. Exceção: o helper de uma área (ex.: `receivable.ts`) fica na pasta da área.
 
 ### `support/pages/`: o mapa de cada tela
 
