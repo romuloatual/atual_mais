@@ -21,7 +21,7 @@ Repositório do setor de QA do Atual Mais: **evidências dos cards, testes autom
 | --- | --- |
 | ver a **rotina do dia a dia** do QA | [`docs/rotina-diaria.md`](./docs/rotina-diaria.md) |
 | ver as **métricas de qualidade** e como calculá-las | [`docs/metricas-qa.md`](./docs/metricas-qa.md) |
-| ver o **desenho das pastas** e para que serve cada uma | [`docs/estrutura-do-repositorio.md`](./docs/estrutura-do-repositorio.md) |
+| ver o **desenho das pastas** e as **camadas da documentação** | [`docs/estrutura-do-repositorio.md`](./docs/estrutura-do-repositorio.md) |
 | entender o sistema (módulos, telas, rotas) | [`docs/mapa-do-sistema.md`](./docs/mapa-do-sistema.md) |
 | entender como uma tela funciona | [`docs/telas/`](./docs/telas/README.md) |
 | ver os fluxos mais importantes do sistema | [`docs/fluxos-principais.md`](./docs/fluxos-principais.md) |
