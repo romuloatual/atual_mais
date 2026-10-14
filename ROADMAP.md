@@ -20,7 +20,7 @@
 | 2 | **Mais 3 a 5 fluxos críticos** (próximos do Venda Rápida: cliente cadastrado, desconto, pagamento parcial) e **credenciais no CI** | a regressão rodar de verdade a cada push | QA (depende do HMG) |
 | 3 | **Métricas:** exportar o CSV todo mês, medir o tempo em Testando e fechar o significado dos demais status | mostra valor com pouco esforço | QA + supervisor |
 | 4 | **Shift-left:** ler o BDD dos próximos cards antes do dev | pega furo de lógica antes de codar | supervisor |
-| 5 | **SQL, performance e segurança** | só depois que o resto estiver firme | time (acesso ao banco) |
+| 5 | **SQL, performance, segurança e testes da API Pública** (Swagger em `/api/public`) | só depois que o resto estiver firme; a API Pública ainda não está habilitada na nossa empresa | time (acesso ao banco e habilitação da API) |
 
 ## Depende de outras pessoas
 
