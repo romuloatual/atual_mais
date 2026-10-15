@@ -12,12 +12,12 @@
 
 | Variável do `.env` | O que é | Onde achar |
 | --- | --- | --- |
-| `QA_API_URL` | API do HMG | já vem no modelo |
+| `QA_API_URL` | API do HMG: o **mesmo endereço que o painel de HMG chama** (hoje `https://api.hmg.atualmais.com.br`) | já vem no modelo; confira em DevTools > Network |
 | `QA_TENANT` | empresa (cabeçalho `schema`) | início da URL do painel (ex.: `romulo`) |
 | `QA_APP_BASIC` | identificação do app, **só o código depois de `Basic `** | DevTools > Network > `oauth/token` > Request Headers, num login novo |
 | `QA_USER`, `QA_PASS` | usuário de teste do HMG | idealmente um usuário dedicado, não administrador |
 
-Senha com `$` ou `#` vai entre aspas simples. O `npm test` e o CI **não** rodam `@api` (precisam do `.env` e criam dados). Se o login der **HTTP 503**, o HMG está fora do ar: tente depois.
+Senha com `$` ou `#` vai entre aspas simples. O `npm test` e o CI **não** rodam `@api` (precisam do `.env` e criam dados). Se o login der **HTTP 503**, confira primeiro se o `QA_API_URL` é o mesmo endereço que o painel de HMG usa (o antigo `api-hmg` deixou de responder em outubro/2026); se for, o HMG está fora do ar: tente depois.
 
 ## O que existe
 

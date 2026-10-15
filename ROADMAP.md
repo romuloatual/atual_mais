@@ -10,7 +10,7 @@
 | **2. Automação** | 🟡 base pronta, pouca cobertura | 10 testes: smoke (no CI), 1 fluxo de tela (Venda Rápida) e 8 de API (quitação). CI com smoke como gate, regressão a cada push e suíte noturna | Mais fluxos críticos; credenciais no CI (hoje o teste de tela é pulado); API fora do CI |
 | **3. Métricas** | 🟡 base pronta | Doc, modelo de relatório e script ([`docs/metricas-qa.md`](./docs/metricas-qa.md)); linha de base de outubro calculada | Tempo de teste por card (precisa do histórico de status); primeira rotina mensal |
 | **4. Engenharia de qualidade** | 🟡 parcial | Leitura do código do painel, captura de payloads, prova de causa por API | Acesso a banco (SQL), performance, segurança, logs |
-| **5. Dados e ambiente** | 🔴 fraco | `.env` fora do Git, trava de HMG, prefixo `QA`, script de limpeza | HMG com 503 em 13/10; título quitado e pedido de teste não se apagam; ids fixos no código; sem gerador de dados nem rotina de reset |
+| **5. Dados e ambiente** | 🔴 fraco | `.env` fora do Git, trava de HMG, prefixo `QA`, script de limpeza | o 503 de 13/10 era o endereço da API que mudou (agora `api.hmg`), não queda do HMG; título quitado e pedido de teste não se apagam; ids fixos no código; sem gerador de dados nem rotina de reset |
 
 ## Próximos passos (em ordem)
 
