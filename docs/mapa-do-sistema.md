@@ -28,7 +28,7 @@ Estrutura do Atual Mais como o **próprio sistema** a organiza (menu e rotas do 
 | Área | Rota | Help | Prioridade | Pasta de teste |
 | --- | --- | --- | --- | --- |
 | **Contas a Receber** | `/financial/bills-to-receive` | [Contasareceber](https://www.atualsistemas.net.br/solucoes/IntegraMais/Contasareceber.html) | P1 | `tests/regression/financeiro/contas-a-receber/` |
-| **Caixa** | `/financial/statement (a confirmar)` | [Caixa](https://www.atualsistemas.net.br/solucoes/IntegraMais/Caixa.html) | P2 | `tests/regression/financeiro/caixa/` |
+| **Caixa** | `/financial/statement` | [Caixa](https://www.atualsistemas.net.br/solucoes/IntegraMais/Caixa.html) | P2 | `tests/regression/financeiro/caixa/` |
 | Contas a Pagar | `/financial/bills-to-pay` | [Contasapagar](https://www.atualsistemas.net.br/solucoes/IntegraMais/Contasapagar.html) |  |  |
 | Boletos | `/financial/bank-slip` | [Boleto1](https://www.atualsistemas.net.br/solucoes/IntegraMais/Boleto1.html) |  |  |
 | Cadastros gerais (plano de contas, bancos, contas correntes, moeda, departamento, grupo DRE, tarifas) | `/financial/general/*` | [Planodecontas](https://www.atualsistemas.net.br/solucoes/IntegraMais/Planodecontas.html) |  |  |
@@ -41,7 +41,7 @@ Estrutura do Atual Mais como o **próprio sistema** a organiza (menu e rotas do 
 | Fornecedores | `/people/general/supplier` | [Fornecedores](https://www.atualsistemas.net.br/solucoes/IntegraMais/Fornecedores.html) |  |  |
 | Transportadoras | `/people/general/carrier` | [Transportadoras](https://www.atualsistemas.net.br/solucoes/IntegraMais/Transportadoras.html) |  |  |
 | Classificação de cliente | `/people/general/customerClassification` | [Classificacaodocliente](https://www.atualsistemas.net.br/solucoes/IntegraMais/Classificacaodocliente.html) |  |  |
-| Financeiras (a confirmar o nome no sistema) | `/people/general/financial` | [Administradoras](https://www.atualsistemas.net.br/solucoes/IntegraMais/Administradoras.html) |  |  |
+| Administradoras (rota `financial`) | `/people/general/financial` | [Administradoras](https://www.atualsistemas.net.br/solucoes/IntegraMais/Administradoras.html) |  |  |
 
 ## Faturamento (`/revenues`)
 
@@ -81,4 +81,4 @@ Estrutura do Atual Mais como o **próprio sistema** a organiza (menu e rotas do 
 - **Documentar a tela:** o comportamento fica em [`docs/telas/`](./telas/README.md). As falhas encontradas ficam no Jira (decisão e status) e na evidência do card.
 - **Dúvida de regra:** o Help (coluna Help) é o ponto de partida; o que for confirmado em teste sobe para `docs/telas/`.
 
-> Pontos a confirmar: "Caixa" ser `/financial/statement`, e o nome de "Financeiras" em Pessoas. As rotas vêm do código do painel; o menu pode esconder áreas conforme a permissão do usuário.
+> Rotas conferidas no código do frontend (`erp-app/config/routes.ts`, 15/10/2026): "Caixa" é `/financial/statement` e o item "Financeiras" aparece no menu como **Administradoras**. O menu pode esconder áreas conforme a permissão do usuário.
