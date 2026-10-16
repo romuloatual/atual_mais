@@ -1,6 +1,6 @@
 # Telas do Atual Mais: finalidade e comportamento (documento vivo)
 
-> **Estado: em construção.** Só a tela de **Contas a Receber (quitação)** tem conteúdo confirmado por teste. As outras 5 (Venda Rápida, Pedidos, Caixa, Forma de Pagamento, Operação) são o ponto de partida do Help, marcado como 📖 e ainda **não confirmado**.
+> **Estado: em construção.** Só as telas de **Contas a Receber (quitação)** e **Integrações de e-commerce** têm conteúdo confirmado por teste. As outras 5 (Venda Rápida, Pedidos, Caixa, Forma de Pagamento, Operação) são o ponto de partida do Help, marcado como 📖 e ainda **não confirmado**.
 
 Para cada tela ou fluxo registramos **para que ela serve e como ela se comporta**, com a fonte (Help ou teste). Regra de negócio entra só como comportamento **confirmado**. Um arquivo por tela; atualizamos **no fim de cada card**, junto com a evidência. Modelo: [`TEMPLATE-tela.md`](./TEMPLATE-tela.md). As falhas encontradas ficam no Jira e na evidência do card; aqui só entram na seção "Falhas conhecidas" de cada tela.
 
@@ -42,3 +42,4 @@ Cuidados: 📖 **não é verdade confirmada**, não use como critério de aprova
 | Caixa | [`caixa.md`](./caixa.md) |
 | Forma de pagamento | [`forma-de-pagamento.md`](./forma-de-pagamento.md) |
 | Operação | [`operacao.md`](./operacao.md) |
+| Configuração > Integrações de e-commerce (Nuvemshop) | [`integracoes-ecommerce.md`](./integracoes-ecommerce.md) |
