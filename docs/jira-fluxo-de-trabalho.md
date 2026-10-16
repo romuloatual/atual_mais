@@ -53,10 +53,10 @@ _As definições gerais (exceto Bug, Bug (subtarefa) e Defeito) são o significa
 | --- | --- | --- |
 | 1 | **Título** `[TIPO] (Camada) {Módulo} descrição` | a camada diz se é Frontend ou Backend |
 | 2 | **"Aguardar: INTG-XXXX"** | o card depende de outro: confira se já está pronto |
-| 3 | **Resumo e Objetivo** | o que muda e por quê |
-| 4 | **Regra de Negócio e BDD** | **é o que o QA testa** |
-| 5 | **Notas técnicas** | apoio ao dev; **não são critério** e podem estar desatualizadas |
-| 6 | **Ocorrência no Cliente** (cards de defeito) | schema, tela, desde quando, frequência, impacto e workaround |
+| 3 | **Resumo, Impacto, Ocorrência no Cliente e Objetivo** | o que muda, por quê, o que sai errado e onde ocorre (schema, tela, desde quando, frequência, workaround; em todo bug) |
+| 4 | **Regras de Negócio e Cenários BDD** | **é o que o QA testa** |
+| 5 | **Fora de Escopo** (cards de bug) | o que apareceu junto mas não faz parte do card; não vira bug aqui |
+| 6 | **Observações e Evidências** (antes "Notas técnicas") | apoio ao dev e links; **não são critério** e podem estar desatualizadas |
 
 Antes de testar, **confira o status real do card** no Jira: o texto pode estar desatualizado.
 
@@ -122,8 +122,8 @@ Use o [modelo de defeito](../tests/cards/TEMPLATE-card-de-defeito.md).
 | --- | --- |
 | 1 | Título `[BUG]` (antes do cliente) ou `[DEFEITO]` (no cliente) + `(Camada) {Módulo} descrição` |
 | 2 | Ambiente e versão (para comparar, cite produção e HMG) |
-| 3 | Passos curtos, resultado esperado e obtido |
-| 4 | Evidência: payload (sem token) e JAM |
+| 3 | **Resumo com Impacto**, **Ocorrência no Cliente** (também no bug de HMG), **Regras de Negócio** e **Cenários BDD** com o esperado e o obtido |
+| 4 | **Fora de Escopo** (o que apareceu junto e não é este bug) e **Observações e Evidências**: payload (sem token), JAM e **Roteiro de Reteste** |
 | 5 | Severidade e prioridade (quitação que fecha título com valor errado é alta) |
 | 6 | Regressão? Cite o card que introduziu; se já existia, escreva "pré-existente" |
 
