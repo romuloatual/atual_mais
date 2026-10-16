@@ -64,6 +64,7 @@ Estrutura do Atual Mais como o **próprio sistema** a organiza (menu e rotas do 
 
 | Área | Rota | Help | Prioridade | Pasta de teste |
 | --- | --- | --- | --- | --- |
+| **Integrações de e-commerce (Nuvemshop)** | `/config/ecommerce` | — | P2 |  |
 | Empresas | `/config/companies` | [Empresas](https://www.atualsistemas.net.br/solucoes/IntegraMais/Empresas.html) |  |  |
 | Fiscal: CEST, CFOP, NCM, Regra de imposto | `/config/fiscal/*` | [Regradeimposto](https://www.atualsistemas.net.br/solucoes/IntegraMais/Regradeimposto.html) |  |  |
 | Tributos: regime, enquadramento, benefício, fórmula, base de cálculo, natureza da receita, motivo de desoneração | `/config/tax/*` | [Regime](https://www.atualsistemas.net.br/solucoes/IntegraMais/Regime.html) |  |  |
