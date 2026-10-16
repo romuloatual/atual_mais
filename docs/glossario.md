@@ -57,4 +57,13 @@ Os termos que aparecem nos documentos, em linguagem simples. Em ordem de assunto
 | **PR (pull request)** | o pedido para juntar a branch do card na `main`; só abre quando o card termina |
 | **`.env`** | arquivo local com usuário e senha de teste. **Nunca** vai para o Git |
 
+## Integração com e-commerce
+
+| Termo | Quer dizer |
+| --- | --- |
+| **Integração de e-commerce** | a ligação entre uma loja do Atual+ e uma loja virtual (hoje a Nuvemshop), em Configuração. Cada loja do Atual+ tem no máximo uma |
+| **Conectar / Reconectar** | autorizar o Atual+ na loja da Nuvemshop. Na primeira vez aparece a tela **Aceitar**; com o app já instalado volta direto |
+| **Ciclo de sincronização** | a rodada automática, a cada 15 minutos (:00, :15, :30, :45), que envia os produtos e traz os pedidos |
+| **Pausada / Ativa** | a chave da integração: pausada, o ciclo não envia nem traz nada; ativa, volta a rodar |
+
 Faltou um termo? Acrescente aqui, em uma linha.
