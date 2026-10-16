@@ -75,26 +75,12 @@ Legenda: ✅ passou · ❌ falhou · ⚠️ passou com ressalva · ⏭️ não t
 
 **Fluxo base:** Configurações > Integrações de e-commerce (`/config/ecommerce`) > Nova integração > Conectar (sempre pelo botão do Atual+) > autorizar na Nuvemshop > aguardar o ciclo (15 min) > conferir produtos na loja > comprar na vitrine > conferir o pedido em Pedidos.
 
-**Para reproduzir a duplicação:**
-1. Integração conectada e ativa.
-2. Cadastrar um produto simples ativo, com preço e estoque no depósito da loja.
-3. Esperar o ciclo (:00, :15, :30 ou :45) e abrir a lista de produtos da loja da Nuvemshop: aparecem 2 produtos com o mesmo SKU.
-4. Alterar o preço no Atual+ e esperar outro ciclo: só um dos dois muda.
+Passos para reproduzir a duplicação, contagens por ciclo e hipóteses para o dev ficam no bug do Jira e no JAM: este repositório é público e não guarda o detalhe de falhas abertas.
 
 ## Evidência técnica (payload/requisição, quando houver)
 
-Contagem de itens na loja da Nuvemshop, sem separar nomes:
-
-| Quando | Produtos no Atual+ | Itens na loja | Leitura |
-| --- | --- | --- | --- |
-| 15/10 15:15 (1ª integração) | 54 | 107 | 53 em dobro |
-| 15/10 16:30 (integração refeita) | 56 | 112 | todos em dobro |
-| 16/10 09:30 (produto novo) | +1 | +2 | 2 cópias |
-| 16/10 11:30 e 11:45 (2 produtos novos) | +2 | +4 | 2 cópias cada |
-
-- Os pares têm ids vizinhos e o mesmo SKU; ao mudar preço e estoque no Atual+, só a cópia de id maior recebeu o valor novo. Hipóteses para o dev: dois processos publicando em paralelo (a trava do job é em memória) e/ou o vínculo produto → id externo guardar um só id.
-- Pedido importado: operação Vendas, vendedor configurado, itens, preços, frete e total iguais ao site; fatura com documento começando por "NS" (id do pedido na Nuvemshop).
-- O roteiro do dev diz: "Não pode aparecer um produto duplicado na Nuvemshop".
+- Pedidos importados: operação Vendas, vendedor configurado, itens, preços, frete e total iguais ao site; fatura com documento começando por "NS" (id do pedido na Nuvemshop).
+- Duplicação de produtos: detalhe (contagens, ids e hipóteses) no bug do Jira; o roteiro do dev diz "Não pode aparecer um produto duplicado na Nuvemshop".
 
 ## Print/preview
 
