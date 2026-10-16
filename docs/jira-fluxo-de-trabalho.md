@@ -56,7 +56,8 @@ _As definições gerais (exceto Bug, Bug (subtarefa) e Defeito) são o significa
 | 3 | **Resumo, Impacto, Ocorrência no Cliente e Objetivo** | o que muda, por quê, o que sai errado e onde ocorre (schema, tela, desde quando, frequência, workaround; em todo bug) |
 | 4 | **Regras de Negócio e Cenários BDD** | **é o que o QA testa** |
 | 5 | **Fora de Escopo** (cards de bug) | o que apareceu junto mas não faz parte do card; não vira bug aqui |
-| 6 | **Observações e Evidências** (antes "Notas técnicas") | apoio ao dev e links; **não são critério** e podem estar desatualizadas |
+| 6 | **Observações e Evidências** (antes "Notas técnicas") | apoio ao dev e links; **não são critério** e podem estar desatualizadas |
+
 
 Antes de testar, **confira o status real do card** no Jira: o texto pode estar desatualizado.
 
